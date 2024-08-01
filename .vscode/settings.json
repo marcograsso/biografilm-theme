@@ -2,5 +2,7 @@
   "[php]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "prettier.documentSelectors": ["**/*.php"]
+  "prettier.documentSelectors": ["**/*.php"],
+  "intelephense.files.maxSize": 10000000,
+  "intelephense.environment.includePaths": ["../vendor/php-stubs/**"]
 }
