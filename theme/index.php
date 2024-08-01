@@ -14,6 +14,9 @@
 use Timber\Timber;
 
 $templates = ["templates/index.twig"];
+$context = Timber::context([
+    "foo" => "bar",
+]);
 
 if (is_home()) {
     array_unshift(
