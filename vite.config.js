@@ -1,7 +1,7 @@
 import { defineConfig, loadEnv } from "vite";
 
-const destination = "./theme/assets/dist";
-const entries = ["./theme/assets/main.js"];
+const destination = "./assets/dist";
+const entries = ["./assets/main.js"];
 
 export default defineConfig(({ mode }) => {
   return {

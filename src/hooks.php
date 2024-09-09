@@ -17,3 +17,10 @@ function disable_embeds_filter_oembed_response_data_($data)
     unset($data["author_name"]);
     return $data;
 }
+
+// modify the path to the icons directory
+add_filter("acf_icon_path_suffix", "acf_icon_path_suffix");
+function acf_icon_path_suffix($path_suffix)
+{
+    return "views/svgs/";
+}

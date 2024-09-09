@@ -36,9 +36,9 @@ class StarterSite extends Site
 
         $vite_env = "production";
 
-        if (file_exists(get_template_directory() . "/../config.json")) {
+        if (file_exists(get_template_directory() . "/config.json")) {
             $config = json_decode(
-                file_get_contents(get_template_directory() . "/../config.json"),
+                file_get_contents(get_template_directory() . "/config.json"),
                 true
             );
             $vite_env = $config["vite"]["environment"] ?? "production";
@@ -57,7 +57,7 @@ class StarterSite extends Site
 
         if (is_array($manifest)) {
             if ($vite_env === "production" || is_admin()) {
-                $js_file = "theme/assets/main.js";
+                $js_file = "assets/main.js";
                 wp_enqueue_style(
                     "main",
                     $dist_uri . "/" . $manifest[$js_file]["css"][0]
@@ -78,7 +78,7 @@ class StarterSite extends Site
         if ($vite_env === "development") {
             add_action("wp_head", function () {
                 echo '<script type="module" crossorigin src="http://localhost:3000/@vite/client"></script>';
-                echo '<script type="module" crossorigin src="http://localhost:3000/theme/assets/main.js"></script>';
+                echo '<script type="module" crossorigin src="http://localhost:3000/assets/main.js"></script>';
             });
         }
     }
@@ -91,6 +91,7 @@ class StarterSite extends Site
     public function add_to_context($context)
     {
         $context["menu"] = Timber::get_menu();
+        $context["options"] = get_fields("options"); // ACF options
         $context["site"] = $this;
 
         return $context;

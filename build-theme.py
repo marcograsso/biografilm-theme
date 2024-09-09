@@ -27,9 +27,11 @@ def main():
 
         print("Creating theme.zip...")
         filename = f'theme-{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}'
-        shutil.make_archive(
-            base_name=filename, format="zip", root_dir=temp_dir, base_dir="."
-        ),
+        (
+            shutil.make_archive(
+                base_name=filename, format="zip", root_dir=temp_dir, base_dir="."
+            ),
+        )
 
     print("[bold green]Theme built successfully![/bold green]")
 
