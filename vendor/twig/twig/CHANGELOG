@@ -1,3 +1,9 @@
+# 3.14.0 (2024-09-09)
+
+ * Fix a security issue when an included sandboxed template has been loaded before without the sandbox context
+ * Add the possibility to reset globals via `Environment::resetGlobals()`
+ * Deprecate `Environment::mergeGlobals()`
+
 # 3.13.0 (2024-09-07)
 
  * Add the `types` tag (experimental)
