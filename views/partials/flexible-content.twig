@@ -1,3 +1,6 @@
 {% for component in components %}
-    {% include "components/" ~ component.acf_fc_layout ~ ".twig" with {props: component, post: post} %}
+  {% include "components/" ~ component.acf_fc_layout ~ ".twig" with {
+    props: component,
+    post: post
+  } %}
 {% endfor %}
