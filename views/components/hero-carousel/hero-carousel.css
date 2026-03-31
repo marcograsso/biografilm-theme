@@ -1,0 +1,58 @@
+@reference "../../../src/main.css";
+
+.hero-carousel-nav {
+  position: absolute;
+  bottom: 0rem;
+  right: 0rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  gap: 3rem;
+}
+
+@media (max-width: 767px) {
+  .hero-carousel-nav {
+    left: 0;
+    right: 0;
+    justify-content: flex-end;
+    padding-right: 1rem;
+  }
+}
+
+.hero-carousel-nav .swiper-button-prev,
+.hero-carousel-nav .swiper-button-next {
+  position: static;
+  margin-top: 0;
+  width: 64px;
+  height: 64px;
+  color: white;
+  --swiper-navigation-size: 15px;
+  @apply focusable;
+}
+
+.hero-carousel-nav .swiper-button-prev::after,
+.hero-carousel-nav .swiper-button-next::after {
+  font-size: 15px !important;
+}
+
+.hero-carousel-nav .swiper-button-prev .swiper-navigation-icon,
+.hero-carousel-nav .swiper-button-next .swiper-navigation-icon {
+  width: 11px;
+  height: 20px;
+}
+
+.hero-carousel-nav .swiper-pagination {
+  position: static;
+  width: auto;
+  @apply flex items-center gap-4;
+}
+
+.hero-carousel-nav .swiper-pagination-bullet {
+  @apply focusable h-3 w-3 rounded-none bg-white/60 opacity-100;
+  margin: 0;
+}
+
+.hero-carousel-nav .swiper-pagination-bullet-active {
+  @apply bg-white;
+}

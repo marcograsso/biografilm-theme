@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\WordPress;
 
 use App\IsPluginActive;
+use Timber\ImageHelper;
 use Yard\Hook\Action;
 use Yard\Hook\Filter;
 
@@ -94,6 +95,95 @@ class WordPress
     public function remove_jpeg_compression(): int
     {
         return 100;
+    }
+
+    #[Filter("upload_mimes")]
+    public function allow_svg_upload(array $mimes): array
+    {
+        if (current_user_can("administrator")) {
+            $mimes["svg"] = "image/svg+xml";
+            $mimes["svgz"] = "image/svg+xml";
+        }
+
+        return $mimes;
+    }
+
+    #[Filter("wp_check_filetype_and_ext", 10, 4)]
+    public function fix_svg_filetype(array $data, string $file, string $filename, ?array $mimes): array
+    {
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        if ($ext === "svg" || $ext === "svgz") {
+            $data["ext"] = $ext;
+            $data["type"] = "image/svg+xml";
+        }
+
+        return $data;
+    }
+
+    private function is_svg_upload(array $file): bool
+    {
+        $ext = strtolower(pathinfo($file["name"] ?? "", PATHINFO_EXTENSION));
+        $type = $file["type"] ?? "";
+
+        return $ext === "svg" || $ext === "svgz" || $type === "image/svg+xml";
+    }
+
+    #[Filter("file_is_displayable_image", 10, 2)]
+    public function svg_is_displayable_image(bool $result, string $path): bool
+    {
+        $ext = strtolower(pathinfo($path, PATHINFO_EXTENSION));
+
+        if ($ext === "svg" || $ext === "svgz") {
+            return true;
+        }
+
+        return $result;
+    }
+
+    #[Filter("wp_handle_upload_prefilter")]
+    public function svg_handle_upload_prefilter(array $file): array
+    {
+        error_log("SVG DEBUG prefilter: name={$file['name']} type={$file['type']} is_svg=" . ($this->is_svg_upload($file) ? 'yes' : 'no'));
+
+        if ($this->is_svg_upload($file)) {
+            add_filter("wp_image_editors", "__return_empty_array");
+            error_log("SVG DEBUG: image editors disabled");
+        }
+
+        return $file;
+    }
+
+    #[Filter("intermediate_image_sizes_advanced", 10, 2)]
+    public function skip_svg_image_sizes(array $sizes, array $metadata): array
+    {
+        error_log("SVG DEBUG intermediate_image_sizes_advanced: file=" . ($metadata["file"] ?? "none"));
+
+        if (
+            isset($metadata["file"]) &&
+            str_ends_with(strtolower($metadata["file"]), ".svg")
+        ) {
+            error_log("SVG DEBUG: skipping image sizes for SVG");
+            return [];
+        }
+
+        return $sizes;
+    }
+
+    #[Filter("wp_generate_attachment_metadata", 10, 2)]
+    public function skip_svg_metadata(array $metadata, int $attachment_id): array
+    {
+        $file = get_attached_file($attachment_id);
+        $ext = strtolower(pathinfo((string) $file, PATHINFO_EXTENSION));
+
+        error_log("SVG DEBUG generate_metadata: id=$attachment_id file=$file ext=$ext");
+
+        if ($ext === "svg" || $ext === "svgz") {
+            error_log("SVG DEBUG: returning minimal metadata for SVG");
+            return ["file" => $file];
+        }
+
+        return $metadata;
     }
 
     // Remove Gutenberg's front-end block styles.

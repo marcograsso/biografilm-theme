@@ -87,7 +87,10 @@ class Bootstrap
 
     public function register_fields()
     {
-        $folders = [STYLESHEETPATH . "/app/Fields/Groups"];
+        $folders = [
+            STYLESHEETPATH . "/app/Fields/Groups",
+            STYLESHEETPATH . "/views/components",
+        ];
 
         foreach ($folders as $folder) {
             $this->require_files_in_folder($folder);

@@ -1,10 +1,15 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Geist-Variable", "sans-serif";
-  --font-mono: "GeistMono-Variable", "monospace";
+  --font-sans: "Instrument Sans", "sans-serif";
+  --font-display: "Bebas Neue", "sans-serif";
+}
+
+@theme {
+  --color-black: #1e1e1e;
 }
 
 @import "./styles/fonts.css";
@@ -15,4 +20,12 @@
 
 @utility pressable {
   @apply cursor-pointer transition-transform duration-150 ease-in-out active:scale-98;
+}
+
+@utility glass-effect {
+  backdrop-filter: blur(50px);
+}
+
+@utility focusable {
+  @apply outline-offset-3 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-5 focus-visible:outline-black motion-safe:transition-all;
 }
