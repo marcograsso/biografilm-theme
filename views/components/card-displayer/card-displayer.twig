@@ -1,0 +1,18 @@
+<section class="w-full">
+  <div class="divide-stroke grid w-full grid-cols-3 divide-x">
+    <div class="col-span-3 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!">
+      {% if component.title %}
+        <h2 class="display-h2">{{ component.title }}</h2>
+      {% endif %}
+    </div>
+    <div
+      class="divide-stroke border-stroke col-span-3 grid grid-cols-1 divide-x divide-y md:grid-cols-2 xl:col-span-2"
+    >
+      {% for i in 1..4 %}
+        {{
+          include("parts/movie-card.twig", { loop: loop, is_last: loop.last })
+        }}
+      {% endfor %}
+    </div>
+  </div>
+</section>

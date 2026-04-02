@@ -25,11 +25,11 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/banner-small/banner-small.php",
                     ),
-                Layout::make("Highlights", "highlights")
+                Layout::make("Card Displayer", "card_displayer")
                     ->layout("block")
                     ->fields(
                         require get_stylesheet_directory() .
-                            "/views/components/highlights/highlights.php",
+                            "/views/components/card-displayer/card-displayer.php",
                     ),
             ])
             ->withSettings([
