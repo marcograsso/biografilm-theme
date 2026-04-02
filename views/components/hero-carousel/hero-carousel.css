@@ -15,8 +15,8 @@
   .hero-carousel-nav {
     left: 0;
     right: 0;
-    justify-content: flex-end;
-    padding-right: 1rem;
+    justify-content: space-between;
+    padding-right: 0;
   }
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 use Extended\ACF\Fields\ColorPicker;
+use Extended\ACF\Fields\File;
 use Extended\ACF\Fields\Image;
 use Extended\ACF\Fields\Link;
 use Extended\ACF\Fields\Repeater;
@@ -19,6 +20,8 @@ return [
             Image::make("Immagine di sfondo", "background_image")->format(
                 "array",
             ),
+            File::make("Video di sfondo", "background_video")
+                ->format("array"),
             Tab::make("Testi")->placement("left"),
             Text::make("Titolo", "title"),
             Text::make("Sottotitolo", "subtitle"),
