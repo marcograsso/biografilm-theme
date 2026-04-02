@@ -133,6 +133,29 @@ class Website extends Site
         $context["current_url"] = URLHelper::get_current_url();
         $context["environment"] = $this->vite->environment;
 
+        // Detect current section (festival = homepage, industry, campus)
+        $section = "festival";
+        global $post;
+        if (is_page() && $post) {
+            $ids = array_merge([$post->ID], get_post_ancestors($post->ID));
+            foreach ($ids as $id) {
+                $slug = get_post_field("post_name", $id);
+                if (in_array($slug, ["industry", "campus"])) {
+                    $section = $slug;
+                    break;
+                }
+            }
+        }
+        $context["current_section"] = $section;
+
+        $industry_page = get_page_by_path("industry");
+        $campus_page = get_page_by_path("campus");
+        $context["nav_urls"] = [
+            "festival" => home_url("/"),
+            "industry" => $industry_page ? get_permalink($industry_page->ID) : home_url("/industry/"),
+            "campus"   => $campus_page ? get_permalink($campus_page->ID) : home_url("/campus/"),
+        ];
+
         return $context;
     }
 
