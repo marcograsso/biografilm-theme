@@ -9,7 +9,15 @@
 }
 
 @theme {
-  --color-black: #1e1e1e;
+  --color-black: hsl(0, 0%, 12%);
+  --color-black-hover: hsl(0, 0%, 2%);
+  --color-black-active: hsl(0, 0%, 0%);
+  --color-red: hsl(356, 77%, 42%);
+  --color-red-hover: hsl(356, 77%, 32%);
+  --color-red-active: hsl(356, 77%, 22%);
+  --color-white: hsl(0, 0%, 100%);
+  --color-white-hover: hsl(0, 0%, 90%);
+  --color-white-active: hsl(0, 0%, 80%);
 }
 
 @import "./styles/fonts.css";

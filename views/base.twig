@@ -4,6 +4,7 @@
     {{ include("parts/head.twig") }}
   {% endblock head %}
   <body {{ attr({ class: [body_class, "antialiased"] }) }}>
+    {{ include("components/header/header.twig") }}
     {{ function("wp_body_open") }}
 
     {% if environment == "development" %}

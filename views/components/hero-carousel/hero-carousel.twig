@@ -2,7 +2,7 @@
   class="swiper hero-carousel h-screen w-full [--swiper-navigation-color:var(--color-white)] [--swiper-pagination-bullet-inactive-color:var(--color-white/50)] [--swiper-pagination-color:var(--color-white)]"
 >
   <div class="swiper-wrapper">
-    {% for slide in post.hero_carousel_slides %}
+    {% for slide in component.hero_carousel_slides %}
       <div
         class="swiper-slide relative !h-screen w-full bg-zinc-900 bg-cover bg-center"
         style="{{
@@ -12,12 +12,12 @@
         }}"
       >
         <div
-          class="glass-effect absolute bottom-0 left-0 flex flex-col gap-6 bg-white/20 {{
+          class="glass-effect absolute bottom-0 left-0 flex flex-col gap-6 bg-white/20 p-6 lg:pl-10 {{
           slide.text_width == "w-1/3"
             ? "w-full md:w-1/2 lg:w-1/3"
             : "w-full md:w-1/2"
           }}"
-          style="padding: 40px 30px 40px 40px;{{
+          style="{{
           slide.text_color
             ? " color: " ~ slide.text_color ~ ";"
             : ""
