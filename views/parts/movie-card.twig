@@ -1,24 +1,66 @@
+{% set film = function("get_field", "film", proiezione.ID) %}
+{% set film_id = film.ID ?? null %}
+{% set sezione = film_id ? function("wp_get_post_terms", film_id, "sezione")[0] : null %}
+{% if film_id and function("get_field", "preview", film_id) %}
+  {% set preview = function("get_field", "preview", film_id) %}
+{% elseif film_id %}
+  {% set preview_parts = [] %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% if regista %}{% set preview_parts = preview_parts|merge([regista]) %}{% endif %}
+  {% if durata %}{% set preview_parts = preview_parts|merge([durata]) %}{% endif %}
+  {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+  {% if genere %}{% set preview_parts = preview_parts|merge([genere.name]) %}{% endif %}
+  {% set preview = preview_parts|join(" / ") %}
+{% else %}
+  {% set preview = null %}
+{% endif %}
+{% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
+
 <div class="col-span-1 {{ is_last ? "border-b border-stroke border-r" : "" }}">
-  <div class="aspect-video w-full bg-gray-200"></div>
+  <div class="aspect-video w-full bg-gray-200">
+    {% set film_image_url = film_id ? function("get_the_post_thumbnail_url", film_id, "large") : null %}
+    {% if film_image_url %}
+      <img
+        src="{{ film_image_url }}"
+        alt="{{ film.post_title }}"
+        class="h-full w-full object-cover"
+      />
+    {% endif %}
+  </div>
   <div class="flex flex-col gap-8 px-6 py-10">
     <!-- Up -->
     <div class="flex flex-col gap-3">
-      <p class="text-tight text-red text-sm font-semibold uppercase">
-        Sezione
-      </p>
-      <h5 class="text-tight text-2xl font-semibold">Titolo del film</h5>
-      <p class="text-tight text-base text-black">
-        Reid Davenport / 99’ / 2023 / Doc
-      </p>
+      {% if sezione %}
+        <p class="text-tight text-red text-sm font-semibold uppercase">
+          {{ sezione.name }}
+        </p>
+      {% endif %}
+      {% if film %}
+        <h5 class="text-tight text-2xl font-semibold">{{ film.post_title }}</h5>
+      {% endif %}
+      {% if preview %}
+        <p class="text-tight text-base text-black">
+          {{ preview }}
+        </p>
+      {% endif %}
     </div>
     <!-- Down -->
     <div class="flex flex-col gap-3">
-      <p class="text-tight text-base font-semibold text-black">
-        8 Giugno 2026 · 14:30
-      </p>
-      <p class="text-tight text-base font-semibold text-black">
-        Cinema Lumière – Sala Scorsese
-      </p>
+      {% if proiezione.data or proiezione.orario %}
+        <p class="text-tight text-base font-semibold text-black">
+          {{ proiezione.data }}{% if proiezione.orario %}
+            · {{ proiezione.orario }}
+          {% endif %}
+        </p>
+      {% endif %}
+      {% if location %}
+        <p class="text-tight text-base font-semibold text-black">
+          {{ location.name }}
+        </p>
+      {% endif %}
     </div>
   </div>
 </div>

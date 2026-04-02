@@ -10,7 +10,7 @@ use Yard\Hook\Filter;
 
 class Dashboard
 {
-    #[Action("wp_dashboard_setup")]
+#[Action("wp_dashboard_setup")]
     public function remove_widgets(): void
     {
         $widgets = [

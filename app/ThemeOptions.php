@@ -51,6 +51,13 @@ class ThemeOptions
                     ->helperText(
                         "Enable this to show a \"Coming Soon\" mode on the website to everyone except for logged in admins.",
                     ),
+                Tab::make("Header"),
+                TrueFalse::make("Mostra data e luogo", "header_show_date_location")
+                    ->default(true),
+                Text::make("Data", "header_date")
+                    ->default("5 — 15.06.2026"),
+                Text::make("Luogo", "header_location")
+                    ->default("Bologna"),
             ],
             "style" => "",
             "location" => [Location::where("options_page", "theme-options")],

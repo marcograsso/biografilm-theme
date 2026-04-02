@@ -11,12 +11,14 @@
           })
         }}
       </a>
-      <div
-        class="text-tight flex flex-col items-start justify-start gap-0 text-xs"
-      >
-        <span class="font-semibold">5 — 15.06.2026</span>
-        <span class="font-normal">Bologna</span>
-      </div>
+      {% if header_show_date_location %}
+        <div
+          class="text-tight flex flex-col items-start justify-start gap-0 text-xs"
+        >
+          <span class="font-semibold">{{ header_date }}</span>
+          <span class="font-normal">{{ header_location }}</span>
+        </div>
+      {% endif %}
     </div>
     <!-- Navigation -->
     <div
@@ -73,13 +75,13 @@
         <div class="flex items-stretch">
           <a
             href="/"
-            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex cursor-pointer items-center border-l bg-white p-6"
+            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
           >
             {{ include("icons/generic/search.svg")|attr({ class: "size-5" }) }}
           </a>
           <a
             href="/"
-            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex cursor-pointer items-center border-l bg-white p-6"
+            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
           >
             {{ include("icons/generic/menu.svg")|attr({ class: "size-5" }) }}
           </a>

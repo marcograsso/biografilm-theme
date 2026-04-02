@@ -24,13 +24,14 @@ class Website extends Site
     #[Action("init")]
     public function register_post_types()
     {
-        PostTypes\Example::register();
+        PostTypes\Film::register();
+        PostTypes\Proiezione::register();
     }
 
     #[Action("init")]
     public function register_taxonomies()
     {
-        Taxonomies\ExampleTaxonomy::register();
+        Taxonomies\FilmTaxonomies::register();
     }
 
     #[Action("wp_enqueue_scripts")]
@@ -131,6 +132,9 @@ class Website extends Site
         }
 
         $context["current_url"] = URLHelper::get_current_url();
+        $context["header_show_date_location"] = get_field("header_show_date_location", "option");
+        $context["header_date"] = get_field("header_date", "option") ?: "5 — 15.06.2026";
+        $context["header_location"] = get_field("header_location", "option") ?: "Bologna";
         $context["environment"] = $this->vite->environment;
 
         // Detect current section (festival = homepage, industry, campus)
