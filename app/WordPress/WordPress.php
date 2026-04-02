@@ -257,13 +257,16 @@ class WordPress
     }
 
     // Disable attachment canonical redirect links.
-    #[Filter("redirect_canonical", 0, 1)]
+    #[Filter("redirect_canonical", 10, 2)]
     public function disable_attachment_canonical_redirect_url(
-        string $url,
-    ): string {
-        attachment_redirect_not_found();
+        string $redirect_url,
+        string $requested_url,
+    ): string|false {
+        if (is_attachment()) {
+            return false;
+        }
 
-        return $url;
+        return $redirect_url;
     }
 
     // Disable attachment links.

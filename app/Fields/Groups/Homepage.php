@@ -25,6 +25,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/banner-small/banner-small.php",
                     ),
+                Layout::make("Highlights", "highlights")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/highlights/highlights.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
