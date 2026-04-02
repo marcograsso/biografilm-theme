@@ -2,24 +2,45 @@
 
 namespace App\Fields\Groups;
 
-use Extended\ACF\Fields\Group;
-use Extended\ACF\Fields\Tab;
-use Extended\ACF\Fields\Textarea;
-use Extended\ACF\Fields\Text;
-use Extended\ACF\Fields\Repeater;
-use Extended\ACF\Fields\Image;
+use Extended\ACF\Fields\FlexibleContent;
+use Extended\ACF\Fields\Layout;
 use Extended\ACF\Location;
-use Extended\ACF\Fields\WYSIWYGEditor;
 
 register_extended_field_group([
     "title" => "Homepage",
     "location" => [Location::where("page_type", "=", "front_page")],
     "fields" => [
-        Tab::make("Hero"),
-        Textarea::make("Frase ad effetto", "hero_claim")
-            ->rows(3)
-            ->newLines("br"),
+        FlexibleContent::make("", "components")
+            ->button("Aggiungi sezione")
+            ->layouts([
+                Layout::make("Hero Carousel", "hero_carousel")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/hero-carousel/hero-carousel.php",
+                    ),
+                Layout::make("Banner Small", "banner_small")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/banner-small/banner-small.php",
+                    ),
+            ])
+            ->withSettings([
+                "acfe_flexible_advanced" => 1,
+                "acfe_flexible_stylised_button" => 1,
+                "acfe_flexible_add_actions" => ["toggle", "copy"],
+                "acfe_flexible_layouts_state" => "user",
+                "acfe_flexible_modal_edit" => [
+                    "acfe_flexible_modal_edit_enabled" => "0",
+                    "acfe_flexible_modal_edit_size" => "large",
+                ],
+                "acfe_flexible_modal" => [
+                    "acfe_flexible_modal_enabled" => "0",
+                ],
+            ]),
     ],
     "style" => "",
     "hide_on_screen" => ["the_content"],
+    "acfe_seamless_style" => 1,
 ]);
