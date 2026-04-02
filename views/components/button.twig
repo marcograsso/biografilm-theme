@@ -4,17 +4,17 @@
     base: "inline-flex items-center justify-center gap-2 whitespace-nowrap font-semibold  text-base  ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 cursor-pointer",
     variants: {
       variant: {
-        default: "bg-black text-white hover:bg-black",
+        default: "bg-black text-white hover:bg-black-hover active:bg-black-active",
         destructive: "bg-red-600 text-white hover:bg-red-700",
         outline: "border border-gray-300 bg-white hover:bg-gray-50 hover:text-gray-900",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200",
+        secondary: "bg-white text-black hover:bg-white-hover active:bg-white-active",
         ghost: "hover:bg-gray-100 hover:text-gray-900",
         link: "text-black underline-offset-4 hover:underline"
       },
       size: {
         default: "h-10 px-4 py-2",
         sm: "h-9   px-3",
-        lg: "h-11   px-8",
+        lg: "h-11   px-6 py-3",
         icon: "h-10 w-10"
       }
     },

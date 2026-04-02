@@ -6,21 +6,71 @@
 @theme {
   --font-sans: "Instrument Sans", "sans-serif";
   --font-display: "Bebas Neue", "sans-serif";
+  --default-font-color: var(--color-black);
+}
+
+@layer base {
+  body {
+    color: var(--color-black);
+  }
 }
 
 @theme {
   --color-black: hsl(0, 0%, 12%);
-  --color-black-hover: hsl(0, 0%, 2%);
-  --color-black-active: hsl(0, 0%, 0%);
+  --color-black-hover: hsl(0, 0%, 22%);
+  --color-black-active: hsl(0, 0%, 32%);
   --color-red: hsl(356, 77%, 42%);
   --color-red-hover: hsl(356, 77%, 32%);
   --color-red-active: hsl(356, 77%, 22%);
   --color-white: hsl(0, 0%, 100%);
   --color-white-hover: hsl(0, 0%, 90%);
   --color-white-active: hsl(0, 0%, 80%);
+  --color-stroke: #d2d2d2;
 }
 
 @import "./styles/fonts.css";
+
+/* Instrument Sans headings */
+@utility heading-h3 {
+  @apply text-tight font-sans text-[40px] md:text-[56px];
+}
+@utility heading-h4 {
+  @apply text-tight font-sans text-[36px] md:text-[48px];
+}
+@utility heading-h5 {
+  @apply text-tight font-sans text-[32px] md:text-[40px];
+}
+@utility heading-h6 {
+  @apply text-tight font-sans text-[28px] md:text-[32px];
+}
+
+/* Bebas Neue headings */
+@utility display-h1-primary {
+  @apply font-display text-tight-display text-[80px] md:text-[160px];
+}
+@utility display-h1-secondary {
+  @apply font-display text-tight-display text-[72px] md:text-[120px];
+}
+@utility display-h1-tertiary {
+  @apply font-display text-tight-display text-[64px] md:text-[96px];
+}
+@utility display-h2 {
+  @apply font-display text-tight-display text-[64px] md:text-[80px];
+}
+@utility display-h3 {
+  @apply font-display text-tight-display text-[40px] md:text-[64px];
+}
+@utility display-h6 {
+  @apply font-display text-tight-display text-[24px] md:text-[32px];
+}
+
+@utility text-tight {
+  @apply leading-[112%] tracking-[-0.02em];
+}
+
+@utility text-tight-display {
+  @apply leading-[90%] tracking-[-0.02em];
+}
 
 @utility debug {
   @apply outline outline-red-500;
