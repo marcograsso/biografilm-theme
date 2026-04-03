@@ -26,6 +26,7 @@ class Website extends Site
     {
         PostTypes\Film::register();
         PostTypes\Proiezione::register();
+        PostTypes\News::register();
     }
 
     #[Action("init")]

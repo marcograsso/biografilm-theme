@@ -1,6 +1,9 @@
 {% set film = function("get_field", "film", proiezione.ID) %}
 {% set film_id = film.ID ?? null %}
-{% set sezione = film_id ? function("wp_get_post_terms", film_id, "sezione")[0] : null %}
+{% set sezione = film_id
+  ? function("wp_get_post_terms", film_id, "sezione")[0]
+  : null
+%}
 {% if film_id and function("get_field", "preview", film_id) %}
   {% set preview = function("get_field", "preview", film_id) %}
 {% elseif film_id %}
@@ -9,28 +12,57 @@
   {% set durata = function("get_field", "durata", film_id) %}
   {% set anno = function("get_field", "anno", film_id) %}
   {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
-  {% if regista %}{% set preview_parts = preview_parts|merge([regista]) %}{% endif %}
-  {% if durata %}{% set preview_parts = preview_parts|merge([durata]) %}{% endif %}
+  {% if regista %}{% set preview_parts =
+    preview_parts|merge([regista])
+  %}{% endif %}
+  {% if durata %}{% set preview_parts =
+    preview_parts|merge([durata])
+  %}{% endif %}
   {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
-  {% if genere %}{% set preview_parts = preview_parts|merge([genere.name]) %}{% endif %}
+  {% if genere %}{% set preview_parts =
+    preview_parts|merge([genere.name])
+  %}{% endif %}
   {% set preview = preview_parts|join(" / ") %}
 {% else %}
   {% set preview = null %}
 {% endif %}
 {% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
 
-<div class="col-span-1 {{ is_last ? "border-b border-stroke border-r" : "" }}">
+{% set film_url = film_id ? function("get_permalink", film_id) : null %}
+<a
+  href="{{ film_url }}"
+  class="group border-b-stroke relative col-span-1 block border-b transition-colors duration-300"
+>
+  {% set badges = film_id ? function("wp_get_post_terms", film_id, "badge") : []
+  %}
+  {% if badges %}
+    <div class="absolute top-0 flex gap-2">
+      {% for badge in badges %}
+        <span
+          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]"
+        >
+          {{ badge.name }}
+        </span>
+      {% endfor %}
+    </div>
+  {% endif %}
   <div class="aspect-video w-full bg-gray-200">
-    {% set film_image_url = film_id ? function("get_the_post_thumbnail_url", film_id, "large") : null %}
-    {% if film_image_url %}
-      <img
-        src="{{ film_image_url }}"
-        alt="{{ film.post_title }}"
-        class="h-full w-full object-cover"
-      />
-    {% endif %}
+    {% set film_image_url = film_id
+      ? function("get_the_post_thumbnail_url", film_id, "large")
+      : null
+    %}
+    <img
+      src="{{
+      film_image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ film.post_title }}"
+      class="h-full w-full object-cover"
+    />
   </div>
-  <div class="flex flex-col gap-8 px-6 py-10">
+
+  <div class="border-l-stroke flex flex-col gap-10 px-6 py-10 lg:border-l">
     <!-- Up -->
     <div class="flex flex-col gap-3">
       {% if sezione %}
@@ -51,7 +83,7 @@
     <div class="flex flex-col gap-3">
       {% if proiezione.data or proiezione.orario %}
         <p class="text-tight text-base font-semibold text-black">
-          {{ proiezione.data }}{% if proiezione.orario %}
+          {{ proiezione.data|date("d F Y") }}{% if proiezione.orario %}
             · {{ proiezione.orario }}
           {% endif %}
         </p>
@@ -63,4 +95,4 @@
       {% endif %}
     </div>
   </div>
-</div>
+</a>

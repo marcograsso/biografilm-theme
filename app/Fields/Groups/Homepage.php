@@ -31,6 +31,18 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/card-displayer/card-displayer.php",
                     ),
+                Layout::make("Partners Displayer", "partners_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/partners-displayer/partners-displayer.php",
+                    ),
+                Layout::make("Highlight Card", "highlight_card")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/highlight-card/highlight-card.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

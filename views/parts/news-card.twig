@@ -1,0 +1,32 @@
+{% set permalink = function("get_permalink", news.ID) %}
+{% set image_url = function("get_the_post_thumbnail_url", news.ID, "large") %}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke relative col-span-1 block border-b transition-colors duration-300"
+>
+  <div class="aspect-video w-full bg-gray-200">
+    <img
+      src="{{
+      image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ news.post_title }}"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div class="border-l-stroke flex h-full flex-col gap-8 px-6 py-6 lg:border-l">
+    <h5 class="text-tight line-clamp-2 text-2xl font-semibold">
+      {{ news.post_title }}
+    </h5>
+    <div class="flex items-center justify-between gap-2">
+      <p class="text-tight text-base text-black">
+        {{ news.post_date|date("d F Y") }}
+      </p>
+      <span>
+        {{ include("icons/generic/arrow-right.svg")|attr({ class: "size-6" }) }}
+      </span>
+    </div>
+  </div>
+</a>

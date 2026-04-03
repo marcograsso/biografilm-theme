@@ -1,18 +1,48 @@
 <section class="w-full">
-  <div class="divide-stroke grid w-full grid-cols-3 divide-x">
-    <div class="col-span-3 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!">
+  <div class="grid w-full grid-cols-3">
+    <div
+      class="col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
+    >
       {% if component.title %}
         <h2 class="display-h2">{{ component.title }}</h2>
       {% endif %}
+      {% if component.link %}
+        <a
+          href="{{ component.link.url }}"
+          target="{{ component.link.target ? : "_self" }}"
+          class="text-tight text-red group flex items-center gap-2 text-xl font-semibold underline-offset-3 transition-all duration-500 ease-out hover:underline"
+        >
+          {{ component.link.title }}
+          {{
+            include("icons/generic/arrow-right.svg")|attr({
+              class: "size-6 transition-transform duration-500 ease-out group-hover:translate-x-2"
+            })
+          }}
+        </a>
+      {% endif %}
     </div>
     <div
-      class="divide-stroke border-stroke col-span-3 grid grid-cols-1 divide-x divide-y md:grid-cols-2 xl:col-span-2"
+      class="border-stroke col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2"
     >
-      {% for proiezione in component.proiezioni %}
-        {{
-          include("parts/movie-card.twig", { proiezione: proiezione, is_last: loop.last })
-        }}
+      {% for item in component.items %}
+        {% if item.post_type == "news" %}
+          {{
+            include("parts/news-card.twig", { news: item, is_last: loop.last })
+          }}
+        {% else %}
+          {{
+            include(
+              "parts/movie-card.twig",
+              { proiezione: item, is_last: loop.last }
+            )
+          }}
+        {% endif %}
       {% endfor %}
+      {% if component.items|length is odd %}
+        <div
+          class="border-stroke col-span-1 border-r border-l xl:border-b"
+        ></div>
+      {% endif %}
     </div>
   </div>
 </section>

@@ -59,7 +59,7 @@ class Proiezione extends \Timber\Post
                     ->format("object"),
                 DatePicker::make("Data", "data")
                     ->displayFormat("d/m/Y")
-                    ->format("d/m/Y"),
+                    ->format("d F Y"),
                 TimePicker::make("Orario", "orario")
                     ->displayFormat("H:i")
                     ->format("H:i"),
