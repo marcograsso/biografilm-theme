@@ -136,6 +136,8 @@ class Website extends Site
         $context["header_show_date_location"] = get_field("header_show_date_location", "option");
         $context["header_date"] = get_field("header_date", "option") ?: "5 — 15.06.2026";
         $context["header_location"] = get_field("header_location", "option") ?: "Bologna";
+        $context["footer_image"] = get_field("footer_image", "option");
+        $context["footer_image_mobile"] = get_field("footer_image_mobile", "option");
         $context["environment"] = $this->vite->environment;
 
         // Detect current section (festival = homepage, industry, campus)

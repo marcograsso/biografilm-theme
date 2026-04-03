@@ -58,6 +58,11 @@ class ThemeOptions
                     ->default("5 — 15.06.2026"),
                 Text::make("Luogo", "header_location")
                     ->default("Bologna"),
+                Tab::make("Footer"),
+                Image::make("Immagine footer", "footer_image")
+                    ->format("array"),
+                Image::make("Immagine footer mobile", "footer_image_mobile")
+                    ->format("array"),
             ],
             "style" => "",
             "location" => [Location::where("options_page", "theme-options")],

@@ -1,3 +1,48 @@
 <footer>
-  Copyright {{ "now"|date("Y") }}
+  <div class="bg-red mt-30 h-10 w-full">
+    Newsletter
+  </div>
+  {% if footer_image %}
+    {% set fp =
+      function("get_post_meta", footer_image.ID, "focalpoint", true)
+    %}
+    {% set fp_mobile = footer_image_mobile
+      ? function("get_post_meta", footer_image_mobile.ID, "focalpoint", true)
+      : null
+    %}
+    {% set fp_style = fp
+      ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+        ~ ((fp.top * 100)|round)
+        ~ "%;"
+      : null
+    %}
+    {% set fp_mobile_style = fp_mobile
+      ? "object-position: " ~ ((fp_mobile.left * 100)|round) ~ "% "
+        ~ ((fp_mobile.top * 100)|round)
+        ~ "%;"
+      : null
+    %}
+    <div class="h-120 w-full overflow-hidden">
+      <img
+        src="{{ footer_image.url }}"
+        alt="{{ footer_image.alt }}"
+        class="h-full w-full object-cover {{
+        footer_image_mobile
+          ? "hidden md:block"
+          : ""
+        }}"
+        style="{{ fp_style }}"
+      />
+      {% if footer_image_mobile %}
+        <img
+          src="{{ footer_image_mobile.url }}"
+          alt="{{ footer_image_mobile.alt }}"
+          class="h-full w-full object-cover md:hidden"
+          style="{{ fp_mobile_style }}"
+        />
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="h-120 w-full bg-gray-200"></div>
+  {% endif %}
 </footer>
