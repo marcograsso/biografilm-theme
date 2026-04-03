@@ -46,7 +46,7 @@
       {% endfor %}
     </div>
   {% endif %}
-  <div class="aspect-video w-full bg-gray-200">
+  <div class="aspect-video w-full overflow-hidden bg-gray-200">
     {% set film_image_url = film_id
       ? function("get_the_post_thumbnail_url", film_id, "large")
       : null

@@ -29,6 +29,10 @@
           {{
             include("parts/news-card.twig", { news: item, is_last: loop.last })
           }}
+        {% elseif item.post_type == "film" %}
+          {{
+            include("parts/film-card.twig", { film: item, is_last: loop.last })
+          }}
         {% else %}
           {{
             include(

@@ -1,0 +1,71 @@
+{% set film_id = film.ID %}
+{% set permalink = function("get_permalink", film_id) %}
+{% set image_url = function("get_the_post_thumbnail_url", film_id, "large") %}
+{% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
+{% set badges = function("wp_get_post_terms", film_id, "badge") %}
+{% set preview_raw = function("get_field", "preview", film_id) %}
+{% if not preview_raw %}
+  {% set preview_parts = [] %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% if regista %}{% set preview_parts =
+    preview_parts|merge([regista])
+  %}{% endif %}
+  {% if durata %}{% set preview_parts =
+    preview_parts|merge([durata])
+  %}{% endif %}
+  {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+  {% if genere %}{% set preview_parts =
+    preview_parts|merge([genere.name])
+  %}{% endif %}
+  {% set preview = preview_parts|join(" / ") %}
+{% else %}
+  {% set preview = preview_raw %}
+{% endif %}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke relative col-span-1 flex flex-col border-b transition-colors duration-300"
+>
+  {% if badges %}
+    <div class="absolute top-0 left-0 flex gap-2">
+      {% for badge in badges %}
+        <span
+          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]"
+        >
+          {{ badge.name }}
+        </span>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <div class="aspect-video w-full overflow-hidden bg-gray-200">
+    <img
+      src="{{
+      image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ film.post_title }}"
+      class="h-full w-full object-cover"
+    />
+  </div>
+  <div
+    class="border-l-stroke flex flex-1 flex-col gap-10 px-6 py-10 md:border-l"
+  >
+    <div class="flex flex-col gap-3">
+      {% if sezione %}
+        <p class="text-tight text-red text-sm font-semibold uppercase">
+          {{ sezione.name }}
+        </p>
+      {% endif %}
+      <h5 class="text-tight text-2xl font-semibold">{{ film.post_title }}</h5>
+      {% if preview %}
+        <p class="text-tight text-base text-black">
+          {{ preview }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</a>
