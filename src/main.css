@@ -16,6 +16,7 @@
 }
 
 @theme {
+  --breakpoint-3xl: 108rem;
   --color-black: hsl(0, 0%, 12%);
   --color-black-hover: hsl(0, 0%, 22%);
   --color-black-active: hsl(0, 0%, 32%);

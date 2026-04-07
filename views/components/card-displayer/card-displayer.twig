@@ -1,7 +1,7 @@
 <section class="w-full">
-  <div class="grid w-full grid-cols-3">
+  <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
     <div
-      class="col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
+      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
     >
       {% if component.title %}
         <h2 class="display-h2">{{ component.title }}</h2>
@@ -22,29 +22,66 @@
       {% endif %}
     </div>
     <div
-      class="border-stroke col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2"
+      class="border-stroke 3xl:col-span-3 3xl:grid-cols-3 col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2"
     >
+      {% set count = component.items|length %}
+      {% set always_even = component.always_even %}
+      {% set is_odd = count % 2 == 1 %}
       {% for item in component.items %}
+        {% set is_last = loop.last %}
+        {% set hide_last = always_even and is_odd and is_last %}
         {% if item.post_type == "news" %}
           {{
-            include("parts/cards/news-card.twig", { news: item, is_last: loop.last })
+            include(
+              "parts/cards/news-card.twig",
+              {
+                news: item,
+                is_last: is_last,
+                extra_class: hide_last ? "hidden 3xl:block" : ""
+              }
+            )
           }}
         {% elseif item.post_type == "film" %}
           {{
-            include("parts/cards/film-card.twig", { film: item, is_last: loop.last })
+            include(
+              "parts/cards/film-card.twig",
+              {
+                film: item,
+                is_last: is_last,
+                extra_class: hide_last ? "hidden 3xl:block" : ""
+              }
+            )
           }}
         {% else %}
           {{
             include(
               "parts/cards/screening-card.twig",
-              { proiezione: item, is_last: loop.last }
+              {
+                proiezione: item,
+                is_last: is_last,
+                extra_class: hide_last ? "hidden 3xl:block" : ""
+              }
             )
           }}
         {% endif %}
       {% endfor %}
-      {% if component.items|length is odd %}
+      {# 2-col filler: only when not always_even (otherwise last card is hidden, making count even) #}
+      {% if is_odd and not always_even %}
         <div
-          class="border-stroke col-span-1 border-r border-l xl:border-b"
+          class="border-stroke 3xl:hidden col-span-1 border-r border-l xl:border-b"
+        ></div>
+      {% endif %}
+      {# 3-col fillers: shown only at 3xl when count % 3 != 0 #}
+      {% if count % 3 == 1 %}
+        <div
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
+        ></div>
+        <div
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
+        ></div>
+      {% elseif count % 3 == 2 %}
+        <div
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
         ></div>
       {% endif %}
     </div>
