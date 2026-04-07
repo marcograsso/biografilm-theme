@@ -4,6 +4,7 @@ namespace App\PostTypes;
 
 use Extended\ACF\Fields\DatePicker;
 use Extended\ACF\Fields\Image;
+use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
 use Extended\ACF\Fields\Text;
@@ -17,6 +18,12 @@ class Film extends \Timber\Post
         "plural" => "Film",
         "slug" => "film",
     ];
+
+    public function get_proiezioni(): array
+    {
+        $items = get_field("proiezioni", $this->ID) ?: [];
+        return array_map(fn($p) => new Proiezione(is_object($p) ? $p->ID : (int) $p), $items);
+    }
 
     public static function register()
     {
@@ -74,6 +81,14 @@ class Film extends \Timber\Post
                     ->helperText(
                         "Questo testo esteso verrà mostrato nella pagina dedicata al film. Può essere anche lungo.",
                     ),
+
+                Tab::make("Proiezioni", "proiezioni_tab"),
+                Relationship::make("Proiezioni", "proiezioni")
+                    ->key("field_film_proiezioni")
+                    ->postTypes(["proiezione"])
+                    ->filters(["search"])
+                    ->elements(["featured_image"])
+                    ->bidirectional("field_proiezione_film"),
 
                 Tab::make("Tassonomie"),
                 Taxonomy::make("Sezione", "sezione")

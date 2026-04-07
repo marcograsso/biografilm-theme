@@ -1,5 +1,8 @@
 {% set permalink = function("get_permalink", news.ID) %}
 {% set image_url = function("get_the_post_thumbnail_url", news.ID, "large") %}
+{% set thumb_id = function("get_post_thumbnail_id", news.ID) %}
+{% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
+{% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
 
 <a
   href="{{ permalink }}"
@@ -14,6 +17,7 @@
       }}"
       alt="{{ news.post_title }}"
       class="h-full w-full object-cover"
+      style="{{ fp_style }}"
     />
   </div>
   <div class="border-l-stroke flex flex-1 flex-col gap-8 px-6 py-6 md:border-l">

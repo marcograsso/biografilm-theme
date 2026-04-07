@@ -1,5 +1,9 @@
-{% set film = function("get_field", "film", proiezione.ID) %}
+{% set film_raw = function("get_field", "film", proiezione.ID) %}
+{% set film = film_raw is iterable ? film_raw|first : film_raw %}
 {% set film_id = film.ID ?? null %}
+{% set thumb_id = film_id ? function("get_post_thumbnail_id", film_id) : null %}
+{% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
+{% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
 {% set sezione = film_id
   ? function("wp_get_post_terms", film_id, "sezione")[0]
   : null
@@ -59,6 +63,7 @@
       }}"
       alt="{{ film.post_title }}"
       class="h-full w-full object-cover"
+      style="{{ fp_style }}"
     />
   </div>
 

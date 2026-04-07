@@ -5,7 +5,7 @@ namespace App\PostTypes;
 use Extended\ACF\Fields\DatePicker;
 use Extended\ACF\Fields\Image;
 use Extended\ACF\Fields\Link;
-use Extended\ACF\Fields\PostObject;
+use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
 use Extended\ACF\Fields\Text;
@@ -24,10 +24,11 @@ class Proiezione extends \Timber\Post
 
     public function get_film(): ?Film
     {
-        $film = get_field("film", $this->ID);
-        if (!$film) {
+        $films = get_field("film", $this->ID);
+        if (empty($films)) {
             return null;
         }
+        $film = is_array($films) ? $films[0] : $films;
         $id = is_object($film) ? $film->ID : (int) $film;
         return new Film($id);
     }
@@ -54,9 +55,13 @@ class Proiezione extends \Timber\Post
             "style" => "",
             "fields" => [
                 Tab::make("Proiezione"),
-                PostObject::make("Film", "film")
+                Relationship::make("Film", "film")
+                    ->key("field_proiezione_film")
                     ->postTypes(["film"])
-                    ->format("object"),
+                    ->filters(["search"])
+                    ->elements(["featured_image"])
+                    ->maxPosts(1)
+                    ->bidirectional("field_film_proiezioni"),
                 DatePicker::make("Data", "data")
                     ->displayFormat("d/m/Y")
                     ->format("d F Y"),

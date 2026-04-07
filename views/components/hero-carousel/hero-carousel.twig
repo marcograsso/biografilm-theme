@@ -4,13 +4,15 @@
 >
   <div class="swiper-wrapper">
     {% for slide in component.hero_carousel_slides %}
+      {% set fp = slide.background_image ? function("get_post_meta", slide.background_image.ID, "focalpoint", true) : null %}
+      {% set fp_bg_style = fp ? "background-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
       <div
         class="swiper-slide relative min-h-160 w-full overflow-hidden bg-zinc-900 bg-cover bg-center"
         style="height: calc(100vh - 108px);{{
         slide.background_image and not slide.background_video
           ? " background-image: url(" ~ slide.background_image.url ~ ");"
           : ""
-        }}"
+        }}{{ fp_bg_style }}"
       >
         {% if slide.background_video %}
           <video
