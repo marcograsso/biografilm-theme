@@ -7,91 +7,237 @@
   {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
   {% set badges = function("wp_get_post_terms", film_id, "badge") %}
   {% set regista = function("get_field", "regista", film_id) %}
+  {% set titolo_alternativo =
+    function("get_field", "titolo_alternativo", film_id)
+  %}
   {% set durata = function("get_field", "durata", film_id) %}
   {% set anno = function("get_field", "anno", film_id) %}
+  {% set area_tematica =
+    function("wp_get_post_terms", film_id, "area-tematica")
+  %}
   {% set description = function("get_field", "description", film_id) %}
+  {% set info_aggiuntive = function("get_field", "info_aggiuntive", film_id) %}
   {% set proiezioni = post.get_proiezioni %}
 
   {# Hero image #}
   {% if post.thumbnail %}
     {% set thumb_id = function("get_post_thumbnail_id", film_id) %}
-    {% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
-    {% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
-    <div class="mt-[108px] aspect-video w-full overflow-hidden">
+    {% set fp = thumb_id
+      ? function("get_post_meta", thumb_id, "focalpoint", true)
+      : null
+    %}
+    {% set fp_style = fp
+      ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+        ~ ((fp.top * 100)|round)
+        ~ "%;"
+      : null
+    %}
+    <div
+      class="relative mt-[108px] h-[550px] w-full overflow-hidden lg:h-[600px]"
+    >
       <img
         src="{{ post.thumbnail.src("full") }}"
         alt="{{ post.title }}"
         class="h-full w-full object-cover"
         style="{{ fp_style }}"
       />
-    </div>
-  {% endif %}
-
-  <div class="mx-auto max-w-4xl px-6 py-16 flex flex-col gap-12">
-
-    {# Header #}
-    <div class="flex flex-col gap-4">
       {% if badges %}
-        <div class="flex gap-0">
+        <div class="absolute bottom-0 left-0 flex gap-0">
           {% for badge in badges %}
-            <span class="bg-black px-2 py-1 text-sm font-semibold text-white uppercase{% if not loop.last %} border-r border-r-[#575757]{% endif %}">
+            <span
+              class="uppercase {{
+              loop.last
+                ? ""
+                : "border-r border-r-[#575757]"
+              }} bg-black/20 px-2 py-1 text-sm font-semibold text-white! backdrop-blur-[50px]"
+            >
               {{ badge.name }}
             </span>
           {% endfor %}
         </div>
       {% endif %}
-      {% if sezione %}
-        <p class="text-tight text-red text-sm font-semibold uppercase">
-          {{ sezione.name }}
-        </p>
-      {% endif %}
-      <h1 class="text-tight text-4xl font-semibold">{{ post.title }}</h1>
-      {% set preview_raw = function("get_field", "preview", film_id) %}
-      {% if preview_raw %}
-        <p class="text-tight text-lg text-black/70">{{ preview_raw }}</p>
-      {% else %}
-        {% set preview_parts = [] %}
-        {% if regista %}{% set preview_parts = preview_parts|merge([regista]) %}{% endif %}
-        {% if durata %}{% set preview_parts = preview_parts|merge([durata]) %}{% endif %}
-        {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
-        {% if genere %}{% set preview_parts = preview_parts|merge([genere.name]) %}{% endif %}
-        {% if preview_parts %}
-          <p class="text-tight text-lg text-black/70">{{ preview_parts|join(" / ") }}</p>
+    </div>
+  {% endif %}
+
+  <div class="mx-auto grid grid-cols-3">
+    {# Main content — cols 1–2 #}
+    <div
+      class="col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:col-span-2 lg:gap-20 lg:pr-30 lg:pb-30 lg:pl-10"
+    >
+      {# Header #}
+      <div class="flex flex-col gap-4">
+        {% if sezione %}
+          <p class="text-tight text-red text-sm font-semibold uppercase">
+            {{ sezione.name }}
+          </p>
         {% endif %}
+        <h1 class="display-h1-tertiary">{{ post.title }}</h1>
+      </div>
+
+      {# Info table #}
+      <div
+        class="grid grid-cols-[auto_1fr] lg:grid-cols-[minmax(auto,_220px)_1fr]"
+      >
+        {% if regista %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b pr-8 pb-6 text-base lg:pr-16 lg:text-xl"
+            >
+              Regista
+            </span>
+            <span
+              class="border-stroke text-tight border-b pb-6 text-base font-semibold lg:text-xl"
+            >
+              {{ regista }}
+            </span>
+          </div>
+        {% endif %}
+        {% if titolo_alternativo %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Titolo alternativo
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ titolo_alternativo }}
+            </span>
+          </div>
+        {% endif %}
+        {% if durata %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Durata
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ durata }}
+            </span>
+          </div>
+        {% endif %}
+        {% if paese %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Paese
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ paese|map(t => t.name)|join(", ") }}
+            </span>
+          </div>
+        {% endif %}
+        {% if anno %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Anno
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ anno }}
+            </span>
+          </div>
+        {% endif %}
+        {% if genere %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Genere
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ genere.name }}
+            </span>
+          </div>
+        {% endif %}
+        {% if area_tematica %}
+          <div class="contents">
+            <span
+              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Aree tematiche
+            </span>
+            <span
+              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ area_tematica|map(t => t.name)|join(", ") }}
+            </span>
+          </div>
+        {% endif %}
+        {% if info_aggiuntive %}
+          {% for row in info_aggiuntive %}
+            <div class="contents">
+              <span
+                class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              >
+                {{ row.titolo }}
+              </span>
+              <span
+                class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              >
+                {{ row.contenuto }}
+              </span>
+            </div>
+          {% endfor %}
+        {% endif %}
+      </div>
+
+      {# Description #}
+      {% if description %}
+        <div
+          class="prose font-regular max-w-none text-base leading-[150%] text-black/80"
+        >
+          {{ description }}
+        </div>
       {% endif %}
     </div>
 
-    {# Description #}
-    {% if description %}
-      <div class="prose max-w-none">
-        {{ description }}
-      </div>
-    {% endif %}
-
-    {# Proiezioni #}
+    {# Proiezioni — col 3 #}
     {% if proiezioni %}
-      <div class="flex flex-col gap-6">
-        <h2 class="text-tight text-2xl font-semibold">Proiezioni</h2>
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div
+        class="border-l-stroke col-span-3 flex flex-col gap-12 py-10 lg:col-span-1 lg:border-l"
+      >
+        <h2 class="text-tight px-10 text-2xl font-semibold">Programmazione</h2>
+        <div class="flex flex-col gap-12">
           {% for proiezione in proiezioni %}
-            {% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
-            <div class="border-stroke border p-6 flex flex-col gap-2">
+            {% set location =
+              function("wp_get_post_terms", proiezione.ID, "location")[0]
+            %}
+            <div class="border-stroke flex flex-col gap-2 border px-10">
               {% if proiezione.meta("titolo_alternativo") %}
-                <p class="text-tight font-semibold">{{ proiezione.meta("titolo_alternativo") }}</p>
+                <p class="text-tight font-semibold">
+                  {{ proiezione.meta("titolo_alternativo") }}
+                </p>
               {% endif %}
               {% if proiezione.meta("data") or proiezione.meta("orario") %}
                 <p class="text-tight font-semibold">
-                  {{ proiezione.meta("data") }}{% if proiezione.meta("orario") %} · {{ proiezione.meta("orario")|date("H:i") }}{% endif %}
+                  {{ proiezione.meta("data") }}{% if
+                    proiezione.meta("orario") %}
+                    · {{ proiezione.meta("orario")|date("H:i") }}
+                  {% endif %}
                 </p>
               {% endif %}
               {% if location %}
-                <p class="text-tight text-black/70">{{ location.name }}</p>
+                <p class="text-tight text-black/70">
+                  {{ location.name }}
+                </p>
               {% endif %}
             </div>
           {% endfor %}
         </div>
       </div>
     {% endif %}
-
   </div>
 {% endblock content %}

@@ -5,9 +5,11 @@ namespace App\PostTypes;
 use Extended\ACF\Fields\Image;
 use Extended\ACF\Fields\Number;
 use Extended\ACF\Fields\Relationship;
+use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
 use Extended\ACF\Fields\Text;
+use Extended\ACF\Fields\Textarea;
 use Extended\ACF\Fields\WYSIWYGEditor;
 use Extended\ACF\Location;
 
@@ -118,6 +120,15 @@ class Film extends \Timber\Post
                     ->appearance("multi_select")
                     ->create(true)
                     ->save(true),
+
+                Tab::make("Info aggiuntive"),
+                Repeater::make("Info aggiuntive", "info_aggiuntive")
+                    ->key("field_film_info_aggiuntive_repeater")
+                    ->helperText("Le righe aggiunte qui appariranno nella tabella informativa della pagina del film, dopo i campi standard (regista, durata, paese, ecc.).")
+                    ->fields([
+                        Text::make("Titolo", "titolo")->key("field_film_info_aggiuntive_titolo"),
+                        Textarea::make("Contenuto", "contenuto")->key("field_film_info_aggiuntive_contenuto")->rows(3),
+                    ]),
             ],
         ]);
     }
