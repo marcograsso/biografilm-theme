@@ -27,16 +27,16 @@
       {% for item in component.items %}
         {% if item.post_type == "news" %}
           {{
-            include("parts/news-card.twig", { news: item, is_last: loop.last })
+            include("parts/cards/news-card.twig", { news: item, is_last: loop.last })
           }}
         {% elseif item.post_type == "film" %}
           {{
-            include("parts/film-card.twig", { film: item, is_last: loop.last })
+            include("parts/cards/film-card.twig", { film: item, is_last: loop.last })
           }}
         {% else %}
           {{
             include(
-              "parts/movie-card.twig",
+              "parts/cards/screening-card.twig",
               { proiezione: item, is_last: loop.last }
             )
           }}

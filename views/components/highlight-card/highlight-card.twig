@@ -6,25 +6,40 @@
   {% set film_raw = function("get_field", "film", post_id) %}
   {% set film = film_raw is iterable ? film_raw|first : film_raw %}
   {% set film_id = film.ID ?? null %}
-  {% set title = film.post_title ?? post.post_title %}
-  {% set image_url = film_id
-    ? function("get_the_post_thumbnail_url", film_id, "full")
-    : null
+
+  {# Alternative info from proiezione #}
+  {% set alt_title = function("get_field", "titolo_alternativo", post_id) %}
+  {% set alt_preview = function("get_field", "preview_alternativa", post_id) %}
+  {% set alt_image = function("get_field", "immagine_alternativa", post_id) %}
+  {% set alt_badges = function("wp_get_post_terms", post_id, "badge") %}
+
+  {% set title = alt_title ? : film.post_title ?? post.post_title %}
+  {% set image_url = alt_image
+    ? alt_image.url
+    : film_id ? function("get_the_post_thumbnail_url", film_id, "full") : null
+  %}
+  {% set fp_source_id = alt_image
+    ? alt_image.ID
+    : film_id ? function("get_post_thumbnail_id", film_id) : null
   %}
   {% set sezione = film_id
     ? function("wp_get_post_terms", film_id, "sezione")[0]
     : null
   %}
-  {% set badges = film_id ? function("wp_get_post_terms", film_id, "badge") : []
+  {% set badges = alt_badges
+    ?
+    : film_id ? function("wp_get_post_terms", film_id, "badge") : []
   %}
   {% set location = function("wp_get_post_terms", post_id, "location")[0] %}
   {% set data = function("get_field", "data", post_id) %}
   {% set orario = function("get_field", "orario", post_id) %}
-  {% set preview_raw = film_id
-    ? function("get_field", "preview", film_id)
-    : null
-  %}
-  {% if not preview_raw and film_id %}
+
+  {# Preview #}
+  {% if alt_preview %}
+    {% set preview = alt_preview %}
+  {% elseif film_id and function("get_field", "preview", film_id) %}
+    {% set preview = function("get_field", "preview", film_id) %}
+  {% elseif film_id %}
     {% set preview_parts = [] %}
     {% set regista = function("get_field", "regista", film_id) %}
     {% set durata = function("get_field", "durata", film_id) %}
@@ -44,12 +59,13 @@
     %}{% endif %}
     {% set preview = preview_parts|join(" / ") %}
   {% else %}
-    {% set preview = preview_raw %}
+    {% set preview = null %}
   {% endif %}
 {% elseif post_type == "film" %}
   {% set film_id = post_id %}
   {% set title = post.post_title %}
   {% set image_url = function("get_the_post_thumbnail_url", film_id, "full") %}
+  {% set fp_source_id = function("get_post_thumbnail_id", film_id) %}
   {% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
   {% set badges = function("wp_get_post_terms", film_id, "badge") %}
   {% set location = null %}
@@ -81,18 +97,27 @@
 {% endif %}
 
 {% if post_id %}
-  {% set thumb_id = film_id ? function("get_post_thumbnail_id", film_id) : null %}
-  {% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
-  {% set fp_bg_style = fp ? "background-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
+  {% set fp = fp_source_id
+    ? function("get_post_meta", fp_source_id, "focalpoint", true)
+    : null
+  %}
+  {% set fp_bg_style = fp
+    ? "background-position: " ~ ((fp.left * 100)|round) ~ "% "
+      ~ ((fp.top * 100)|round)
+      ~ "%;"
+    : null
+  %}
   <section
     class="relative flex h-[547px] w-full items-end justify-end bg-zinc-900 bg-cover bg-center md:items-center"
-    style="{{ image_url ? "background-image: url(" ~ image_url ~ ");" : "" }}{{ fp_bg_style }}"
+    style="{{ image_url ? "background-image: url(" ~ image_url ~ ");" : "" }}{{
+    fp_bg_style
+    }}"
   >
     {% if badges %}
-      <div class="absolute top-0 left-0 flex gap-2">
+      <div class="absolute top-0 left-0 flex flex-wrap gap-0">
         {% for badge in badges %}
           <span
-            class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]"
+            class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]{% if not loop.last %} border-r border-r-[#575757]{% endif %}"
           >
             {{ badge.name }}
           </span>
@@ -123,7 +148,7 @@
           {% if data or orario %}
             <p class="text-tight text-base font-semibold">
               {{ data }}{% if orario %}
-                · {{ orario }}
+                · {{ orario|date("H:i") }}
               {% endif %}
             </p>
           {% endif %}

@@ -1,0 +1,31 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  <article class="mx-auto max-w-3xl px-6 py-20">
+
+    {% if post.thumbnail %}
+      {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
+      {% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
+      {% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
+      <div class="mb-10 aspect-video w-full overflow-hidden">
+        <img
+          src="{{ post.thumbnail.src("large") }}"
+          alt="{{ post.thumbnail.alt }}"
+          class="h-full w-full object-cover"
+          style="{{ fp_style }}"
+        />
+      </div>
+    {% endif %}
+
+    <div class="flex flex-col gap-6">
+      <p class="text-tight text-sm text-black/50">
+        {{ post.post_date|date("d F Y") }}
+      </p>
+      <h1 class="text-tight text-4xl font-semibold">{{ post.title }}</h1>
+      <div class="prose max-w-none">
+        {{ post.content }}
+      </div>
+    </div>
+
+  </article>
+{% endblock content %}

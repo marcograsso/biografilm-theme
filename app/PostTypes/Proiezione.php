@@ -44,6 +44,14 @@ class Proiezione extends \Timber\Post
         });
 
         self::register_custom_fields();
+
+        // Proiezioni have no public single pages
+        add_action("template_redirect", function () {
+            if (is_singular(self::$names["slug"])) {
+                wp_redirect(home_url(), 301);
+                exit;
+            }
+        });
     }
 
     private static function register_custom_fields()

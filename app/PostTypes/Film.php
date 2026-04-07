@@ -2,8 +2,8 @@
 
 namespace App\PostTypes;
 
-use Extended\ACF\Fields\DatePicker;
 use Extended\ACF\Fields\Image;
+use Extended\ACF\Fields\Number;
 use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
@@ -68,9 +68,10 @@ class Film extends \Timber\Post
                 Text::make("Regista", "regista"),
                 Text::make("Titolo alternativo", "titolo_alternativo"),
                 Text::make("Durata", "durata"),
-                DatePicker::make("Anno", "anno")
-                    ->displayFormat("Y")
-                    ->format("Y"),
+                Number::make("Anno", "anno")
+                    ->min(1888)
+                    ->max(2100)
+                    ->placeholder("es. 2024"),
                 Text::make("Preview", "preview")->helperText(
                     "La preview viene automaticamente generata dall'unione di regista / durata / anno / genere. Se vuoi sovrascriverla, inserisci qui il testo manualmente. Es: Reid Davenport / 99' / 2023 / Doc. Altrimenti, lascia vuoto.",
                 ),
@@ -88,7 +89,8 @@ class Film extends \Timber\Post
                     ->postTypes(["proiezione"])
                     ->filters(["search"])
                     ->elements(["featured_image"])
-                    ->bidirectional("field_proiezione_film"),
+                    ->bidirectional("field_proiezione_film")
+                    ->withSettings(["acfe_add_post" => 1]),
 
                 Tab::make("Tassonomie"),
                 Taxonomy::make("Sezione", "sezione")

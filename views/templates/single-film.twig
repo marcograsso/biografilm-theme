@@ -1,0 +1,97 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  {% set film_id = post.ID %}
+  {% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
+  {% set paese = function("wp_get_post_terms", film_id, "paese") %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% set badges = function("wp_get_post_terms", film_id, "badge") %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set description = function("get_field", "description", film_id) %}
+  {% set proiezioni = post.get_proiezioni %}
+
+  {# Hero image #}
+  {% if post.thumbnail %}
+    {% set thumb_id = function("get_post_thumbnail_id", film_id) %}
+    {% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
+    {% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
+    <div class="mt-[108px] aspect-video w-full overflow-hidden">
+      <img
+        src="{{ post.thumbnail.src("full") }}"
+        alt="{{ post.title }}"
+        class="h-full w-full object-cover"
+        style="{{ fp_style }}"
+      />
+    </div>
+  {% endif %}
+
+  <div class="mx-auto max-w-4xl px-6 py-16 flex flex-col gap-12">
+
+    {# Header #}
+    <div class="flex flex-col gap-4">
+      {% if badges %}
+        <div class="flex gap-0">
+          {% for badge in badges %}
+            <span class="bg-black px-2 py-1 text-sm font-semibold text-white uppercase{% if not loop.last %} border-r border-r-[#575757]{% endif %}">
+              {{ badge.name }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if sezione %}
+        <p class="text-tight text-red text-sm font-semibold uppercase">
+          {{ sezione.name }}
+        </p>
+      {% endif %}
+      <h1 class="text-tight text-4xl font-semibold">{{ post.title }}</h1>
+      {% set preview_raw = function("get_field", "preview", film_id) %}
+      {% if preview_raw %}
+        <p class="text-tight text-lg text-black/70">{{ preview_raw }}</p>
+      {% else %}
+        {% set preview_parts = [] %}
+        {% if regista %}{% set preview_parts = preview_parts|merge([regista]) %}{% endif %}
+        {% if durata %}{% set preview_parts = preview_parts|merge([durata]) %}{% endif %}
+        {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+        {% if genere %}{% set preview_parts = preview_parts|merge([genere.name]) %}{% endif %}
+        {% if preview_parts %}
+          <p class="text-tight text-lg text-black/70">{{ preview_parts|join(" / ") }}</p>
+        {% endif %}
+      {% endif %}
+    </div>
+
+    {# Description #}
+    {% if description %}
+      <div class="prose max-w-none">
+        {{ description }}
+      </div>
+    {% endif %}
+
+    {# Proiezioni #}
+    {% if proiezioni %}
+      <div class="flex flex-col gap-6">
+        <h2 class="text-tight text-2xl font-semibold">Proiezioni</h2>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {% for proiezione in proiezioni %}
+            {% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
+            <div class="border-stroke border p-6 flex flex-col gap-2">
+              {% if proiezione.meta("titolo_alternativo") %}
+                <p class="text-tight font-semibold">{{ proiezione.meta("titolo_alternativo") }}</p>
+              {% endif %}
+              {% if proiezione.meta("data") or proiezione.meta("orario") %}
+                <p class="text-tight font-semibold">
+                  {{ proiezione.meta("data") }}{% if proiezione.meta("orario") %} · {{ proiezione.meta("orario")|date("H:i") }}{% endif %}
+                </p>
+              {% endif %}
+              {% if location %}
+                <p class="text-tight text-black/70">{{ location.name }}</p>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+
+  </div>
+{% endblock content %}

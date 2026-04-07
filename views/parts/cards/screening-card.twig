@@ -1,14 +1,59 @@
 {% set film_raw = function("get_field", "film", proiezione.ID) %}
 {% set film = film_raw is iterable ? film_raw|first : film_raw %}
 {% set film_id = film.ID ?? null %}
-{% set thumb_id = film_id ? function("get_post_thumbnail_id", film_id) : null %}
-{% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
-{% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
+
+{# Alternative info from proiezione #}
+{% set alt_title = function("get_field", "titolo_alternativo", proiezione.ID) %}
+{% set alt_preview =
+  function("get_field", "preview_alternativa", proiezione.ID)
+%}
+{% set alt_image =
+  function("get_field", "immagine_alternativa", proiezione.ID)
+%}
+{% set alt_badges = function("wp_get_post_terms", proiezione.ID, "badge") %}
+
+{# Image & focal point #}
+{% if alt_image %}
+  {% set image_url = alt_image.url %}
+  {% set fp = function("get_post_meta", alt_image.ID, "focalpoint", true) %}
+{% else %}
+  {% set image_url = film_id
+    ? function("get_the_post_thumbnail_url", film_id, "large")
+    : null
+  %}
+  {% set thumb_id = film_id ? function("get_post_thumbnail_id", film_id) : null
+  %}
+  {% set fp = thumb_id
+    ? function("get_post_meta", thumb_id, "focalpoint", true)
+    : null
+  %}
+{% endif %}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+{# Title #}
+{% set title = alt_title ? : film.post_title ?? null %}
+
+{# Badges #}
+{% set badges = alt_badges
+  ?
+  : film_id ? function("wp_get_post_terms", film_id, "badge") : []
+%}
+
+{# Sezione (always from film) #}
 {% set sezione = film_id
   ? function("wp_get_post_terms", film_id, "sezione")[0]
   : null
 %}
-{% if film_id and function("get_field", "preview", film_id) %}
+
+{# Preview #}
+{% if alt_preview %}
+  {% set preview = alt_preview %}
+{% elseif film_id and function("get_field", "preview", film_id) %}
   {% set preview = function("get_field", "preview", film_id) %}
 {% elseif film_id %}
   {% set preview_parts = [] %}
@@ -30,20 +75,19 @@
 {% else %}
   {% set preview = null %}
 {% endif %}
-{% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
 
+{% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
 {% set film_url = film_id ? function("get_permalink", film_id) : null %}
+
 <a
   href="{{ film_url }}"
   class="group border-b-stroke relative col-span-1 block border-b transition-colors duration-300"
 >
-  {% set badges = film_id ? function("wp_get_post_terms", film_id, "badge") : []
-  %}
   {% if badges %}
-    <div class="absolute top-0 flex gap-2">
+    <div class="absolute top-0 flex flex-wrap gap-0">
       {% for badge in badges %}
         <span
-          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]"
+          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]{% if not loop.last %} border-r border-r-[#575757]{% endif %}"
         >
           {{ badge.name }}
         </span>
@@ -51,17 +95,13 @@
     </div>
   {% endif %}
   <div class="aspect-video w-full overflow-hidden bg-gray-200">
-    {% set film_image_url = film_id
-      ? function("get_the_post_thumbnail_url", film_id, "large")
-      : null
-    %}
     <img
       src="{{
-      film_image_url
+      image_url
         ?
         : site.theme.link ~ "/assets/images/fallback-img.jpg"
       }}"
-      alt="{{ film.post_title }}"
+      alt="{{ title }}"
       class="h-full w-full object-cover"
       style="{{ fp_style }}"
     />
@@ -75,8 +115,8 @@
           {{ sezione.name }}
         </p>
       {% endif %}
-      {% if film %}
-        <h5 class="text-tight text-2xl font-semibold">{{ film.post_title }}</h5>
+      {% if title %}
+        <h5 class="text-tight text-2xl font-semibold">{{ title }}</h5>
       {% endif %}
       {% if preview %}
         <p class="text-tight text-base text-black">
@@ -89,7 +129,7 @@
       {% if proiezione.data or proiezione.orario %}
         <p class="text-tight text-base font-semibold text-black">
           {{ proiezione.data|date("d F Y") }}{% if proiezione.orario %}
-            · {{ proiezione.orario }}
+            · {{ proiezione.orario|date("H:i") }}
           {% endif %}
         </p>
       {% endif %}
