@@ -1,0 +1,21 @@
+{% set any_label = params.facet.label_any is not empty ? params.facet.label_any : 'Any' %}
+{% set selected_values = params.selected_values %}
+{% set multiple = params.facet.multiple == "yes" ? 'multiple="multiple"' : "" %}
+<div class="">
+  <select class="facetwp-dropdown" title="{{ params.facet.label }}" {{ multiple }}>
+    <option value="">{{ any_label }}</option>
+    {% for value in params.values %}
+      {% set is_selected = value.facet_value in selected_values %}
+      {% set is_disabled = value.counter == 0 and not is_selected %}
+      <option
+        value="{{ value.facet_value }}"
+        data-counter="{{ value.counter }}"
+        class="d{{ value.depth ?? 0 }}"
+        {{ is_selected ? "selected" : "" }}
+        {{ is_disabled ? "disabled" : "" }}
+      >
+        {{ value.facet_display_value }}
+      </option>
+    {% endfor %}
+  </select>
+</div>

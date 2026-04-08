@@ -1,0 +1,18 @@
+{% for value in params.values %}
+  <div
+    class="facetwp-checkbox text-tight flex cursor-pointer items-center gap-2 text-sm {{ value.selected ? 'checked font-semibold' : 'text-black/70' }}"
+    data-value="{{ value.facet_value }}"
+  >
+    <span class="border-stroke flex size-4 shrink-0 items-center justify-center border {{ value.selected ? 'bg-black' : 'bg-white' }}">
+      {% if value.selected %}
+        <svg viewBox="0 0 10 8" class="size-2.5 stroke-white" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 4l2.5 2.5L9 1"/>
+        </svg>
+      {% endif %}
+    </span>
+    <span>{{ value.facet_display_value }}</span>
+    {% if value.counter is defined %}
+      <span class="text-black/40">({{ value.counter }})</span>
+    {% endif %}
+  </div>
+{% endfor %}

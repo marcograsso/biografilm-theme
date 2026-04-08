@@ -1,0 +1,187 @@
+@reference "../../../src/main.css";
+
+/* ── Make FacetWP outer wrapper invisible to layout ── */
+.facetwp-facet {
+  display: contents;
+}
+
+/* ── Search input ── */
+.facetwp-search::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* ── Hide original select, show only fs-wrap ── */
+.facetwp-type-fselect select.fs-hidden {
+  display: none !important;
+}
+
+/* ── fs-wrap ── */
+.fs-wrap {
+  @apply relative w-full cursor-pointer select-none focus-visible:z-[200] focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black;
+}
+
+/* Header */
+.fs-label-wrap {
+  @apply relative flex items-center justify-between gap-2 border border-[var(--color-stroke)] px-4 py-3 transition-colors;
+}
+
+.fs-label {
+  @apply text-tight line-clamp-1 text-base uppercase;
+}
+
+/* ── White variant ── */
+.filters-white .fs-label-wrap {
+  @apply hover:bg-white-hover active:bg-white-active bg-white text-black;
+}
+.filters-white .fs-label {
+  @apply text-black;
+}
+.filters-white > button {
+  @apply hover:bg-white-hover active:bg-white-active bg-white text-black;
+}
+.filters-white .facetwp-search {
+  @apply hover:bg-white-hover active:bg-white-active bg-white text-black placeholder:text-black;
+}
+.filters-white .fs-label-wrap,
+.filters-white .facetwp-search,
+.filters-white > button,
+.filters-white .filter-filler,
+.filters-white .fs-options {
+  @apply border-black/20;
+}
+.filters-white .fs-dropdown {
+  @apply bg-white;
+}
+.filters-white .fs-option {
+  @apply text-black;
+}
+.filters-white .fs-no-results {
+  @apply text-black/40;
+}
+
+/* ── Black variant ── */
+.filters-black .fs-label-wrap {
+  @apply hover:bg-black-hover active:bg-black-active bg-black text-white;
+}
+.filters-black .fs-label {
+  @apply text-white;
+}
+.filters-black .fs-arrow {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23ffffff99' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E");
+}
+.filters-black > button {
+  @apply hover:bg-black-hover active:bg-black-active bg-black text-white;
+}
+.filters-black .facetwp-search {
+  @apply hover:bg-black-hover active:bg-black-active bg-black text-white placeholder:text-white;
+}
+.filters-black .facetwp-search + span {
+  @apply text-white;
+}
+.filters-black .fs-label-wrap,
+.filters-black .facetwp-search,
+.filters-black > button,
+.filters-black .filter-filler,
+.filters-black .fs-options {
+  @apply border-white/20;
+}
+.filters-black .fs-dropdown {
+  @apply bg-black;
+}
+.filters-black .fs-option {
+  @apply text-white;
+}
+.filters-black .fs-no-results {
+  @apply text-white/40;
+}
+
+.fs-wrap:has(.fs-option.selected) .fs-label {
+  color: var(--color-red);
+  font-weight: 600;
+}
+
+/* Arrow — chevron-down icon */
+.fs-arrow {
+  @apply size-6 shrink-0 origin-center bg-center bg-no-repeat transition-transform duration-200;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%231e1e1e99' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E");
+  background-size: contain;
+}
+
+.fs-wrap.fs-open .fs-arrow {
+  @apply rotate-180;
+}
+
+/* Dropdown panel */
+.fs-dropdown {
+  @apply absolute top-full left-0 z-50 w-full shadow-lg;
+}
+
+.fs-dropdown.fs-hidden {
+  @apply hidden;
+}
+
+/* Hide search */
+.fs-search {
+  @apply hidden;
+}
+
+/* No results */
+.fs-no-results {
+  @apply text-tight px-6 py-4 text-base;
+}
+
+.fs-no-results.fs-hidden {
+  @apply hidden;
+}
+
+/* Options list */
+.fs-options {
+  @apply border-stroke flex max-h-80 flex-col gap-4 overflow-y-auto border-x border-b p-6;
+}
+
+.fs-option {
+  @apply text-tight flex cursor-pointer items-center gap-2 text-base leading-[130%];
+}
+
+.fs-option:hover,
+.fs-option:focus-visible {
+  @apply underline underline-offset-4;
+}
+
+.fs-option:focus-visible {
+  @apply outline-none;
+}
+
+.fs-option.selected .fs-option-label {
+  @apply font-semibold;
+}
+
+.fs-option.disabled {
+  @apply pointer-events-none opacity-40;
+}
+
+/* Checkbox repurposed as checkmark */
+.fs-checkbox {
+  @apply w-5 shrink-0;
+}
+
+.fs-checkbox i {
+  @apply hidden;
+}
+
+.fs-checkbox::before {
+  content: "";
+  @apply bg-red block size-5 origin-center scale-75 opacity-0 transition-all duration-200;
+  mask-image: url("../../icons/generic/check.svg");
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+}
+
+.fs-option.selected .fs-checkbox::before {
+  @apply scale-100 opacity-100;
+}
+
+.fs-option-label {
+  @apply flex-1 transition-all duration-200;
+}
