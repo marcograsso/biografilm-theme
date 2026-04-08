@@ -49,7 +49,7 @@ class Proiezione extends \Timber\Post
         add_action("template_redirect", function () {
             if (is_singular(self::$names["slug"])) {
                 wp_redirect(home_url(), 301);
-                exit;
+                exit();
             }
         });
     }
@@ -90,13 +90,16 @@ class Proiezione extends \Timber\Post
                     ->disableMediaUpload(),
 
                 Tab::make("Biglietti", "biglietti_tab"),
-                Link::make("Biglietti", "biglietti")->format("array"),
-                URL::make("Link biglietto", "link_biglietto"),
-                URL::make("Link MyMovies", "link_mymovies"),
+
+                Link::make("Link biglietto", "link_biglietto")
+                    ->helperText("Link principale per l'acquisto del biglietto. Viene mostrato come pulsante primario. Titolo predefinito consigliato: «Compra biglietto»."),
                 Link::make(
-                    "Link personalizzabile",
+                    "Link extra personalizzabile",
                     "link_personalizzabile",
-                )->format("array"),
+                )->format("array")
+                    ->helperText("Link secondario con testo personalizzabile. Utile per biglietterie alternative o pagine di informazioni aggiuntive."),
+                Link::make("Link MyMovies", "link_mymovies")
+                    ->helperText("Link diretto alla pagina MyMovies. Titolo predefinito consigliato: «Guarda online su MyMovies»."),
 
                 Tab::make("Info alternative"),
                 Text::make("Titolo alternativo", "titolo_alternativo"),

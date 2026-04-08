@@ -12,6 +12,7 @@ class Bootstrap
         Timber::init();
         $this->boot_classes();
         $this->register_fields();
+        $this->load_integrations();
     }
 
     // Initialize all the classes and register their hooks.
@@ -23,6 +24,7 @@ class Bootstrap
             Integrations\ACFExtended::class,
             Integrations\TinyMCE::class,
             Integrations\Polylang::class,
+            Integrations\Yoast::class,
             WordPress\WordPress::class,
             WordPress\LoginPage::class,
             WordPress\DisableComments::class,
@@ -94,6 +96,19 @@ class Bootstrap
 
         foreach ($folders as $folder) {
             $this->require_files_in_folder($folder);
+        }
+    }
+
+    public function load_integrations()
+    {
+        $files = [
+            STYLESHEETPATH . "/src/fwp/fwp.php",
+        ];
+
+        foreach ($files as $file) {
+            if (file_exists($file)) {
+                require_once $file;
+            }
         }
     }
 }

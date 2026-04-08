@@ -12,6 +12,17 @@
     {% endif %}
 
     <main>
+      {% block hero %}
+        {% if not function("get_field", "hide_hero") %}
+          {% set hero_alt_title = function("get_field", "hero_alt_title") %}
+          {% set hero_title_style = function("get_field", "hero_title_style") ?: "primary" %}
+          {{ include("components/hero/hero.twig", {
+            hero_title: hero_alt_title ?: post.title,
+            hero_title_style: hero_title_style
+          }) }}
+        {% endif %}
+      {% endblock hero %}
+
       {% block content %}
 
       {% endblock content %}

@@ -1,5 +1,9 @@
 {% extends "base.twig" %}
 
+{% block hero %}
+
+{% endblock hero %}
+
 {% block content %}
   {% set film_id = post.ID %}
   {% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
@@ -59,13 +63,14 @@
     </div>
   {% endif %}
 
-  <div class="mx-auto grid grid-cols-3">
+  <div class="border-b-stroke mx-auto grid grid-cols-3 border-b">
     {# Main content — cols 1–2 #}
     <div
-      class="col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:col-span-2 lg:gap-20 lg:pr-30 lg:pb-30 lg:pl-10"
+      class="col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:gap-20 xl:col-span-2 xl:pr-10 xl:pb-30 2xl:pr-10 2xl:pr-30 2xl:pl-10"
     >
       {# Header #}
-      <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-6">
+        {{ include("parts/breadcrumbs.twig") }}
         {% if sezione %}
           <p class="text-tight text-red text-sm font-semibold uppercase">
             {{ sezione.name }}
@@ -207,32 +212,101 @@
     {# Proiezioni — col 3 #}
     {% if proiezioni %}
       <div
-        class="border-l-stroke col-span-3 flex flex-col gap-12 py-10 lg:col-span-1 lg:border-l"
+        class="border-l-stroke col-span-3 flex flex-col gap-10 lg:border-l xl:col-span-1 xl:py-12"
       >
-        <h2 class="text-tight px-10 text-2xl font-semibold">Programmazione</h2>
+        <h2 class="heading-h6 px-6 font-semibold xl:px-10">Programmazione</h2>
         <div class="flex flex-col gap-12">
           {% for proiezione in proiezioni %}
             {% set location =
               function("wp_get_post_terms", proiezione.ID, "location")[0]
             %}
-            <div class="border-stroke flex flex-col gap-2 border px-10">
-              {% if proiezione.meta("titolo_alternativo") %}
-                <p class="text-tight font-semibold">
-                  {{ proiezione.meta("titolo_alternativo") }}
-                </p>
-              {% endif %}
-              {% if proiezione.meta("data") or proiezione.meta("orario") %}
-                <p class="text-tight font-semibold">
-                  {{ proiezione.meta("data") }}{% if
-                    proiezione.meta("orario") %}
-                    · {{ proiezione.meta("orario")|date("H:i") }}
+            {% set p_data = function("get_field", "data", proiezione.ID) %}
+            {% set p_orario = function("get_field", "orario", proiezione.ID) %}
+            {% set p_descrizione =
+              function("get_field", "descrizione_proiezione", proiezione.ID)
+            %}
+            {% set p_biglietto =
+              function("get_field", "link_biglietto", proiezione.ID)
+            %}
+            {% set p_mymovies =
+              function("get_field", "link_mymovies", proiezione.ID)
+            %}
+            {% set p_link_extra =
+              function("get_field", "link_personalizzabile", proiezione.ID)
+            %}
+
+            {% if not loop.first %}
+              <div class="flex items-center gap-4">
+                <span class="border-stroke flex-1 border-t"></span>
+                <span class="text-tight text-xl text-black">oppure</span>
+                <span class="border-stroke flex-1 border-t"></span>
+              </div>
+            {% endif %}
+
+            <div class="flex flex-col gap-6 px-6 xl:px-10">
+              <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-2">
+                  {% if p_data or p_orario %}
+                    <p class="text-tight text-xl font-semibold">
+                      {{ p_data }}{% if p_orario %}
+                        · {{ p_orario|date("H:i") }}
+                      {% endif %}
+                    </p>
                   {% endif %}
-                </p>
-              {% endif %}
-              {% if location %}
-                <p class="text-tight text-black/70">
-                  {{ location.name }}
-                </p>
+                  {% if location %}
+                    <p class="text-tight text-xl">
+                      {{ location.name }}
+                    </p>
+                  {% endif %}
+                </div>
+                {% if p_descrizione %}
+                  <div class="text-tight text-base text-black">
+                    {{ p_descrizione }}
+                  </div>
+                {% endif %}
+              </div>
+              {% if p_biglietto or p_link_extra or p_mymovies %}
+                <div class="flex flex-col gap-3">
+                  {% if p_biglietto %}
+                    {% include "components/button.twig" with {
+                      as_link: true,
+                      variant: "default",
+                      size: "lg",
+                      label: p_biglietto.title ? : "Compra biglietto",
+                      attributes: {
+                        href: p_biglietto.url ?? p_biglietto,
+                        target: p_biglietto.target ?? "_self",
+                        class: "xl:w-full md:w-fit w-full"
+                      }
+                    } %}
+                  {% endif %}
+                  {% if p_link_extra %}
+                    {% include "components/button.twig" with {
+                      as_link: true,
+                      variant: "default",
+                      size: "lg",
+                      label: p_link_extra.title,
+                      attributes: {
+                        href: p_link_extra.url,
+                        target: p_link_extra.target ?? "_self",
+                        class: "xl:w-full md:w-fit w-full"
+                      }
+                    } %}
+                  {% endif %}
+                  {% if p_mymovies %}
+                    {% include "components/button.twig" with {
+                      as_link: true,
+                      variant: "secondary",
+                      size: "lg",
+                      label: p_mymovies.title ? : "Guarda online su MyMovies",
+                      attributes: {
+                        href: p_mymovies.url ?? p_mymovies,
+                        target: p_mymovies.target ?? "_self",
+                        class: "xl:w-full md:w-fit md:bg-black/3 xl:bg-white w-full"
+                      }
+                    } %}
+                  {% endif %}
+                </div>
               {% endif %}
             </div>
           {% endfor %}

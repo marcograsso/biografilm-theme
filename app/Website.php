@@ -155,6 +155,33 @@ class Website extends Site
         }
         $context["current_section"] = $section;
 
+        // Build breadcrumbs from page hierarchy
+        $breadcrumbs = [];
+        if (is_post_type_archive('film')) {
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
+            $breadcrumbs[] = ["url" => "", "title" => "Tutti i film"];
+        } elseif ($post && !is_front_page()) {
+            if (get_post_type($post->ID) === 'film') {
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('film'), "title" => "Tutti i film"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } else {
+                $ancestors = get_post_ancestors($post->ID);
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => empty($ancestors) ? "Biografilm" : "Festival"];
+                $front_page_id = (int) get_option('page_on_front');
+                foreach (array_reverse($ancestors) as $ancestor_id) {
+                    if ($ancestor_id === $front_page_id) {
+                        continue;
+                    }
+                    $breadcrumbs[] = [
+                        "url"   => get_permalink($ancestor_id),
+                        "title" => get_the_title($ancestor_id),
+                    ];
+                }
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            }
+        }
+        $context["breadcrumbs"] = $breadcrumbs;
+
         $industry_page = get_page_by_path("industry");
         $campus_page = get_page_by_path("campus");
         $context["nav_urls"] = [

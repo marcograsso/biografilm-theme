@@ -1,5 +1,7 @@
 {% extends "base.twig" %}
 
+{% block hero %}{% endblock hero %}
+
 {% block content %}
   {% for component in post.components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}

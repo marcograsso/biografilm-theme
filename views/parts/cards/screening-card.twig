@@ -81,13 +81,19 @@
 
 <a
   href="{{ film_url }}"
-  class="group border-b-stroke relative col-span-1 block border-b transition-colors duration-300 {{ extra_class }}"
+  class="group border-b-stroke relative col-span-1 block border-b transition-colors duration-300 {{
+  extra_class
+  }}"
 >
   {% if badges %}
     <div class="absolute top-0 flex flex-wrap gap-0">
       {% for badge in badges %}
         <span
-          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]{% if not loop.last %} border-r border-r-[#575757]{% endif %}"
+          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px] {{
+          loop.last
+            ? ""
+            : "border-r border-r-[#575757]"
+          }}"
         >
           {{ badge.name }}
         </span>

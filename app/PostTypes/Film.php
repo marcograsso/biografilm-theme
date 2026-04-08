@@ -23,8 +23,18 @@ class Film extends \Timber\Post
 
     public function get_proiezioni(): array
     {
-        $items = get_field("proiezioni", $this->ID) ?: [];
-        return array_map(fn($p) => new Proiezione(is_object($p) ? $p->ID : (int) $p), $items);
+        $wp_posts = get_posts([
+            "post_type"   => "proiezione",
+            "numberposts" => -1,
+            "meta_query"  => [
+                [
+                    "key"     => "film",
+                    "value"   => '"' . $this->ID . '"',
+                    "compare" => "LIKE",
+                ],
+            ],
+        ]);
+        return array_map(fn($p) => \Timber\Timber::get_post($p->ID), $wp_posts);
     }
 
     public static function register()

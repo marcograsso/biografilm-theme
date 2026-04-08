@@ -1,0 +1,27 @@
+{% if breadcrumbs %}
+  <nav class="flex w-full flex-wrap items-center gap-2">
+    {% for crumb in breadcrumbs %}
+      {% if not loop.first %}
+        {{
+          include("icons/generic/chevron-right.svg")|attr({
+            class: "size-3 shrink-0 text-black/40"
+          })
+        }}
+      {% endif %}
+      {% if loop.last %}
+        <span
+          class="bg-red min-w-0 max-w-[300px] truncate px-2 py-0.5 text-sm font-semibold text-white"
+        >
+          {{ crumb.title }}
+        </span>
+      {% else %}
+        <a
+          href="{{ crumb.url }}"
+          class="text-tight shrink-0 whitespace-nowrap text-sm text-black underline-offset-3 hover:underline"
+        >
+          {{ crumb.title }}
+        </a>
+      {% endif %}
+    {% endfor %}
+  </nav>
+{% endif %}
