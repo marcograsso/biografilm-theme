@@ -100,17 +100,22 @@
   @apply border-white/20;
 }
 .filters-black .fs-dropdown {
-  @apply bg-black;
+  @apply bg-white;
 }
 .filters-black .fs-option {
-  @apply text-white;
+  @apply text-black;
 }
 .filters-black .fs-no-results {
-  @apply text-white/40;
+  @apply text-black/40;
 }
 
 .fs-wrap:has(.fs-option.selected) .fs-label {
   color: var(--color-red);
+  font-weight: 600;
+}
+
+.filters-black .fs-wrap:has(.fs-option.selected) .fs-label {
+  color: white;
   font-weight: 600;
 }
 
