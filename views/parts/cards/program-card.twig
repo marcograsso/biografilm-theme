@@ -1,0 +1,196 @@
+{% set film_raw = function("get_field", "film", proiezione.ID) %}
+{% set film = film_raw is iterable ? film_raw|first : film_raw %}
+{% set film_id = film.ID ?? null %}
+
+{% set alt_title = function("get_field", "titolo_alternativo", proiezione.ID) %}
+{% set alt_preview =
+  function("get_field", "preview_alternativa", proiezione.ID)
+%}
+{% set alt_image =
+  function("get_field", "immagine_alternativa", proiezione.ID)
+%}
+{% set alt_badges = function("wp_get_post_terms", proiezione.ID, "badge") %}
+{% set descrizione_proiezione =
+  function("get_field", "descrizione_proiezione", proiezione.ID)
+%}
+{% set link_biglietto =
+  function("get_field", "link_biglietto", proiezione.ID)
+%}
+
+{# Image & focal point #}
+{% if alt_image %}
+  {% set image_url = alt_image.url %}
+  {% set fp = function("get_post_meta", alt_image.ID, "focalpoint", true) %}
+{% else %}
+  {% set image_url = film_id
+    ? function("get_the_post_thumbnail_url", film_id, "large")
+    : null
+  %}
+  {% set thumb_id = film_id ? function("get_post_thumbnail_id", film_id) : null
+  %}
+  {% set fp = thumb_id
+    ? function("get_post_meta", thumb_id, "focalpoint", true)
+    : null
+  %}
+{% endif %}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+{% set title = alt_title ? : film.post_title ?? null %}
+{% set badges = alt_badges
+  ?
+  : film_id ? function("wp_get_post_terms", film_id, "badge") : []
+%}
+{% set sezione = film_id
+  ? function("wp_get_post_terms", film_id, "sezione")[0]
+  : null
+%}
+
+{# Preview #}
+{% if alt_preview %}
+  {% set preview = alt_preview %}
+{% elseif film_id and function("get_field", "preview", film_id) %}
+  {% set preview = function("get_field", "preview", film_id) %}
+{% elseif film_id %}
+  {% set preview_parts = [] %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% if regista %}{% set preview_parts =
+    preview_parts|merge([regista])
+  %}{% endif %}
+  {% if durata %}{% set preview_parts =
+    preview_parts|merge([durata])
+  %}{% endif %}
+  {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+  {% if genere %}{% set preview_parts =
+    preview_parts|merge([genere.name])
+  %}{% endif %}
+  {% set preview = preview_parts|join(" / ") %}
+{% else %}
+  {% set preview = null %}
+{% endif %}
+
+{% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
+{% set sala_location = function("get_field", "sala_location", proiezione.ID) %}
+{% set film_url = film_id ? function("get_permalink", film_id) : null %}
+
+<div
+  class="border-b-stroke group relative flex flex-col border-b lg:flex-row lg:items-end"
+>
+  {# Film link — stretched over the full card, behind everything #}
+  <a
+    href="{{ film_url }}"
+    class="absolute inset-0 transition-colors duration-300"
+    aria-label="{{ title }}"
+  >
+
+  </a>
+
+  {# Main content #}
+  <div
+    class="pointer-events-none relative flex min-w-0 flex-1 flex-col lg:flex-row"
+  >
+    {# Thumbnail #}
+    <div
+      class="relative aspect-video w-full shrink-0 overflow-hidden bg-gray-200 lg:aspect-auto lg:w-65"
+    >
+      {% if badges %}
+        <div class="absolute top-0 left-0 z-10 flex flex-wrap">
+          {% for badge in badges %}
+            <span
+              class="bg-black/20 px-2 py-1 text-xs font-semibold text-white uppercase backdrop-blur-[50px] {{
+              loop.last
+                ? ""
+                : "border-r border-r-[#575757]"
+              }}"
+            >
+              {{ badge.name }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <img
+        src="{{
+        image_url
+          ?
+          : site.theme.link ~ "/assets/images/fallback-img.jpg"
+        }}"
+        alt="{{ title }}"
+        class="h-full w-full object-cover"
+        style="{{ fp_style }}"
+      />
+    </div>
+
+    {# Info #}
+    <div class="flex flex-1 flex-col gap-8 px-6 py-10 lg:px-8 lg:py-6">
+      <div class="flex flex-col gap-3">
+        {% if sezione %}
+          <p
+            class="text-tight text-red xl text-sm font-semibold uppercase lg:hidden"
+          >
+            {{ sezione.name }}
+          </p>
+        {% endif %}
+        {% if title %}
+          <h5 class="text-tight text-2xl! font-semibold">{{ title }}</h5>
+        {% endif %}
+        <span class="flex flex-wrap items-center gap-x-6 gap-y-3">
+          {% if sezione %}
+            <p
+              class="text-tight text-red xl hidden text-sm font-semibold uppercase lg:block"
+            >
+              {{ sezione.name }}
+            </p>
+          {% endif %}
+          {% if preview %}
+            <p class="text-tight text-base text-black">
+              {{ preview }}
+            </p>
+          {% endif %}
+        </span>
+      </div>
+      <div class="flex flex-col gap-3">
+        <div class="text-tight line-clamp-2 min-h-[2lh] text-sm text-black [&_p]:mb-0">
+          {{ descrizione_proiezione }}
+        </div>
+        <div class="mt-auto flex flex-wrap items-baseline gap-x-6 gap-y-1">
+          {% if proiezione.data or proiezione.orario %}
+            <p class="text-tight text-base font-semibold text-black">
+              {{ proiezione.data|date("d F Y") }}{% if proiezione.orario %}
+                · {{ proiezione.orario|date("H:i") }}
+              {% endif %}
+            </p>
+          {% endif %}
+          {% if location %}
+            <p class="text-tight text-base font-semibold text-black">
+              {{ location.name }}{{ sala_location ? " – " ~ sala_location : "" }}
+            </p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {# Ticket button — above the stretched film link #}
+  {% if link_biglietto %}
+    <div class="pointer-events-auto relative z-10">
+      {% include "components/button.twig" with {
+        as_link: true,
+        label: link_biglietto.title ? : "Compra biglietto",
+        variant: "default",
+        size: "lg",
+        attributes: {
+          href: link_biglietto.url,
+          target: link_biglietto.target,
+          class: "text-lg! py-6 px-8 lg:w-auto w-full"
+        }
+      } %}
+    </div>
+  {% endif %}
+</div>

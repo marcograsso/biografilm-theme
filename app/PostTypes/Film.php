@@ -34,6 +34,13 @@ class Film extends \Timber\Post
                 ],
             ],
         ]);
+
+        usort($wp_posts, function ($a, $b) {
+            $key_a = get_post_meta($a->ID, "data", true) . get_post_meta($a->ID, "orario", true);
+            $key_b = get_post_meta($b->ID, "data", true) . get_post_meta($b->ID, "orario", true);
+            return strcmp($key_a, $key_b);
+        });
+
         return array_map(fn($p) => \Timber\Timber::get_post($p->ID), $wp_posts);
     }
 
@@ -49,6 +56,8 @@ class Film extends \Timber\Post
 
         self::register_custom_fields();
 
+        add_action("save_post_film", [self::class, "sync_proiezioni_taxonomies"]);
+
         add_action("admin_head-post.php", [
             self::class,
             "featured_image_helper",
@@ -57,6 +66,24 @@ class Film extends \Timber\Post
             self::class,
             "featured_image_helper",
         ]);
+    }
+
+    public static function sync_proiezioni_taxonomies(int $post_id): void
+    {
+        $proiezioni = get_posts([
+            "post_type"   => "proiezione",
+            "numberposts" => -1,
+            "fields"      => "ids",
+            "meta_query"  => [[
+                "key"     => "film",
+                "value"   => '"' . $post_id . '"',
+                "compare" => "LIKE",
+            ]],
+        ]);
+
+        foreach ($proiezioni as $proiezione_id) {
+            Proiezione::sync_film_taxonomies($proiezione_id);
+        }
     }
 
     public static function featured_image_helper(): void

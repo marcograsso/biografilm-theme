@@ -290,6 +290,18 @@ class Website extends Site
         return $options;
     }
 
+    #[Filter("body_class")]
+    function add_page_slug_body_class(array $classes): array
+    {
+        if (is_page()) {
+            $slug = get_queried_object()?->post_name;
+            if ($slug) {
+                $classes[] = 'page-' . $slug;
+            }
+        }
+        return $classes;
+    }
+
     // Redirect non-users to coming soon page, but allow certain other pages
     #[Action("template_redirect")]
     function coming_soon_redirect()

@@ -11,7 +11,8 @@
 
 {% block content %}
   <section class="w-full">
-    <div class="filters-black mb-20 flex w-full">
+    <div id="filters-sentinel" class="h-0"></div>
+    <div class="filters-black sticky top-0 z-50 mb-20 flex w-full">
       <div class="flex-1">
         {{ function("do_shortcode", '[facetwp facet="sezione"]') }}
       </div>
@@ -25,7 +26,7 @@
         {{ function("do_shortcode", '[facetwp facet="genere"]') }}
       </div>
       <div class="-ml-px flex-1">
-        {{ function("do_shortcode", '[facetwp facet="search"]') }}
+        {{ function("do_shortcode", '[facetwp facet="film_search"]') }}
       </div>
       <button
         type="button"
@@ -49,9 +50,10 @@
           }}
         {% else %}
           <p
-            class="text-tight col-span-full py-16 text-center text-base text-black/40 uppercase"
+            class="text-tight col-span-full py-30 text-center text-xl font-semibold text-black"
           >
-            Nessun film trovato
+            Nessun risultato per i filtri selezionati.<br />Prova a modificare
+            la ricerca o resetta i filtri.
           </p>
         {% endfor %}
 

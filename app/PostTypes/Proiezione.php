@@ -33,6 +33,59 @@ class Proiezione extends \Timber\Post
         return new Film($id);
     }
 
+    public static function sync_film_taxonomies(int $post_id): void
+    {
+        $films = get_field("film", $post_id);
+        if (empty($films)) {
+            return;
+        }
+
+        $film_id = is_array($films) ? $films[0]->ID : $films->ID;
+
+        foreach (["sezione", "paese", "genere", "area-tematica", "badge"] as $taxonomy) {
+            $term_ids = wp_get_post_terms($film_id, $taxonomy, ["fields" => "ids"]);
+            wp_set_post_terms($post_id, is_wp_error($term_ids) ? [] : $term_ids, $taxonomy);
+        }
+
+        update_post_meta($post_id, '_film_title', get_the_title($film_id));
+        update_post_meta($post_id, '_film_regista', get_post_meta($film_id, 'regista', true));
+    }
+
+    public static function search_join(string $join, \WP_Query $query): string
+    {
+        global $wpdb;
+        if (empty($query->get('s'))) {
+            return $join;
+        }
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS pm_film_title ON ({$wpdb->posts}.ID = pm_film_title.post_id AND pm_film_title.meta_key = '_film_title')";
+        $join .= " LEFT JOIN {$wpdb->postmeta} AS pm_film_regista ON ({$wpdb->posts}.ID = pm_film_regista.post_id AND pm_film_regista.meta_key = '_film_regista')";
+        return $join;
+    }
+
+    public static function search_where(string $search, \WP_Query $query): string
+    {
+        global $wpdb;
+        if (empty($query->get('s')) || empty($search)) {
+            return $search;
+        }
+        $like = '%' . $wpdb->esc_like($query->get('s')) . '%';
+        $extra = $wpdb->prepare('OR pm_film_title.meta_value LIKE %s OR pm_film_regista.meta_value LIKE %s', $like, $like);
+        // Insert before the last closing paren of the search clause
+        $pos = strrpos($search, ')');
+        if ($pos !== false) {
+            $search = substr_replace($search, ' ' . $extra, $pos, 0);
+        }
+        return $search;
+    }
+
+    public static function search_distinct(string $distinct, \WP_Query $query): string
+    {
+        if (!empty($query->get('s'))) {
+            return 'DISTINCT';
+        }
+        return $distinct;
+    }
+
     public static function register()
     {
         self::register_post_type();
@@ -44,6 +97,18 @@ class Proiezione extends \Timber\Post
         });
 
         self::register_custom_fields();
+
+        add_action("save_post_proiezione", [self::class, "sync_film_taxonomies"]);
+
+        add_filter('posts_join', [self::class, 'search_join'], 10, 2);
+        add_filter('posts_search', [self::class, 'search_where'], 10, 2);
+        add_filter('posts_distinct', [self::class, 'search_distinct'], 10, 2);
+
+        add_action("admin_menu", function () {
+            foreach (["sezione", "paese", "genere", "area-tematica", "badge"] as $taxonomy) {
+                remove_meta_box("tagsdiv-{$taxonomy}", "proiezione", "side");
+            }
+        });
 
         // Proiezioni have no public single pages
         add_action("template_redirect", function () {
@@ -72,7 +137,7 @@ class Proiezione extends \Timber\Post
                     ->bidirectional("field_film_proiezioni"),
                 DatePicker::make("Data", "data")
                     ->displayFormat("d/m/Y")
-                    ->format("d F Y"),
+                    ->format("Ymd"),
                 TimePicker::make("Orario", "orario")
                     ->displayFormat("H:i")
                     ->format("H:i"),
@@ -81,6 +146,8 @@ class Proiezione extends \Timber\Post
                     ->appearance("multi_select")
                     ->create(true)
                     ->save(true),
+                Text::make("Sala o altre informazioni location", "sala_location")
+                    ->helperText("Informazioni aggiuntive sulla location, es. «Sala 1», «Arena esterna», ecc."),
                 WYSIWYGEditor::make(
                     "Descrizione proiezione",
                     "descrizione_proiezione",

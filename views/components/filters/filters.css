@@ -9,6 +9,9 @@
 .facetwp-search::-webkit-search-cancel-button {
   display: none;
 }
+.facetwp-search {
+  --tw-ring-color: transparent;
+}
 
 /* ── Hide original select, show only fs-wrap ── */
 .facetwp-type-fselect select.fs-hidden {
@@ -29,18 +32,28 @@
   @apply text-tight line-clamp-1 text-base uppercase;
 }
 
+/* ── Active filters dot on toggle ── */
+:has(> .filters-white .fs-option.selected) .filters-active-dot,
+:has(> .filters-white .facetwp-search:not(:placeholder-shown))
+  .filters-active-dot {
+  @apply block;
+}
+
 /* ── White variant ── */
 .filters-white .fs-label-wrap {
-  @apply hover:bg-white-hover active:bg-white-active bg-white text-black;
+  @apply hover:bg-white-hover active:bg-white-active border-t-0 bg-white text-black;
 }
 .filters-white .fs-label {
   @apply text-black;
 }
 .filters-white > button {
-  @apply hover:bg-white-hover active:bg-white-active bg-white text-black;
+  @apply hover:bg-white-hover active:bg-white-active border-t-0 bg-white text-black;
 }
 .filters-white .facetwp-search {
-  @apply hover:bg-white-hover active:bg-white-active bg-white text-black placeholder:text-black;
+  @apply hover:bg-white-hover active:bg-white-active focus:bg-white-active border-t-0 bg-white text-black placeholder:text-black;
+}
+.filters-white .facetwp-search:not(:placeholder-shown) {
+  color: var(--color-red);
 }
 .filters-white .fs-label-wrap,
 .filters-white .facetwp-search,
@@ -69,11 +82,11 @@
 .filters-black .fs-arrow {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%23ffffff99' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m5 7.5 5 5 5-5'/%3E%3C/svg%3E");
 }
-.filters-black > button {
+.filters-black > button:not(.filters-toggle) {
   @apply hover:bg-black-hover active:bg-black-active bg-black text-white;
 }
 .filters-black .facetwp-search {
-  @apply hover:bg-black-hover active:bg-black-active bg-black text-white placeholder:text-white;
+  @apply hover:bg-black-hover active:bg-black-active focus:bg-black-active bg-black text-white placeholder:text-white;
 }
 .filters-black .facetwp-search + span {
   @apply text-white;
@@ -82,7 +95,8 @@
 .filters-black .facetwp-search,
 .filters-black > button,
 .filters-black .filter-filler,
-.filters-black .fs-options {
+.filters-black .fs-options,
+.filters-black .facetwp-radio {
   @apply border-white/20;
 }
 .filters-black .fs-dropdown {
@@ -184,4 +198,29 @@
 
 .fs-option-label {
   @apply flex-1 transition-all duration-200;
+}
+
+/* ── Radio as tabs ── */
+.facetwp-type-radio {
+  @apply flex h-full flex-wrap items-stretch;
+}
+
+.facetwp-radio {
+  @apply text-tight border-stroke -ml-px line-clamp-1 flex w-fit cursor-pointer items-center justify-center border bg-black px-4 py-3 text-center text-base text-white uppercase transition-colors first:ml-0;
+}
+
+.facetwp-radio:not(.checked):not(.disabled):hover {
+  @apply bg-black-hover active:bg-black-active;
+}
+
+.facetwp-radio.checked {
+  @apply relative z-10 bg-white text-black;
+}
+
+.filters-black .facetwp-radio.checked {
+  @apply border-stroke!;
+}
+
+.facetwp-radio.disabled {
+  @apply pointer-events-auto bg-[#a5a5a5] text-white/40;
 }

@@ -52,3 +52,36 @@ class FWP_Config
 }
 
 new FWP_Config();
+
+add_filter('facetwp_preload_url_vars', function ($url_vars) {
+    if (false === strpos(FWP()->helper->get_uri(), 'programma')) {
+        return $url_vars;
+    }
+
+    if (!empty($url_vars['days'])) {
+        return $url_vars;
+    }
+
+    $posts = get_posts([
+        'post_type'      => 'proiezione',
+        'post_status'    => 'publish',
+        'posts_per_page' => 1,
+        'meta_key'       => 'data',
+        'orderby'        => 'meta_value',
+        'order'          => 'ASC',
+        'fields'         => 'ids',
+    ]);
+
+    if (!empty($posts)) {
+        $raw = get_post_meta($posts[0], 'data', true);
+        if ($raw) {
+            $date = DateTime::createFromFormat('Ymd', $raw)
+                ?: DateTime::createFromFormat('Y-m-d', $raw);
+            if ($date) {
+                $url_vars['days'] = [$date->format('Y-m-d')];
+            }
+        }
+    }
+
+    return $url_vars;
+});

@@ -59,7 +59,7 @@ class FilmTaxonomies
         foreach ($taxonomies as $tax) {
             register_extended_taxonomy(
                 $tax["slug"],
-                ["film"],
+                ["film", "proiezione"],
                 [
                     "hierarchical" => false,
                     "labels" => [

@@ -77,6 +77,7 @@
 {% endif %}
 
 {% set location = function("wp_get_post_terms", proiezione.ID, "location")[0] %}
+{% set sala_location = function("get_field", "sala_location", proiezione.ID) %}
 {% set film_url = film_id ? function("get_permalink", film_id) : null %}
 
 <a
@@ -141,7 +142,7 @@
       {% endif %}
       {% if location %}
         <p class="text-tight text-base font-semibold text-black">
-          {{ location.name }}
+          {{ location.name }}{{ sala_location ? " – " ~ sala_location : "" }}
         </p>
       {% endif %}
     </div>

@@ -234,6 +234,9 @@
             {% set p_link_extra =
               function("get_field", "link_personalizzabile", proiezione.ID)
             %}
+            {% set p_sala_location =
+              function("get_field", "sala_location", proiezione.ID)
+            %}
 
             {% if not loop.first %}
               <div class="flex items-center gap-4">
@@ -248,14 +251,14 @@
                 <div class="flex flex-col gap-2">
                   {% if p_data or p_orario %}
                     <p class="text-tight text-xl font-semibold">
-                      {{ p_data }}{% if p_orario %}
+                      {{ p_data|date("d F Y") }}{% if p_orario %}
                         · {{ p_orario|date("H:i") }}
                       {% endif %}
                     </p>
                   {% endif %}
                   {% if location %}
                     <p class="text-tight text-xl">
-                      {{ location.name }}
+                      {{ location.name }}{{ p_sala_location ? " – " ~ p_sala_location : "" }}
                     </p>
                   {% endif %}
                 </div>
