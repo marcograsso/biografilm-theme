@@ -182,6 +182,17 @@ class Website extends Site
         }
         $context["breadcrumbs"] = $breadcrumbs;
 
+        if (is_singular('film') && $post) {
+            $manual = get_field('film_correlati', $post->ID);
+            $ids = !empty($manual)
+                ? array_map(fn($p) => is_object($p) ? $p->ID : (int) $p, $manual)
+                : [];
+            if (count($ids) < 3) {
+                $ids = array_merge($ids, self::get_related_films($post->ID, 3 - count($ids), $ids));
+            }
+            $context['related_films'] = array_map(fn($id) => Timber::get_post($id), $ids);
+        }
+
         $industry_page = get_page_by_path("industry");
         $campus_page = get_page_by_path("campus");
         $context["nav_urls"] = [
@@ -300,6 +311,64 @@ class Website extends Site
             }
         }
         return $classes;
+    }
+
+    public static function get_related_films(int $post_id, int $limit = 3, array $exclude_extra = []): array
+    {
+        $taxonomies = ['sezione', 'genere', 'area-tematica', 'paese'];
+
+        // Collect all term IDs for this film across relevant taxonomies
+        $term_ids = [];
+        foreach ($taxonomies as $tax) {
+            $terms = wp_get_post_terms($post_id, $tax, ['fields' => 'ids']);
+            if (!is_wp_error($terms)) {
+                $term_ids = array_merge($term_ids, $terms);
+            }
+        }
+
+        // Get all published films except the current one and any manual picks
+        $candidates = !empty($term_ids) ? get_posts([
+            'post_type'      => 'film',
+            'post_status'    => 'publish',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'post__not_in'   => array_merge([$post_id], $exclude_extra),
+        ]) : [];
+
+        // Score each candidate by number of shared terms
+        $scores = [];
+        foreach ($candidates as $candidate_id) {
+            $shared = 0;
+            foreach ($taxonomies as $tax) {
+                $candidate_terms = wp_get_post_terms($candidate_id, $tax, ['fields' => 'ids']);
+                if (!is_wp_error($candidate_terms)) {
+                    $shared += count(array_intersect($term_ids, $candidate_terms));
+                }
+            }
+            if ($shared > 0) {
+                $scores[$candidate_id] = $shared;
+            }
+        }
+
+        arsort($scores);
+
+        $result = array_slice(array_keys($scores), 0, $limit);
+
+        // Fill up to $limit with random films if not enough scored matches
+        if (count($result) < $limit) {
+            $exclude = array_merge([$post_id], $exclude_extra, $result);
+            $fillers = get_posts([
+                'post_type'      => 'film',
+                'post_status'    => 'publish',
+                'posts_per_page' => $limit - count($result),
+                'fields'         => 'ids',
+                'post__not_in'   => $exclude,
+                'orderby'        => 'rand',
+            ]);
+            $result = array_merge($result, $fillers);
+        }
+
+        return $result;
     }
 
     // Redirect non-users to coming soon page, but allow certain other pages

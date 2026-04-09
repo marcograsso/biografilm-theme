@@ -63,10 +63,12 @@
     </div>
   {% endif %}
 
-  <div class="border-b-stroke mx-auto grid grid-cols-3 border-b">
+  <div
+    class="border-b-stroke 3xl:grid-cols-4 mx-auto grid grid-cols-3 border-b"
+  >
     {# Main content — cols 1–2 #}
     <div
-      class="col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:gap-20 xl:col-span-2 xl:pr-10 xl:pb-30 2xl:pr-10 2xl:pr-30 2xl:pl-10"
+      class="3xl:col-span-3 col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:gap-20 xl:col-span-2 xl:pr-10 xl:pb-30 2xl:pr-10 2xl:pr-30 2xl:pl-10"
     >
       {# Header #}
       <div class="flex flex-col gap-6">
@@ -212,7 +214,7 @@
     {# Proiezioni — col 3 #}
     {% if proiezioni %}
       <div
-        class="border-l-stroke col-span-3 flex flex-col gap-10 lg:border-l xl:col-span-1 xl:py-12"
+        class="border-l-stroke col-span-3 flex flex-col gap-10 pb-12 lg:border-l xl:col-span-1 xl:py-12"
       >
         <h2 class="heading-h6 px-6 font-semibold xl:px-10">Programmazione</h2>
         <div class="flex flex-col gap-12">
@@ -317,4 +319,18 @@
       </div>
     {% endif %}
   </div>
+  {% if related_films %}
+    {{
+      include(
+        "components/card-displayer/card-displayer.twig",
+        {
+          component: {
+            title: "Scopri anche",
+            items: related_films,
+            always_even: true
+          }
+        }
+      )
+    }}
+  {% endif %}
 {% endblock content %}

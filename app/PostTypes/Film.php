@@ -158,6 +158,15 @@ class Film extends \Timber\Post
                     ->create(true)
                     ->save(true),
 
+                Tab::make("Film correlati", "correlati_tab"),
+                Relationship::make("Contenuti correlati", "film_correlati")
+                    ->key("field_film_correlati")
+                    ->postTypes(["film", "proiezione"])
+                    ->filters(["search", "post_type"])
+                    ->elements(["featured_image"])
+                    ->maxPosts(3)
+                    ->helperText("Se impostato, questi contenuti (film o proiezioni) verranno mostrati come «Scopri anche» al posto dei suggerimenti automatici."),
+
                 Tab::make("Info aggiuntive"),
                 Repeater::make("Info aggiuntive", "info_aggiuntive")
                     ->key("field_film_info_aggiuntive_repeater")
