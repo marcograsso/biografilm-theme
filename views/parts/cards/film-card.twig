@@ -12,7 +12,7 @@
     ~ "%;"
   : null
 %}
-{% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
+{% set sezione = function("get_field", "sezione", film_id)[0] %}
 {% set badges = function("wp_get_post_terms", film_id, "badge") %}
 {% set preview_raw = function("get_field", "preview", film_id) %}
 {% if not preview_raw %}
@@ -75,7 +75,7 @@
     <div class="flex flex-col gap-3">
       {% if sezione %}
         <p class="text-tight text-red text-sm font-semibold uppercase">
-          {{ sezione.name }}
+          {{ sezione.post_title }}
         </p>
       {% endif %}
       <h5 class="text-tight line-clamp-2 text-2xl font-semibold">

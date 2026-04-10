@@ -35,7 +35,8 @@
 /* ── Active filters dot on toggle ── */
 :has(> .filters-white .fs-option.selected) .filters-active-dot,
 :has(> .filters-white .facetwp-search:not(:placeholder-shown))
-  .filters-active-dot {
+  .filters-active-dot,
+:has(> .filters-black .fs-option.selected) .filters-active-dot {
   @apply block;
 }
 
@@ -205,8 +206,8 @@
   @apply flex-1 transition-all duration-200;
 }
 
-/* ── Days facet: hide count, format handled by JS ── */
-.facetwp-facet[data-name="days"] .facetwp-counter {
+/* ── Hide counts on all facets ── */
+.facetwp-counter {
   display: none;
 }
 
@@ -232,12 +233,12 @@
 }
 
 .facetwp-radio.disabled {
-  @apply pointer-events-auto bg-[#a5a5a5] text-white/40;
+  @apply pointer-events-auto bg-black text-white;
 }
 
 /* ── Mobile drawer variant ── */
 .filters-drawer .fs-label-wrap {
-  @apply border-x-0 border-t-0 bg-white text-black hover:bg-white-hover active:bg-white-active;
+  @apply hover:bg-white-hover active:bg-white-active border-x-0 border-t-0 bg-white text-black;
 }
 
 .filters-drawer .fs-label {
@@ -254,7 +255,7 @@
 }
 
 .filters-drawer .facetwp-search {
-  @apply block h-auto w-full border-x-0 border-t-0 bg-white text-black placeholder:text-black hover:bg-white-hover active:bg-white-active focus:bg-white-active;
+  @apply hover:bg-white-hover active:bg-white-active focus:bg-white-active block h-auto w-full border-x-0 border-t-0 bg-white text-black placeholder:text-black;
 }
 
 .filters-drawer .facetwp-search + span {

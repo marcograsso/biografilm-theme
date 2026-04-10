@@ -23,7 +23,7 @@
     : film_id ? function("get_post_thumbnail_id", film_id) : null
   %}
   {% set sezione = film_id
-    ? function("wp_get_post_terms", film_id, "sezione")[0]
+    ? function("get_field", "sezione", film_id)[0]
     : null
   %}
   {% set badges = alt_badges
@@ -67,7 +67,7 @@
   {% set title = post.post_title %}
   {% set image_url = function("get_the_post_thumbnail_url", film_id, "full") %}
   {% set fp_source_id = function("get_post_thumbnail_id", film_id) %}
-  {% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
+  {% set sezione = function("get_field", "sezione", film_id)[0] %}
   {% set badges = function("wp_get_post_terms", film_id, "badge") %}
   {% set location = null %}
   {% set data = null %}
@@ -98,6 +98,10 @@
 {% endif %}
 
 {% if post_id %}
+  {% set permalink = film_id
+    ? function("get_permalink", film_id)
+    : function("get_permalink", post_id)
+  %}
   {% set fp = fp_source_id
     ? function("get_post_meta", fp_source_id, "focalpoint", true)
     : null
@@ -108,8 +112,9 @@
       ~ "%;"
     : null
   %}
-  <section
-    class="relative flex h-[547px] w-full items-end justify-end bg-zinc-900 bg-cover bg-center md:items-center"
+  <a
+    href="{{ permalink }}"
+    class="group relative flex h-[547px] w-full items-end justify-end bg-zinc-900 bg-cover bg-center md:items-center"
     style="{{ image_url ? "background-image: url(" ~ image_url ~ ");" : "" }}{{
     fp_bg_style
     }}"
@@ -136,11 +141,11 @@
       <div class="flex flex-col gap-3">
         {% if sezione %}
           <p class="text-tight text-sm font-semibold text-white uppercase">
-            {{ sezione.name }}
+            {{ sezione.post_title }}
           </p>
         {% endif %}
         {% if title %}
-          <h2 class="heading-h6 font-semibold">{{ title }}</h2>
+          <h2 class="heading-h6 font-semibold transition-opacity group-hover:opacity-80">{{ title }}</h2>
         {% endif %}
         {% if preview %}
           <p class="text-tight text-base">
@@ -165,5 +170,5 @@
         </div>
       {% endif %}
     </div>
-  </section>
+  </a>
 {% endif %}

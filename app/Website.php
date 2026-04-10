@@ -24,6 +24,7 @@ class Website extends Site
     #[Action("init")]
     public function register_post_types()
     {
+        PostTypes\Sezione::register();
         PostTypes\Film::register();
         PostTypes\Proiezione::register();
         PostTypes\News::register();
@@ -315,9 +316,9 @@ class Website extends Site
 
     public static function get_related_films(int $post_id, int $limit = 3, array $exclude_extra = []): array
     {
-        $taxonomies = ['sezione', 'genere', 'area-tematica', 'paese'];
+        $taxonomies = ['genere', 'area-tematica', 'paese'];
 
-        // Collect all term IDs for this film across relevant taxonomies
+        // Collect taxonomy term IDs for the current film
         $term_ids = [];
         foreach ($taxonomies as $tax) {
             $terms = wp_get_post_terms($post_id, $tax, ['fields' => 'ids']);
@@ -326,16 +327,44 @@ class Website extends Site
             }
         }
 
+        // Collect sezione post IDs from the CPT relationship field
+        $sezione_ids = self::extract_post_ids(get_field('sezione', $post_id));
+
         // Get all published films except the current one and any manual picks
-        $candidates = !empty($term_ids) ? get_posts([
+        $exclude    = array_merge([$post_id], $exclude_extra);
+        $candidates = get_posts([
             'post_type'      => 'film',
             'post_status'    => 'publish',
             'posts_per_page' => -1,
             'fields'         => 'ids',
-            'post__not_in'   => array_merge([$post_id], $exclude_extra),
-        ]) : [];
+            'post__not_in'   => $exclude,
+        ]);
 
-        // Score each candidate by number of shared terms
+        if (empty($candidates)) {
+            return [];
+        }
+
+        // Preload sezione meta for all candidates in one query (avoids N+1)
+        global $wpdb;
+        $placeholders    = implode(',', array_fill(0, count($candidates), '%d'));
+        $candidate_sezioni = [];
+        if (!empty($sezione_ids)) {
+            $rows = $wpdb->get_results(
+                $wpdb->prepare(
+                    "SELECT post_id, meta_value FROM {$wpdb->postmeta}
+                     WHERE meta_key = 'sezione' AND post_id IN ($placeholders)",
+                    ...$candidates
+                )
+            );
+            foreach ($rows as $row) {
+                $ids = @unserialize($row->meta_value);
+                $candidate_sezioni[(int) $row->post_id] = is_array($ids)
+                    ? array_map('intval', $ids)
+                    : [];
+            }
+        }
+
+        // Score each candidate: +1 per shared taxonomy term, +2 per shared sezione
         $scores = [];
         foreach ($candidates as $candidate_id) {
             $shared = 0;
@@ -344,6 +373,10 @@ class Website extends Site
                 if (!is_wp_error($candidate_terms)) {
                     $shared += count(array_intersect($term_ids, $candidate_terms));
                 }
+            }
+            if (!empty($sezione_ids)) {
+                $c_sezione_ids = $candidate_sezioni[$candidate_id] ?? [];
+                $shared += count(array_intersect($sezione_ids, $c_sezione_ids)) * 2;
             }
             if ($shared > 0) {
                 $scores[$candidate_id] = $shared;
@@ -369,6 +402,18 @@ class Website extends Site
         }
 
         return $result;
+    }
+
+    /** Normalise an ACF relationship value to a flat array of integer post IDs. */
+    private static function extract_post_ids(mixed $value): array
+    {
+        if (empty($value)) {
+            return [];
+        }
+        return array_map(
+            fn($p) => is_object($p) ? (int) $p->ID : (int) $p,
+            (array) $value
+        );
     }
 
     // Redirect non-users to coming soon page, but allow certain other pages

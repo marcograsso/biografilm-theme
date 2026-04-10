@@ -6,7 +6,7 @@
 
 {% block content %}
   {% set film_id = post.ID %}
-  {% set sezione = function("wp_get_post_terms", film_id, "sezione")[0] %}
+  {% set sezione = function("get_field", "sezione", film_id)[0] %}
   {% set paese = function("wp_get_post_terms", film_id, "paese") %}
   {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
   {% set badges = function("wp_get_post_terms", film_id, "badge") %}
@@ -75,7 +75,7 @@
         {{ include("parts/breadcrumbs.twig") }}
         {% if sezione %}
           <p class="text-tight text-red text-sm font-semibold uppercase">
-            {{ sezione.name }}
+            {{ sezione.post_title }}
           </p>
         {% endif %}
         <h1 class="display-h1-tertiary">{{ post.title }}</h1>

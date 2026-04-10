@@ -46,7 +46,7 @@
   : film_id ? function("wp_get_post_terms", film_id, "badge") : []
 %}
 {% set sezione = film_id
-  ? function("wp_get_post_terms", film_id, "sezione")[0]
+  ? function("get_field", "sezione", film_id)[0]
   : null
 %}
 
@@ -134,7 +134,7 @@
           <p
             class="text-tight text-red xl text-sm font-semibold uppercase lg:hidden"
           >
-            {{ sezione.name }}
+            {{ sezione.post_title }}
           </p>
         {% endif %}
         {% if title %}
@@ -145,7 +145,7 @@
             <p
               class="text-tight text-red xl hidden text-sm font-semibold uppercase lg:block"
             >
-              {{ sezione.name }}
+              {{ sezione.post_title }}
             </p>
           {% endif %}
           {% if preview %}

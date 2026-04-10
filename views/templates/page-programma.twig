@@ -14,11 +14,16 @@
         {# Mobile only: filter icon button #}
         <button
           type="button"
-          class="border-stroke hover:bg-white-hover active:bg-white-active flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
+          class="border-stroke hover:bg-white-hover active:bg-white-active relative flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
           @click="drawerOpen = true"
           aria-label="Apri filtri"
         >
           {{ include("icons/generic/filters.svg")|attr({ class: "size-5" }) }}
+          <span
+            class="filters-active-dot bg-red absolute top-2 right-2 hidden size-2 rounded-full"
+          >
+
+          </span>
         </button>
         {# Days — rendered once, always visible, scrollable #}
         <div
@@ -54,10 +59,10 @@
       <div
         x-show="desktopFiltersOpen"
         x-collapse
-        class="filters-white flex w-full bg-black"
+        class="filters-white hidden w-full bg-black lg:flex"
       >
         <div class="flex-1">
-          {{ function("do_shortcode", '[facetwp facet="sezione"]') }}
+          {{ function("do_shortcode", '[facetwp facet="program_sezione"]') }}
         </div>
         <div class="-ml-px flex-1">
           {{ function("do_shortcode", '[facetwp facet="area_tematica"]') }}

@@ -9,7 +9,6 @@
       {% set is_disabled = value.counter == 0 and not is_selected %}
       <option
         value="{{ value.facet_value }}"
-        data-counter="{{ value.counter }}"
         class="d{{ value.depth ?? 0 }}"
         {{ is_selected ? "selected" : "" }}
         {{ is_disabled ? "disabled" : "" }}

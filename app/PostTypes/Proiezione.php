@@ -42,13 +42,21 @@ class Proiezione extends \Timber\Post
 
         $film_id = is_array($films) ? $films[0]->ID : $films->ID;
 
-        foreach (["sezione", "paese", "genere", "area-tematica", "badge"] as $taxonomy) {
+        foreach (["paese", "genere", "area-tematica", "badge"] as $taxonomy) {
             $term_ids = wp_get_post_terms($film_id, $taxonomy, ["fields" => "ids"]);
             wp_set_post_terms($post_id, is_wp_error($term_ids) ? [] : $term_ids, $taxonomy);
         }
 
+        // Sync sezione relationship from film
+        $sezione = get_field("sezione", $film_id);
+        $sezione_ids = !empty($sezione)
+            ? array_map(fn($p) => is_object($p) ? $p->ID : (int) $p, (array) $sezione)
+            : [];
+        update_field("field_proiezione_sezione", $sezione_ids, $post_id);
+
         update_post_meta($post_id, '_film_title', get_the_title($film_id));
         update_post_meta($post_id, '_film_regista', get_post_meta($film_id, 'regista', true));
+        update_post_meta($post_id, '_film_sezione', !empty($sezione_ids) ? get_the_title($sezione_ids[0]) : '');
     }
 
     public static function search_join(string $join, \WP_Query $query): string
@@ -105,7 +113,7 @@ class Proiezione extends \Timber\Post
         add_filter('posts_distinct', [self::class, 'search_distinct'], 10, 2);
 
         add_action("admin_menu", function () {
-            foreach (["sezione", "paese", "genere", "area-tematica", "badge"] as $taxonomy) {
+            foreach (["paese", "genere", "area-tematica", "badge"] as $taxonomy) {
                 remove_meta_box("tagsdiv-{$taxonomy}", "proiezione", "side");
             }
         });
@@ -167,6 +175,15 @@ class Proiezione extends \Timber\Post
                     ->helperText("Link secondario con testo personalizzabile. Utile per biglietterie alternative o pagine di informazioni aggiuntive."),
                 Link::make("Link MyMovies", "link_mymovies")
                     ->helperText("Link diretto alla pagina MyMovies. Titolo predefinito consigliato: «Guarda online su MyMovies»."),
+
+                Tab::make("Sezione"),
+                Relationship::make("Sezione", "sezione")
+                    ->key("field_proiezione_sezione")
+                    ->postTypes(["sezione"])
+                    ->filters(["search"])
+                    ->maxPosts(1)
+                    ->withSettings(["readonly" => 1])
+                    ->helperText("Sincronizzata automaticamente dal film associato."),
 
                 Tab::make("Info alternative"),
                 Text::make("Titolo alternativo", "titolo_alternativo"),

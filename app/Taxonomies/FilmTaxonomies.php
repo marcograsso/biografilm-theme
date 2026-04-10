@@ -8,11 +8,6 @@ class FilmTaxonomies
     {
         $taxonomies = [
             [
-                "slug"     => "sezione",
-                "singular" => "Sezione",
-                "plural"   => "Sezioni",
-            ],
-            [
                 "slug"     => "paese",
                 "singular" => "Paese",
                 "plural"   => "Paesi",

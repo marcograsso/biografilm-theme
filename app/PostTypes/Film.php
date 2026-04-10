@@ -132,11 +132,11 @@ class Film extends \Timber\Post
                     ->withSettings(["acfe_add_post" => 1]),
 
                 Tab::make("Tassonomie"),
-                Taxonomy::make("Sezione", "sezione")
-                    ->taxonomy("sezione")
-                    ->appearance("checkbox")
-                    ->create(true)
-                    ->save(true),
+                Relationship::make("Sezione", "sezione")
+                    ->key("field_film_sezione")
+                    ->postTypes(["sezione"])
+                    ->filters(["search"])
+                    ->maxPosts(1),
                 Taxonomy::make("Paese", "paese")
                     ->taxonomy("paese")
                     ->appearance("multi_select")
