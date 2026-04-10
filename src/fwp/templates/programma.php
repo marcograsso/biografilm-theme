@@ -18,10 +18,12 @@
                 ? "border-t border-t-stroke"
                 : "" ?>"><?php $first_group = false; ?>
                 <?php if ($hour_label !== "__no_time__"): ?>
-                    <div class="border-r-stroke border-b-stroke flex w-20 lg:w-30 shrink-0 items-start justify-center border-r border-b pt-10 pb-10">
-                        <h3 class="display-h6">
-                            <?= esc_html($hour_label) ?>
-                        </h3>
+                    <div class="border-r-stroke border-b-stroke w-20 lg:w-30 shrink-0 border-r border-b">
+                        <div class="sticky top-12 flex justify-center pt-10 pb-10">
+                            <h3 class="display-h6">
+                                <?= esc_html($hour_label) ?>
+                            </h3>
+                        </div>
                     </div>
                 <?php else: ?>
                     <div class="border-r-stroke border-b-stroke w-20 lg:w-30 shrink-0 border-r border-b"></div>

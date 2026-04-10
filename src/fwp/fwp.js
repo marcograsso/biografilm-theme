@@ -1,3 +1,4 @@
+
 import Alpine from "alpinejs";
 
 // Re-initialize Alpine on elements injected by FacetWP AJAX refreshes
@@ -71,6 +72,19 @@ document.addEventListener("click", (e) => {
   }
 });
 
-document.addEventListener("DOMContentLoaded", () => { lockFsLabels(); updateSelectionDots(); });
-document.addEventListener("facetwp-loaded", () => { lockFsLabels(); updateSelectionDots(); });
+function formatDayLabels() {
+  const italianDays = ["DOM", "LUN", "MAR", "MER", "GIO", "VEN", "SAB"];
+  document
+    .querySelectorAll(".facetwp-type-radio .facetwp-radio[data-value]")
+    .forEach((el) => {
+      const val = el.getAttribute("data-value");
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(val)) return;
+      const [y, m, d] = val.split("-").map(Number);
+      const date = new Date(y, m - 1, d); // local constructor avoids UTC midnight offset
+      el.textContent = italianDays[date.getDay()] + " " + d;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => { lockFsLabels(); updateSelectionDots(); formatDayLabels(); });
+document.addEventListener("facetwp-loaded", () => { lockFsLabels(); updateSelectionDots(); formatDayLabels(); });
 document.addEventListener("fs:changed", () => { lockFsLabels(); updateSelectionDots(); });

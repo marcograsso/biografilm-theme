@@ -1,0 +1,75 @@
+{#
+  Mobile filters drawer (overlay + slide-in panel).
+
+  Parameters:
+    state_var  {string}  Alpine variable that controls open/close (e.g. "filtersOpen")
+    facets     {array}   FacetWP facet names to render inside the drawer
+#}
+
+{# ── Overlay ── #}
+<div
+  x-show="{{ state_var }}"
+  x-transition:enter="transition-opacity duration-300 ease-out"
+  x-transition:enter-start="opacity-0"
+  x-transition:enter-end="opacity-100"
+  x-transition:leave="transition-opacity duration-200 ease-in"
+  x-transition:leave-start="opacity-100"
+  x-transition:leave-end="opacity-0"
+  class="fixed inset-0 z-[40001] bg-black/50 lg:hidden"
+  @click="{{ state_var }} = false"
+  style="display: none"
+></div>
+
+{# ── Drawer panel ── #}
+<div
+  x-show="{{ state_var }}"
+  x-transition:enter="transition-transform duration-300 ease-out"
+  x-transition:enter-start="-translate-x-full"
+  x-transition:enter-end="translate-x-0"
+  x-transition:leave="transition-transform duration-300 ease-in"
+  x-transition:leave-start="translate-x-0"
+  x-transition:leave-end="-translate-x-full"
+  class="fixed inset-y-0 left-0 z-[40002] flex h-dvh w-[min(320px,88vw)] flex-col bg-white shadow-xl lg:hidden"
+  style="display: none"
+>
+  <div class="border-stroke flex shrink-0 items-center justify-between border-b">
+    <span class="text-tight px-4 py-4 text-2xl font-semibold">Filtri</span>
+    <button
+      type="button"
+      class="border-stroke flex aspect-square h-full cursor-pointer items-center justify-center border-l text-black transition-opacity hover:opacity-60"
+      @click="{{ state_var }} = false"
+      aria-label="Chiudi filtri"
+    >
+      {{ include("icons/generic/close.svg")|attr({ class: "size-5" }) }}
+    </button>
+  </div>
+
+  <div class="filters-drawer min-h-0 flex-1 overflow-y-auto">
+    {% for facet in facets %}
+      {{ function("do_shortcode", '[facetwp facet="' ~ facet ~ '"]') }}
+    {% endfor %}
+  </div>
+
+  <div class="border-stroke flex shrink-0 flex-wrap gap-3 border-t p-4">
+    {% include "components/button.twig" with {
+      variant: "secondary",
+      size: "lg",
+      label: "Rimuovi filtri",
+      attributes: {
+        type: "button",
+        onclick: "FWP.reset()",
+        class: "flex-1 border border-stroke"
+      }
+    } %}
+    {% include "components/button.twig" with {
+      variant: "default",
+      size: "lg",
+      label: "Vedi risultati",
+      attributes: {
+        type: "button",
+        "x-on:click": state_var ~ " = false",
+        class: "flex-1"
+      }
+    } %}
+  </div>
+</div>
