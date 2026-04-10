@@ -74,9 +74,15 @@
       <div class="flex flex-col gap-6">
         {{ include("parts/breadcrumbs.twig") }}
         {% if sezione %}
-          <p class="text-tight text-red text-sm font-semibold uppercase">
-            {{ sezione.post_title }}
-          </p>
+          {% include "components/button.twig" with {
+            as_link: true,
+            variant: "link",
+            label: sezione.post_title,
+            attributes: {
+              href: function("get_permalink", sezione.ID),
+              class: "text-red h-auto p-0 text-sm font-semibold uppercase w-fit"
+            }
+          } %}
         {% endif %}
         <h1 class="display-h1-tertiary">{{ post.title }}</h1>
       </div>
@@ -179,7 +185,20 @@
             <span
               class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
-              {{ area_tematica|map(t => t.name)|join(", ") }}
+              {% for term in area_tematica %}
+                {% include "components/button.twig" with {
+                  as_link: true,
+                  variant: "link",
+                  label: term.name,
+                  attributes: {
+                    href: function("get_post_type_archive_link", "film")
+                      ~ "?_area_tematica="
+                      ~ term.slug,
+                    class: "h-auto p-0 text-base font-semibold lg:text-xl"
+                  }
+                } %}
+                {% if not loop.last %}, {% endif %}
+              {% endfor %}
             </span>
           </div>
         {% endif %}

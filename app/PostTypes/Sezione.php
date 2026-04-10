@@ -27,11 +27,14 @@ class Sezione extends \Timber\Post
         $names = self::$names;
 
         register_extended_post_type($name, [
-            "menu_icon"    => "dashicons-category",
-            "supports"     => ["title"],
-            "public"       => false,
-            "show_ui"      => true,
-            "show_in_rest" => false,
+            "menu_icon"           => "dashicons-category",
+            "supports"            => ["title", "editor", "thumbnail"],
+            "public"              => true,
+            "publicly_queryable"  => true,
+            "show_ui"             => true,
+            "show_in_rest"        => true,
+            "has_archive"         => false,
+            "rewrite"             => ["slug" => "sezione", "with_front" => false],
             "labels"       => [
                 "name"          => "Sezioni",
                 "singular_name" => "Sezione",
