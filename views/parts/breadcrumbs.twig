@@ -14,13 +14,17 @@
         >
           {{ crumb.title }}
         </span>
-      {% else %}
+      {% elseif crumb.url %}
         <a
           href="{{ crumb.url }}"
           class="text-tight shrink-0 whitespace-nowrap text-sm text-black underline-offset-3 hover:underline"
         >
           {{ crumb.title }}
         </a>
+      {% else %}
+        <span class="text-tight shrink-0 whitespace-nowrap text-sm text-black">
+          {{ crumb.title }}
+        </span>
       {% endif %}
     {% endfor %}
   </nav>

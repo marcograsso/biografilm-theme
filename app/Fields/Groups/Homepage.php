@@ -43,6 +43,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/highlight-card/highlight-card.php",
                     ),
+                Layout::make("Text Displayer", "text_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/text-displayer/text-displayer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

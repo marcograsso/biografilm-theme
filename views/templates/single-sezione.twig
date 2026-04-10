@@ -1,0 +1,41 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  {% set sezione_id = post.ID %}
+  {% set td_heading = function("get_field", "heading", sezione_id) %}
+  {% set td_title = function("get_field", "title", sezione_id) %}
+  {% set td_title_size = function("get_field", "title_size", sezione_id) %}
+  {% set td_content = function("get_field", "content", sezione_id) %}
+
+  {% if td_heading or td_title or td_content %}
+    {{
+      include(
+        "components/text-displayer/text-displayer.twig",
+        {
+          component: {
+            heading: td_heading,
+            title: td_title,
+            title_size: td_title_size,
+            content: td_content
+          }
+        }
+      )
+    }}
+  {% endif %}
+
+  {% set films = post.get_films %}
+  {% if films %}
+    {{
+      include(
+        "components/card-displayer/card-displayer.twig",
+        {
+          component: {
+            title: "Film in sezione",
+            title_class: "heading-h4 font-semibold",
+            items: films
+          }
+        }
+      )
+    }}
+  {% endif %}
+{% endblock content %}

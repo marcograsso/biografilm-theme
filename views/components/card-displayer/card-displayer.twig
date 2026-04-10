@@ -4,7 +4,9 @@
       class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
     >
       {% if component.title %}
-        <h2 class="display-h2">{{ component.title }}</h2>
+        <h2 class="{{ component.title_class ? : "display-h2" }}">
+          {{ component.title }}
+        </h2>
       {% endif %}
       {% if component.link %}
         <a
@@ -27,6 +29,7 @@
       {% set count = component.items|length %}
       {% set always_even = component.always_even %}
       {% set is_odd = count % 2 == 1 %}
+      {% set filler_border = component.filler_border_bottom ? "border-b" : "" %}
       {% for item in component.items %}
         {% set is_last = loop.last %}
         {% set hide_last = always_even and is_odd and is_last %}
@@ -68,20 +71,30 @@
       {# 2-col filler: only when not always_even (otherwise last card is hidden, making count even) #}
       {% if is_odd and not always_even %}
         <div
-          class="border-stroke 3xl:hidden col-span-1 border-r border-l xl:border-b"
+          class="border-stroke 3xl:hidden col-span-1 border-r border-l {{
+          filler_border
+            ? "xl:border-b"
+            : ""
+          }}"
         ></div>
       {% endif %}
       {# 3-col fillers: shown only at 3xl when count % 3 != 0 #}
       {% if count % 3 == 1 %}
         <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
+          filler_border
+          }}"
         ></div>
         <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
+          filler_border
+          }}"
         ></div>
       {% elseif count % 3 == 2 %}
         <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-b border-l"
+          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
+          filler_border
+          }}"
         ></div>
       {% endif %}
     </div>

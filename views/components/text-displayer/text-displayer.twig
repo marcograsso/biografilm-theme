@@ -1,0 +1,29 @@
+<section class="w-full">
+  <div
+    class="3xl:grid-cols-4 border-stroke grid w-full grid-cols-3 border-y py-20 xl:py-0"
+  >
+    <div
+      class="3xl:col-span-1 col-span-3 mb-10 flex flex-col gap-2 px-6 xl:col-span-1 xl:mb-0 xl:px-10 xl:py-30"
+    >
+      {% if component.heading %}
+        {% set heading_class = component.title_size == "big"
+          ? "display-h2"
+          : "heading-h4 font-semibold"
+        %}
+        <h2 class="{{ heading_class }}">{{ component.heading }}</h2>
+      {% endif %}
+    </div>
+    <div
+      class="3xl:col-span-3 col-span-3 flex flex-col gap-6 pr-6 pl-6 xl:col-span-2 xl:py-30 xl:pr-10 xl:pl-0"
+    >
+      {% if component.title %}
+        <h6 class="heading-h6 font-semibold">{{ component.title }}</h6>
+      {% endif %}
+      {% if component.content %}
+        <div class="prose text-black0 max-w-none text-xl leading-[150%]">
+          {{ component.content }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

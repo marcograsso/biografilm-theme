@@ -14,7 +14,7 @@
 %}
 {% set sezione = function("get_field", "sezione", film_id)[0] %}
 {% set badges = function("wp_get_post_terms", film_id, "badge") %}
-{% set preview_raw = function("get_field", "preview", film_id) %}
+{% set preview_raw = preview_override ?: function("get_field", "preview", film_id) %}
 {% if not preview_raw %}
   {% set preview_parts = [] %}
   {% set regista = function("get_field", "regista", film_id) %}
@@ -82,7 +82,7 @@
         {{ film.post_title }}
       </h5>
       {% if preview %}
-        <p class="text-tight text-base text-black">
+        <p class="text-tight line-clamp-3 text-base text-black">
           {{ preview }}
         </p>
       {% endif %}

@@ -15,4 +15,7 @@ return [
     TrueFalse::make("Sempre pari", "always_even")
         ->stylized()
         ->helperText("Se attivo e il numero di contenuti è dispari, l'ultimo elemento viene nascosto nelle griglie a 2 colonne e mostrato solo dalla griglia a 4 colonne (3xl)."),
+    TrueFalse::make("Bordo inferiore filler", "filler_border_bottom")
+        ->stylized()
+        ->helperText("Se attivo, aggiunge un bordo inferiore alle celle vuote di riempimento griglia."),
 ];

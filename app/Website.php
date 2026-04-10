@@ -158,12 +158,20 @@ class Website extends Site
 
         // Build breadcrumbs from page hierarchy
         $breadcrumbs = [];
-        if (is_post_type_archive('film')) {
+        if (is_post_type_archive('sezione')) {
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
+            $breadcrumbs[] = ["url" => "", "title" => "Sezioni"];
+        } elseif (is_post_type_archive('film')) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
             $breadcrumbs[] = ["url" => "", "title" => "Tutti i film"];
         } elseif ($post && !is_front_page()) {
             if (get_post_type($post->ID) === 'film') {
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('film'), "title" => "Tutti i film"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'sezione') {
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('sezione'), "title" => "Sezioni"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } else {
                 $ancestors = get_post_ancestors($post->ID);
