@@ -1,0 +1,43 @@
+<div class="border-stroke relative col-span-1 flex h-full flex-col border-b">
+  {% if member.subtitle %}
+    <div class="absolute top-0 left-0 z-10">
+      <span
+        class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px]"
+      >
+        {{ member.subtitle }}
+      </span>
+    </div>
+  {% endif %}
+
+  <div class="aspect-video w-full shrink-0 overflow-hidden bg-gray-200">
+    <img
+      src="{{
+      member.image.url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ member.image.alt ? : member.title }}"
+      class="h-full w-full object-cover"
+    />
+  </div>
+
+  <div class="border-stroke flex h-full flex-col border-l px-6 py-10 {{ is_last ? 'border-r' : '' }}">
+    <div class="flex h-full flex-col gap-3">
+      {% if member.provenienza %}
+        <p class="text-red text-tight text-sm font-semibold uppercase">
+          {{ member.provenienza }}
+        </p>
+      {% endif %}
+      {% if member.title %}
+        <h5 class="text-tight line-clamp-2 text-2xl font-semibold">
+          {{ member.title }}
+        </h5>
+      {% endif %}
+      {% if member.content %}
+        <div class="prose text-tight text-base leading-[125%] text-black">
+          {{ member.content }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>

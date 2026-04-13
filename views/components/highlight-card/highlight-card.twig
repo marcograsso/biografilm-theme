@@ -115,9 +115,7 @@
   <a
     href="{{ permalink }}"
     class="group relative flex h-[547px] w-full items-end justify-end bg-zinc-900 bg-cover bg-center md:items-center"
-    style="{{ image_url ? "background-image: url(" ~ image_url ~ ");" : "" }}{{
-    fp_bg_style
-    }}"
+    style="background-image: url({{ image_url ?: site.theme.link ~ "/assets/images/fallback-img.jpg" }});{{ fp_bg_style }}"
   >
     {% if badges %}
       <div class="absolute top-0 left-0 flex flex-wrap gap-0">

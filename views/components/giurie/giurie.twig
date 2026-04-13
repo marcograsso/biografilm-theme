@@ -1,0 +1,44 @@
+<section class="border-stroke w-full border-t">
+  {% for section in component.sections %}
+    <div class="section">
+      <div
+        class="flex flex-col gap-6 px-6 pt-20 xl:px-10 xl:pt-30 {{
+        section.members
+          ? "pb-10 xl:pb-20"
+          : (not loop.last ? "border-stroke border-b" : "") ~ " pb-30 xl:pb-30"
+        }}"
+      >
+        {% if section.title %}
+          <h5 class="heading-h5 font-semibold">{{ section.title }}</h5>
+        {% endif %}
+        {% if section.subtitle %}
+          <div class="prose text-tight text-xl leading-[150%]">
+            {{ section.subtitle }}
+          </div>
+        {% endif %}
+      </div>
+
+      {% if section.members %}
+        <div class="swiper giurie-swiper">
+          <div class="swiper-wrapper">
+            {% for member in section.members %}
+              <div class="swiper-slide">
+                {{
+                  include(
+                    "components/giurie/member-card.twig",
+                    { member: member, is_last: loop.last }
+                  )
+                }}
+              </div>
+            {% endfor %}
+          </div>
+          <div class="hero-carousel-nav giurie-nav">
+            <button class="swiper-button-prev" aria-label="Precedente"></button>
+            <div class="swiper-pagination" role="tablist"></div>
+            <button class="swiper-button-next" aria-label="Successivo"></button>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</section>

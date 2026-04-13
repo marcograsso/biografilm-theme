@@ -14,6 +14,7 @@ return [
         ->button("Aggiungi sezione")
         ->fields([
             Text::make("Titolo", "title"),
+            Text::make("Sottotitolo", "subtitle"),
             Repeater::make("Premi", "awards")
                 ->layout("block")
                 ->collapsed("title")

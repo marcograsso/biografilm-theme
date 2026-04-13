@@ -1,0 +1,37 @@
+@reference "../../../src/main.css";
+
+.giurie-swiper {
+  padding-bottom: 64px;
+}
+
+.giurie-nav {
+  left: 0 !important;
+  right: 0 !important;
+  justify-content: space-between !important;
+}
+
+.hero-carousel-nav.giurie-nav .swiper-button-prev,
+.hero-carousel-nav.giurie-nav .swiper-button-next {
+  color: black;
+  --swiper-navigation-color: black;
+}
+
+.hero-carousel-nav.giurie-nav .swiper-pagination-bullet {
+  @apply bg-black/20 opacity-100;
+}
+
+.hero-carousel-nav.giurie-nav .swiper-pagination-bullet-active {
+  @apply bg-red opacity-100;
+}
+
+.giurie-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.giurie-swiper .swiper-slide {
+  height: auto;
+}
+
+.giurie-swiper .swiper-slide > * {
+  height: 100%;
+}
