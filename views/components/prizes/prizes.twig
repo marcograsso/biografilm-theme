@@ -1,0 +1,64 @@
+<section class="w-full">
+  {% for section in component.sections %}
+    <div class="section">
+      {% if section.title %}
+        <div class="border-stroke border-y px-6 pt-20 pb-10 xl:p-10">
+          <h2 class="display-h2">{{ section.title }}</h2>
+        </div>
+      {% endif %}
+
+      {% if section.awards %}
+        <div class="awards">
+          {% for award in section.awards %}
+            <div class="award flex flex-col lg:flex-row">
+              <div
+                class="flex flex-col gap-12 px-6 pt-20 pb-10 lg:w-1/2 lg:px-10 lg:py-30 xl:w-3/5 {{
+                loop.first
+                  ? ""
+                  : "border-stroke border-t"
+                }}"
+              >
+                <div class="flex flex-col gap-6">
+                  {% if award.title %}
+                    <h5 class="heading-h5 font-semibold">{{ award.title }}</h5>
+                  {% endif %}
+
+                  {% if award.subtitle %}
+                    <p class="text-tight text-base">
+                      {{ award.subtitle }}
+                    </p>
+                  {% endif %}
+                </div>
+                {% if award.stato != "non_assegnato" %}
+                  <div class="flex flex-col gap-6">
+                    {% if award.title_2 %}
+                      <h4 class="text-tight text-2xl font-semibold">
+                        {{ award.title_2 }}
+                      </h4>
+                    {% endif %}
+
+                    {% if award.content %}
+                      <div class="prose text-tight text-base leading-[150%]">
+                        {{ award.content }}
+                      </div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </div>
+              {% if award.stato != "non_assegnato" and award.film %}
+                <div class="lg:w-1/2 xl:w-2/5">
+                  {{
+                    include(
+                      "components/prize-card/prize-card.twig",
+                      { film: award.film }
+                    )
+                  }}
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</section>

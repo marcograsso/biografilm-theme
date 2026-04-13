@@ -1,0 +1,82 @@
+{% set film_id = film.ID %}
+{% set title = film.post_title %}
+{% set permalink = function("get_permalink", film_id) %}
+{% set image_url = function("get_the_post_thumbnail_url", film_id, "full") %}
+{% set fp_source_id = function("get_post_thumbnail_id", film_id) %}
+{% set sezione = function("get_field", "sezione", film_id)[0] %}
+{% set badges = function("wp_get_post_terms", film_id, "badge") %}
+
+{% set preview_raw = function("get_field", "preview", film_id) %}
+{% if not preview_raw %}
+  {% set preview_parts = [] %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% if regista %}{% set preview_parts =
+    preview_parts|merge([regista])
+  %}{% endif %}
+  {% if durata %}{% set preview_parts =
+    preview_parts|merge([durata])
+  %}{% endif %}
+  {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+  {% if genere %}{% set preview_parts =
+    preview_parts|merge([genere.name])
+  %}{% endif %}
+  {% set preview = preview_parts|join(" / ") %}
+{% else %}
+  {% set preview = preview_raw %}
+{% endif %}
+
+{% set fp = fp_source_id
+  ? function("get_post_meta", fp_source_id, "focalpoint", true)
+  : null
+%}
+{% set fp_bg_style = fp
+  ? "background-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+<a
+  href="{{ permalink }}"
+  class="group relative flex h-full min-h-[400px] w-full items-end bg-zinc-900 bg-cover bg-center lg:min-h-[500px]"
+  style="{{ image_url ? "background-image: url(" ~ image_url ~ ");" : "" }}{{
+  fp_bg_style
+  }}"
+>
+  {% if badges %}
+    <div class="absolute top-0 left-0 flex flex-wrap gap-0">
+      {% for badge in badges %}
+        <span
+          class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px] {{
+          loop.last
+            ? ""
+            : "border-r border-r-[#575757]"
+          }}"
+        >
+          {{ badge.name }}
+        </span>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div
+    class="glass-effect relative flex w-full flex-col gap-3 bg-black/20 px-6 py-10 text-white"
+  >
+    {% if sezione %}
+      <p class="text-tight text-sm font-semibold text-white uppercase">
+        {{ sezione.post_title }}
+      </p>
+    {% endif %}
+    {% if title %}
+      <h2 class="heading-h6 font-semibold transition-opacity">{{ title }}</h2>
+    {% endif %}
+    {% if preview %}
+      <p class="text-tight text-base">
+        {{ preview }}
+      </p>
+    {% endif %}
+  </div>
+</a>
