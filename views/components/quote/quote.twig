@@ -1,0 +1,27 @@
+<section class="w-full">
+  <div class="border-stroke flex flex-col lg:flex-row">
+    {% if component.image %}
+      <div class="lg:w-1/2">
+        <img
+          src="{{ component.image.url }}"
+          alt="{{ component.image.alt }}"
+          class="aspect-3/4 h-full w-full object-cover lg:aspect-square"
+        />
+      </div>
+    {% endif %}
+    <div
+      class="flex flex-col items-start justify-center gap-12 px-6 pt-20 pb-10 lg:w-1/2 xl:px-30 xl:py-10"
+    >
+      {% if component.quote %}
+        <blockquote class="heading-h5">
+          {{ component.quote }}
+        </blockquote>
+      {% endif %}
+      {% if component.author %}
+        <cite class="text-tight text-xl not-italic">
+          {{ component.author }}
+        </cite>
+      {% endif %}
+    </div>
+  </div>
+</section>

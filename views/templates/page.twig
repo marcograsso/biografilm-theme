@@ -1,14 +1,13 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <div class="content-wrapper">
-    <article class="post-type-{{ post.type }}" id="post-{{ post.id }}">
-      <section class="article-content">
-        <h1 class="article-h1">{{ post.title }}</h1>
-        <div class="article-body">
-          {{ post.content }}
-        </div>
-      </section>
-    </article>s
-  </div>
+  {% for component in post.components %}
+    {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
+    {{
+      include(
+        "components/" ~ layout ~ "/" ~ layout ~ ".twig",
+        { component: component }
+      )
+    }}
+  {% endfor %}
 {% endblock content %}
