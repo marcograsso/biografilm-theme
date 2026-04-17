@@ -13,12 +13,38 @@ class News extends \Timber\Post
     public static function register()
     {
         self::register_post_type();
+        self::register_taxonomy();
 
         add_filter("timber/post/classmap", function ($classmap) {
             return array_merge($classmap, [
                 self::$names["slug"] => self::class,
             ]);
         });
+    }
+
+    private static function register_taxonomy(): void
+    {
+        register_extended_taxonomy(
+            "news-category",
+            ["news"],
+            [
+                "hierarchical" => true,
+                "labels" => [
+                    "name"          => "Categorie",
+                    "singular_name" => "Categoria",
+                    "add_new_item"  => "Aggiungi categoria",
+                    "edit_item"     => "Modifica categoria",
+                    "search_items"  => "Cerca categorie",
+                    "not_found"     => "Nessuna categoria trovata",
+                    "all_items"     => "Tutte le categorie",
+                ],
+            ],
+            [
+                "singular" => "Categoria",
+                "plural"   => "Categorie",
+                "slug"     => "news-category",
+            ],
+        );
     }
 
     private static function register_post_type()

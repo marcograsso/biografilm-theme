@@ -7,7 +7,10 @@
 <section class="w-full">
   <div class="grid grid-cols-1 xl:grid-cols-[3fr_2fr]">
     {% if component.image %}
-      <div class="{{ image_right ? "xl:order-last" : "" }} overflow-hidden">
+      <div class="{{ image_right ? "xl:order-last" : "" }} relative overflow-hidden">
+        <div
+          class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
+        ></div>
         <img
           src="{{ component.image.url }}"
           alt="{{ component.image.alt }}"

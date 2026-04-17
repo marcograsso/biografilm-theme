@@ -21,25 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     normalizeScroll: !isTouch,
   });
 
-  // Single-film hero image parallax.
-  const filmHero = document.querySelector(".film-hero");
-  const filmHeroImg = document.querySelector(".film-hero-img");
-  if (filmHero && filmHeroImg) {
-    gsap.fromTo(
-      filmHeroImg,
-      { y: -40 },
-      {
-        y: 40,
-        ease: "none",
-        scrollTrigger: {
-          trigger: filmHero,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
-    );
-  }
 
   // Date/location badge slides in from the left on load — homepage only.
   const dateline = document.querySelector(".header-dateline");

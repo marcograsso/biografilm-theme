@@ -1,33 +1,63 @@
 {% extends "base.twig" %}
 
-{% block hero %}{% endblock hero %}
-
-{% block content %}
-  <article class="mx-auto max-w-3xl px-6 py-20">
-
-    {% if post.thumbnail %}
-      {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
-      {% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
-      {% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
-      <div class="mb-10 aspect-video w-full overflow-hidden">
-        <img
-          src="{{ post.thumbnail.src("large") }}"
-          alt="{{ post.thumbnail.alt }}"
-          class="h-full w-full object-cover"
-          style="{{ fp_style }}"
-        />
-      </div>
-    {% endif %}
-
-    <div class="flex flex-col gap-6">
-      <p class="text-tight text-sm text-black/50">
+{% block hero %}
+  <div class="mt-[108px] w-full px-6 py-20 xl:px-10 xl:py-20">
+    <div class="flex flex-col gap-6 xl:w-2/3">
+      {{ include("parts/breadcrumbs.twig") }}
+      <h1 class="display-h1-news">{{ post.title }}</h1>
+      <p class="text-tight text-sm text-black">
         {{ post.post_date|date("d F Y") }}
       </p>
-      <h1 class="text-tight text-4xl font-semibold">{{ post.title }}</h1>
-      <div class="prose max-w-none">
+    </div>
+  </div>
+{% endblock hero %}
+
+{% block content %}
+  <article class="">
+    <div class="flex flex-col gap-10 xl:w-2/3 xl:gap-20">
+      {% if post.thumbnail %}
+        {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
+        {% set fp = thumb_id
+          ? function("get_post_meta", thumb_id, "focalpoint", true)
+          : null
+        %}
+        {% set fp_style = fp
+          ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+            ~ ((fp.top * 100)|round)
+            ~ "%;"
+          : null
+        %}
+        <div class="aspect-video w-full overflow-hidden">
+          <img
+            src="{{ post.thumbnail.src("large") }}"
+            alt="{{ post.thumbnail.alt }}"
+            class="h-full w-full object-cover"
+            style="{{ fp_style }}"
+          />
+        </div>
+      {% endif %}
+
+      <div
+        class="prose-content prose border-stroke max-w-none border-b px-6 pb-20 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-30"
+      >
         {{ post.content }}
       </div>
     </div>
-
   </article>
+
+  {% if related_news %}
+    {{
+      include(
+        "components/card-displayer/card-displayer.twig",
+        {
+          component: {
+            title: "Leggi anche",
+            title_class: "heading-h4 font-semibold",
+            items: related_news,
+            always_even: true
+          }
+        }
+      )
+    }}
+  {% endif %}
 {% endblock content %}

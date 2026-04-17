@@ -165,8 +165,15 @@ class Website extends Site
         } elseif (is_post_type_archive('film')) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
             $breadcrumbs[] = ["url" => "", "title" => "Tutti i film"];
+        } elseif (is_post_type_archive('news')) {
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+            $breadcrumbs[] = ["url" => "", "title" => "News"];
         } elseif ($post && !is_front_page()) {
-            if (get_post_type($post->ID) === 'film') {
+            if (get_post_type($post->ID) === 'news') {
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('news'), "title" => "News"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'film') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('film'), "title" => "Tutti i film"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
@@ -191,6 +198,41 @@ class Website extends Site
             }
         }
         $context["breadcrumbs"] = $breadcrumbs;
+
+        if (is_singular('news') && $post) {
+            $terms = wp_get_post_terms($post->ID, 'news-category', ['fields' => 'ids']);
+            $related = [];
+
+            if (!empty($terms) && !is_wp_error($terms)) {
+                $related = get_posts([
+                    'post_type'      => 'news',
+                    'posts_per_page' => 3,
+                    'post__not_in'   => [$post->ID],
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                    'tax_query'      => [[
+                        'taxonomy' => 'news-category',
+                        'field'    => 'term_id',
+                        'terms'    => $terms,
+                    ]],
+                ]);
+            }
+
+            // Fall back to latest news if not enough results from category
+            if (count($related) < 3) {
+                $exclude = array_merge([$post->ID], array_map(fn($p) => $p->ID, $related));
+                $fallback = get_posts([
+                    'post_type'      => 'news',
+                    'posts_per_page' => 3 - count($related),
+                    'post__not_in'   => $exclude,
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                ]);
+                $related = array_merge($related, $fallback);
+            }
+
+            $context['related_news'] = array_map(fn($p) => Timber::get_post($p->ID), $related);
+        }
 
         if (is_singular('film') && $post) {
             $manual = get_field('film_correlati', $post->ID);

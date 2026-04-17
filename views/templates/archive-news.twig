@@ -1,0 +1,63 @@
+{% extends "base.twig" %}
+
+{% block hero %}
+  {{
+    include(
+      "components/hero/hero.twig",
+      { hero_title: "News", hero_title_style: "primary" }
+    )
+  }}
+{% endblock hero %}
+
+{% block content %}
+  <section class="w-full">
+    <div
+      class="border-stroke 3xl:grid-cols-4 grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+    >
+      {% for post in posts %}
+        {{
+          include(
+            "parts/cards/news-card.twig",
+            { news: post, extra_class: loop.last ? "" : "" }
+          )
+        }}
+      {% else %}
+        <p
+          class="text-tight col-span-full py-30 text-center text-xl font-semibold text-black"
+        >
+          Nessuna news trovata.
+        </p>
+      {% endfor %}
+
+      {# 2-col fillers #}
+      {% set count = posts|length %}
+      {% if count % 2 == 1 %}
+        <div class="border-stroke col-span-1 border-l xl:hidden"></div>
+      {% endif %}
+
+      {# 3-col fillers #}
+      {% if count % 3 == 1 %}
+        <div class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"></div>
+        <div class="3xl:hidden col-span-1 hidden xl:block"></div>
+      {% elseif count % 3 == 2 %}
+        <div class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"></div>
+      {% endif %}
+
+      {# 4-col fillers #}
+      {% if count % 4 == 1 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+      {% elseif count % 4 == 2 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+      {% elseif count % 4 == 3 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+      {% endif %}
+    </div>
+  </section>
+
+  {% include "parts/pagination.twig" with {
+    pagination: posts.pagination({ show_all: false, mid_size: 3, end_size: 2 })
+  } %}
+{% endblock content %}

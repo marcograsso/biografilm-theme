@@ -55,6 +55,10 @@
 @utility display-h1-tertiary {
   @apply font-display text-tight-display text-[64px] md:text-[96px];
 }
+
+@utility display-h1-news {
+  @apply font-display text-tight-display text-[56px] md:text-[88px];
+}
 @utility display-h2 {
   @apply font-display text-tight-display text-[64px] md:text-[80px];
 }
@@ -108,6 +112,10 @@
 
 @utility focusable {
   @apply outline-offset-3 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-5 focus-visible:outline-black motion-safe:transition-all;
+}
+
+.prose-content a {
+  @apply text-red hover:text-red-hover active:text-red-active font-semibold underline underline-offset-3;
 }
 
 @utility link-underline {
