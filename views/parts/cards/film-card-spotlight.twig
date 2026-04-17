@@ -1,0 +1,109 @@
+{% set film_id = film.ID %}
+{% set permalink = function("get_permalink", film_id) %}
+{% set image_url = function("get_the_post_thumbnail_url", film_id, "large") %}
+{% set thumb_id = function("get_post_thumbnail_id", film_id) %}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+{% set sezione = function("get_field", "sezione", film_id)[0] %}
+{% set badges = function("wp_get_post_terms", film_id, "badge") %}
+{% set preview_raw = preview_override
+  ?
+  : function("get_field", "preview", film_id)
+%}
+{% if not preview_raw %}
+  {% set preview_parts = [] %}
+  {% set regista = function("get_field", "regista", film_id) %}
+  {% set durata = function("get_field", "durata", film_id) %}
+  {% set anno = function("get_field", "anno", film_id) %}
+  {% set genere = function("wp_get_post_terms", film_id, "genere")[0] %}
+  {% if regista %}{% set preview_parts =
+    preview_parts|merge([regista])
+  %}{% endif %}
+  {% if durata %}{% set preview_parts =
+    preview_parts|merge([durata])
+  %}{% endif %}
+  {% if anno %}{% set preview_parts = preview_parts|merge([anno]) %}{% endif %}
+  {% if genere %}{% set preview_parts =
+    preview_parts|merge([genere.name])
+  %}{% endif %}
+  {% set preview = preview_parts|join(" / ") %}
+{% else %}
+  {% set preview = preview_raw %}
+{% endif %}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke relative isolate col-span-1 flex flex-col overflow-hidden border-b bg-zinc-900 {{
+  extra_class
+  }}"
+>
+  <!-- Blur overlay -->
+  <div
+    class="overlay-blur overlay absolute inset-0 z-30 bg-transparent backdrop-blur-[50px]"
+  ></div>
+
+  <!-- Image: covers the entire card -->
+  <img
+    src="{{
+    image_url
+      ?
+      : site.theme.link ~ "/assets/images/fallback-img.jpg"
+    }}"
+    alt="{{ film.post_title }}"
+    class="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
+    style="{{ fp_style }}"
+  />
+
+  <!-- Radial blur vignette on hover: covers the entire card -->
+  <div
+    class="absolute inset-0 z-10 bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+  ></div>
+
+  {% if badges %}
+    <div class="absolute top-0 left-0 z-40 flex flex-wrap gap-0">
+      {% for badge in badges %}
+        <span
+          class="backdrop-blur-[50px] {{
+          loop.last
+            ? ""
+            : "border-r border-r-[#575757]"
+          }} bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase"
+        >
+          {{ badge.name }}
+        </span>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Proportional spacer: defines the image area height -->
+  <div class="aspect-video w-full"></div>
+
+  <!-- Text panel: in-flow below the spacer -->
+  <div
+    class="glass-effect relative z-40 flex flex-1 flex-col gap-3 bg-[#1E1E1E]/20 px-6 py-10"
+  >
+    {% if sezione %}
+      <p class="text-tight blur-in text-sm font-semibold text-white uppercase">
+        {{ sezione.post_title }}
+      </p>
+    {% endif %}
+    <h5
+      class="text-tight blur-in line-clamp-2 text-2xl font-semibold text-white"
+    >
+      {{ film.post_title }}
+    </h5>
+    {% if preview %}
+      <p class="text-tight blur-in line-clamp-3 text-base text-white">
+        {{ preview }}
+      </p>
+    {% endif %}
+  </div>
+</a>

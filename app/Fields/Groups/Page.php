@@ -25,6 +25,24 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/quote/quote.php",
                     ),
+                Layout::make("Film Displayer", "film_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/film-displayer/film-displayer.php",
+                    ),
+                Layout::make("Editorial Block", "editorial_block")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/editorial-block/editorial-block.php",
+                    ),
+                Layout::make("Spacer", "spacer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/spacer/spacer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

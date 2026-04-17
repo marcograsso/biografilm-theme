@@ -32,6 +32,7 @@
               } %}
               <div
                 x-show="open"
+                x-cloak
                 @click.outside="open = false"
                 class="bg-red absolute top-full left-0 z-50 flex min-w-[180px] flex-col shadow-lg"
               >
@@ -42,7 +43,7 @@
                     label: child.title,
                     attributes: {
                       href: child.url,
-                      class: "text-tight w-full justify-start rounded-none text-sm font-normal text-white! "
+                      class: "text-tight w-full justify-start rounded-none text-base font-normal text-white! "
                         ~ item_padding
                         ~ " py-3 h-auto"
                     }

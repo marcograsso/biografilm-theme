@@ -6,9 +6,11 @@
   <body {{ attr({ class: [body_class, "antialiased"] }) }}>
     {{ function("wp_body_open") }}
     {{ include("components/header/header.twig") }}
+    {% if environment == "development" %}
+      {{ include("components/tailwind-debugger.twig") }}
+    {% endif %}
     <div id="smooth-wrapper">
       <div id="smooth-content">
-
         {% if environment == "development" %}
           {{ include("components/tailwind-debugger.twig") }}
         {% endif %}

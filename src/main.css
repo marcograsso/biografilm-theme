@@ -83,9 +83,15 @@
 }
 
 /* Scroll blur-in animation — initial state for FOUC prevention.
-   GSAP overrides with SVG filter on DOMContentLoaded. */
+   GSAP overrides with SVG filter on DOMContentLoaded.
+   Disabled on touch devices where the effect is skipped entirely. */
 .blur-in {
   filter: blur(40px);
+}
+@media (hover: none) and (pointer: coarse) {
+  .blur-in {
+    filter: none;
+  }
 }
 
 @utility pressable {
@@ -93,7 +99,11 @@
 }
 
 @utility glass-effect {
-  backdrop-filter: blur(50px);
+  backdrop-filter: blur(20px);
+}
+
+[x-cloak] {
+  display: none !important;
 }
 
 @utility focusable {

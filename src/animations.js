@@ -140,72 +140,94 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("facetwp-loaded", () => {
     ScrollTrigger.refresh();
     pinHourLabels();
+    initBlurEffects();
   });
 
-  gsap.utils.toArray(".overlay-blur").forEach((el) => {
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 99%",
-      once: true,
-      onEnter: () => {
-        gsap.fromTo(
-          el,
-          { backdropFilter: "blur(50px)" },
-          {
-            backdropFilter: "blur(0px)",
-            duration: 1,
-            ease: "power3.out",
-            onComplete: () => el.remove(),
-          },
-        );
-      },
-    });
-  });
-
-  const blurEls = gsap.utils.toArray(".blur-in");
-  const inView = [];
-  const belowFold = [];
-
-  blurEls.forEach((el) => {
-    if (el.getBoundingClientRect().top < window.innerHeight * 0.97) {
-      inView.push(el);
-    } else {
-      belowFold.push(el);
+  function initBlurEffects() {
+    if (isTouch) {
+      // On mobile, skip blur effects entirely — clear initial state immediately.
+      gsap.utils.toArray(".blur-in").forEach((el) => {
+        el.classList.remove("blur-in");
+        gsap.set(el, { clearProps: "filter" });
+      });
+      gsap.utils.toArray(".overlay-blur").forEach((el) => el.remove());
+      return;
     }
-  });
 
-  // Already-visible elements: animate in together on load
-  if (inView.length) {
-    gsap.to(inView, {
-      filter: "blur(0px)",
-      duration: 1,
-      ease: "power4.out",
-      onComplete: () => {
-        inView.forEach((el) => {
-          el.classList.remove("blur-in");
-          gsap.set(el, { clearProps: "filter" });
-        });
-      },
+    // Kill any stale blur ScrollTriggers left over from a previous FacetWP render.
+    ScrollTrigger.getAll()
+      .filter((st) => st.vars._blurEffect)
+      .forEach((st) => st.kill());
+
+    gsap.utils.toArray(".overlay-blur").forEach((el) => {
+      ScrollTrigger.create({
+        _blurEffect: true,
+        trigger: el,
+        start: "top 99%",
+        once: true,
+        onEnter: () => {
+          gsap.fromTo(
+            el,
+            { backdropFilter: "blur(50px)" },
+            {
+              backdropFilter: "blur(0px)",
+              duration: 1,
+              ease: "power3.out",
+              onComplete: () => el.remove(),
+            },
+          );
+        },
+      });
+    });
+
+    const blurEls = gsap.utils.toArray(".blur-in");
+    const inView = [];
+    const belowFold = [];
+
+    blurEls.forEach((el) => {
+      if (el.getBoundingClientRect().top < window.innerHeight * 0.97) {
+        inView.push(el);
+      } else {
+        belowFold.push(el);
+      }
+    });
+
+    // Already-visible elements: animate in together immediately.
+    if (inView.length) {
+      gsap.to(inView, {
+        filter: "blur(0px)",
+        duration: 1,
+        ease: "power4.out",
+        onComplete: () => {
+          inView.forEach((el) => {
+            el.classList.remove("blur-in");
+            gsap.set(el, { clearProps: "filter" });
+          });
+        },
+      });
+    }
+
+    // Below-fold elements: trigger individually on scroll.
+    belowFold.forEach((el) => {
+      ScrollTrigger.create({
+        _blurEffect: true,
+        trigger: el,
+        start: "top 99%",
+        once: true,
+        onEnter: () => {
+          gsap.to(el, {
+            filter: "blur(0px)",
+            duration: 1,
+            ease: "power4.out",
+            onComplete: () => {
+              el.classList.remove("blur-in");
+              gsap.set(el, { clearProps: "filter" });
+            },
+          });
+        },
+      });
     });
   }
 
-  // Below-fold elements: trigger individually on scroll
-  belowFold.forEach((el) => {
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 99%",
-      once: true,
-      onEnter: () => {
-        gsap.to(el, {
-          filter: "blur(0px)",
-          duration: 1,
-          ease: "power4.out",
-          onComplete: () => {
-            el.classList.remove("blur-in");
-            gsap.set(el, { clearProps: "filter" });
-          },
-        });
-      },
-    });
-  });
+  initBlurEffects();
 });

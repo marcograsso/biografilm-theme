@@ -1,0 +1,56 @@
+<section class="w-full">
+  <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
+    <div
+      class="3xl:col-span-1 col-span-3 flex flex-col gap-6 px-6 pt-10 pb-10 xl:col-span-1 xl:p-10!"
+    >
+      {% if component.title %}
+        <h2
+          class="{{
+          component.title_class
+            ?
+            : "heading-h4 font-semibold"
+          }} blur-in"
+        >
+          {{ component.title }}
+        </h2>
+      {% endif %}
+      {% if component.subtitle %}
+        <p class="blur-in text-tight text-xl text-black">
+          {{ component.subtitle }}
+        </p>
+      {% endif %}
+    </div>
+    <div
+      class="border-stroke 3xl:col-span-3 3xl:grid-cols-3 col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2"
+    >
+      {% set count = component.items|length %}
+      {% for item in component.items %}
+        {% set is_last = loop.last %}
+        {% set is_second_to_last = loop.index == count - 1 %}
+
+        {# 2-col (md): push last item of incomplete row to rightmost column #}
+        {% set md_start = count % 2 == 1 and is_last ? "xl:col-start-2" : "" %}
+
+        {# 3-col (3xl): push items in incomplete last row to right #}
+        {% set xl3_start = "" %}
+        {% if count % 3 == 1 and is_last %}
+          {% set xl3_start = "3xl:col-start-3" %}
+        {% elseif count % 3 == 2 %}
+          {% if is_second_to_last %}
+            {% set xl3_start = "3xl:col-start-2" %}
+          {% elseif is_last %}
+            {% set xl3_start = "3xl:col-start-3" %}
+          {% endif %}
+        {% endif %}
+
+        {% set card_extra_class = (md_start ~ " " ~ xl3_start)|trim %}
+        {{
+          include(
+            "parts/cards/film-card-spotlight.twig",
+            { film: item, is_last: is_last, extra_class: card_extra_class }
+          )
+        }}
+      {% endfor %}
+    </div>
+  </div>
+</section>

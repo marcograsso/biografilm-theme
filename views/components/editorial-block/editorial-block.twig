@@ -1,0 +1,37 @@
+{% set heading_class = component.title_size == "big"
+  ? "display-h2"
+  : "heading-h4 font-semibold"
+%}
+{% set image_right = component.image_position == "right" %}
+
+<section class="w-full">
+  <div class="grid grid-cols-1 xl:grid-cols-[3fr_2fr]">
+    {% if component.image %}
+      <div class="{{ image_right ? "xl:order-last" : "" }} overflow-hidden">
+        <img
+          src="{{ component.image.url }}"
+          alt="{{ component.image.alt }}"
+          class="aspect-3/4 h-full w-full object-cover xl:aspect-auto"
+        />
+      </div>
+    {% endif %}
+
+    <div
+      class="flex flex-col gap-6 self-start px-6 pt-20 pb-10 xl:px-10 xl:py-0"
+    >
+      {% if component.heading %}
+        <h2 class="{{ heading_class }} blur-in">{{ component.heading }}</h2>
+      {% endif %}
+      {% if component.title %}
+        <h6 class="heading-h6 blur-in font-semibold">{{ component.title }}</h6>
+      {% endif %}
+      {% if component.content %}
+        <div
+          class="prose text-black0 blur-in max-w-none text-xl leading-[150%]"
+        >
+          {{ component.content }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

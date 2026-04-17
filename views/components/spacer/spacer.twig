@@ -1,0 +1,9 @@
+{% set gap_tablet = (component.gap_tablet is not null and component.gap_tablet is not same as(false) and component.gap_tablet is not same as("")) ? component.gap_tablet : component.gap %}
+{% set gap_mobile = (component.gap_mobile is not null and component.gap_mobile is not same as(false) and component.gap_mobile is not same as("")) ? component.gap_mobile : gap_tablet %}
+{% set border_classes = (component.border_top ? "border-stroke border-t " : "") ~ (component.border_bottom ? "border-stroke border-b" : "") %}
+
+<div class="w-full {{ border_classes|trim }}">
+  <div class="md:hidden" style="height: {{ gap_mobile }}rem;"></div>
+  <div class="hidden md:block xl:hidden" style="height: {{ gap_tablet }}rem;"></div>
+  <div class="hidden xl:block" style="height: {{ component.gap }}rem;"></div>
+</div>

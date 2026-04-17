@@ -41,11 +41,15 @@
 
 <a
   href="{{ permalink }}"
-  class="group relative flex h-full min-h-[400px] w-full items-end bg-zinc-900 bg-cover bg-center lg:min-h-[500px]"
-  style="background-image: url({{ image_url ?: site.theme.link ~ "/assets/images/fallback-img.jpg" }});{{ fp_bg_style }}"
+  class="group relative isolate flex h-full min-h-[400px] w-full items-end overflow-hidden bg-zinc-900 bg-cover bg-center lg:min-h-[500px]"
+  style="background-image: url({{
+  image_url
+    ?
+    : site.theme.link ~ "/assets/images/fallback-img.jpg"
+  }});{{ fp_bg_style }}"
 >
   {% if badges %}
-    <div class="absolute top-0 left-0 flex flex-wrap gap-0">
+    <div class="absolute top-0 left-0 z-40 flex flex-wrap gap-0">
       {% for badge in badges %}
         <span
           class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px] {{
@@ -60,19 +64,31 @@
     </div>
   {% endif %}
 
+  <!-- Blur overlay -->
   <div
-    class="glass-effect relative flex w-full flex-col gap-3 bg-black/20 px-6 py-10 text-white"
+    class="overlay-blur overlay absolute inset-0 z-30 bg-transparent backdrop-blur-[50px]"
+  ></div>
+
+  <!-- Radial blur vignette on hover -->
+  <div
+    class="absolute inset-0 z-10 bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+  ></div>
+
+  <div
+    class="glass-effect relative z-40 flex w-full flex-col gap-3 bg-black/20 px-6 py-10 text-white"
   >
     {% if sezione %}
-      <p class="text-tight text-sm font-semibold text-white uppercase">
+      <p class="text-tight blur-in text-sm font-semibold text-white uppercase">
         {{ sezione.post_title }}
       </p>
     {% endif %}
     {% if title %}
-      <h2 class="heading-h6 font-semibold transition-opacity">{{ title }}</h2>
+      <h2 class="heading-h6 blur-in font-semibold transition-opacity">
+        {{ title }}
+      </h2>
     {% endif %}
     {% if preview %}
-      <p class="text-tight text-base">
+      <p class="text-tight blur-in text-base">
         {{ preview }}
       </p>
     {% endif %}

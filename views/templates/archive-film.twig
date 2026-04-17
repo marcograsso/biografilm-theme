@@ -19,7 +19,10 @@
     <div id="filters-sentinel" class="h-0"></div>
 
     {# ── Mobile filter bar (< lg) ── #}
-    <div data-sticky-top class="filters-black top-0 z-50 mb-20 flex w-full lg:hidden">
+    <div
+      data-sticky-top
+      class="filters-black top-0 z-50 mb-20 flex w-full lg:hidden"
+    >
       <button
         type="button"
         class="text-tight border-stroke hover:bg-white-hover active:bg-white-active flex cursor-pointer items-center gap-2 border bg-white px-4 py-3 text-base text-black uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
@@ -39,7 +42,10 @@
     </div>
 
     {# ── Desktop filter bar (lg+) ── #}
-    <div data-sticky-top class="filters-black top-0 z-50 mb-20 hidden w-full lg:flex">
+    <div
+      data-sticky-top
+      class="filters-black top-0 z-50 mb-20 hidden w-full lg:flex"
+    >
       <div class="flex-1">
         {{ function("do_shortcode", '[facetwp facet="sezione"]') }}
       </div>
@@ -92,37 +98,31 @@
         {# 2-col fillers #}
         {% set count = posts|length %}
         {% if count % 2 == 1 %}
-          <div class="border-stroke col-span-1 -ml-px border-l xl:hidden"></div>
+          <div class="border-stroke col-span-1 border-l xl:hidden"></div>
         {% endif %}
 
         {# 3-col fillers #}
         {% if count % 3 == 1 %}
           <div
-            class="border-stroke 3xl:hidden col-span-1 -ml-px hidden border-l xl:block"
+            class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
           ></div>
           <div class="3xl:hidden col-span-1 hidden xl:block"></div>
         {% elseif count % 3 == 2 %}
           <div
-            class="border-stroke 3xl:hidden col-span-1 -ml-px hidden border-l xl:block"
+            class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
           ></div>
         {% endif %}
 
         {# 4-col fillers #}
         {% if count % 4 == 1 %}
-          <div
-            class="border-stroke 3xl:block col-span-1 -ml-px hidden border-l"
-          ></div>
+          <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
           <div class="3xl:block col-span-1 hidden"></div>
           <div class="3xl:block col-span-1 hidden"></div>
         {% elseif count % 4 == 2 %}
-          <div
-            class="border-stroke 3xl:block col-span-1 -ml-px hidden border-l"
-          ></div>
+          <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
           <div class="3xl:block col-span-1 hidden"></div>
         {% elseif count % 4 == 3 %}
-          <div
-            class="border-stroke 3xl:block col-span-1 -ml-px hidden border-l"
-          ></div>
+          <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
         {% endif %}
       </div>
     </div>
