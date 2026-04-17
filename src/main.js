@@ -7,6 +7,7 @@ import collapse from "@alpinejs/collapse";
 Alpine.plugin(collapse);
 
 import "./main.css";
+import "./animations.js";
 
 import.meta.glob("../views/**/*.js", { eager: true });
 import.meta.glob("../views/**/*.css", { eager: true });

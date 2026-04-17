@@ -19,7 +19,7 @@
     <div id="filters-sentinel" class="h-0"></div>
 
     {# ── Mobile filter bar (< lg) ── #}
-    <div class="filters-black sticky top-0 z-50 mb-20 flex w-full lg:hidden">
+    <div data-sticky-top class="filters-black top-0 z-50 mb-20 flex w-full lg:hidden">
       <button
         type="button"
         class="text-tight border-stroke hover:bg-white-hover active:bg-white-active flex cursor-pointer items-center gap-2 border bg-white px-4 py-3 text-base text-black uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
@@ -31,13 +31,15 @@
           })
         }}
         Filtri
-        <span class="filters-active-dot bg-red hidden size-2 rounded-full"></span>
+        <span class="filters-active-dot bg-red hidden size-2 rounded-full">
+
+        </span>
       </button>
       <div class="flex-1 border-y border-white/20 bg-black"></div>
     </div>
 
     {# ── Desktop filter bar (lg+) ── #}
-    <div class="filters-black sticky top-0 z-50 mb-20 hidden w-full lg:flex">
+    <div data-sticky-top class="filters-black top-0 z-50 mb-20 hidden w-full lg:flex">
       <div class="flex-1">
         {{ function("do_shortcode", '[facetwp facet="sezione"]') }}
       </div>

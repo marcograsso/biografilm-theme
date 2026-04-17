@@ -10,7 +10,7 @@ register_extended_field_group([
     "title" => "Page",
     "location" => [Location::where("page_template", "=", "default")],
     "fields" => [
-        FlexibleContent::make("", "components")
+        FlexibleContent::make("", "page_components")
             ->button("Aggiungi sezione")
             ->layouts([
                 Layout::make("Text Displayer", "text_displayer")

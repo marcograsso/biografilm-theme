@@ -4,33 +4,48 @@
     {{ include("parts/head.twig") }}
   {% endblock head %}
   <body {{ attr({ class: [body_class, "antialiased"] }) }}>
-    {{ include("components/header/header.twig") }}
     {{ function("wp_body_open") }}
+    {{ include("components/header/header.twig") }}
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
 
-    {% if environment == "development" %}
-      {{ include("components/tailwind-debugger.twig") }}
-    {% endif %}
-
-    <main>
-      {% block hero %}
-        {% if not function("get_field", "hide_hero") %}
-          {% set hero_alt_title = function("get_field", "hero_alt_title") %}
-          {% set hero_title_style = function("get_field", "hero_title_style") ?: "primary" %}
-          {{ include("components/hero/hero.twig", {
-            hero_title: hero_alt_title ?: post.title,
-            hero_title_style: hero_title_style
-          }) }}
+        {% if environment == "development" %}
+          {{ include("components/tailwind-debugger.twig") }}
         {% endif %}
-      {% endblock hero %}
 
-      {% block content %}
+        <main>
+          {% block hero %}
+            {% if not function("get_field", "hide_hero") %}
+              {% set hero_alt_title = function("get_field", "hero_alt_title") %}
+              {% set hero_title_style = function(
+                "get_field",
+                "hero_title_style"
+              )
+                ?
+                : "primary"
+              %}
+              {{
+                include(
+                  "components/hero/hero.twig",
+                  {
+                    hero_title: hero_alt_title ? : post.title,
+                    hero_title_style: hero_title_style
+                  }
+                )
+              }}
+            {% endif %}
+          {% endblock hero %}
 
-      {% endblock content %}
-    </main>
+          {% block content %}
 
-    {% block footer %}
-      {{ include("parts/footer.twig") }}
-    {% endblock footer %}
+          {% endblock content %}
+        </main>
+
+        {% block footer %}
+          {{ include("parts/footer.twig") }}
+        {% endblock footer %}
+      </div>
+    </div>
 
     {{ function("wp_footer") }}
     {% do action("get_footer", null) %}

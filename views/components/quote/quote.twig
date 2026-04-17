@@ -2,6 +2,9 @@
   <div class="border-stroke flex flex-col lg:flex-row">
     {% if component.image %}
       <div class="lg:w-1/2">
+        <div
+          class="overlay-blur overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+        ></div>
         <img
           src="{{ component.image.url }}"
           alt="{{ component.image.alt }}"
@@ -13,12 +16,12 @@
       class="flex flex-col items-start justify-center gap-12 px-6 pt-20 pb-10 lg:w-1/2 xl:px-30 xl:py-10"
     >
       {% if component.quote %}
-        <blockquote class="heading-h5">
+        <blockquote class="heading-h5 blur-in">
           {{ component.quote }}
         </blockquote>
       {% endif %}
       {% if component.author %}
-        <cite class="text-tight text-xl not-italic">
+        <cite class="text-tight blur-in text-xl not-italic">
           {{ component.author }}
         </cite>
       {% endif %}

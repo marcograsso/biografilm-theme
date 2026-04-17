@@ -1,0 +1,73 @@
+<div class="bg-red relative h-[44px] w-full">
+  {% if current_section == "festival" %}
+    <!-- Festival -->
+    {% if menu_festival %}
+      <nav class="flex h-full items-stretch">
+        {% for item in menu_festival.items %}
+          {% set is_first = loop.first %}
+          {% set item_padding = is_first ? "pl-10 pr-5" : "px-5" %}
+          {% if item.children %}
+            <div
+              x-data="{ open: false }"
+              class="relative flex items-center items-stretch gap-2"
+            >
+              {% set toggle_label %}
+                {{- item.title -}}
+                {{-
+                  include("icons/generic/chevron-down.svg")|attr({
+                    class: "size-6! transition-transform duration-200",
+                    ":class": "open ? 'rotate-180' : ''"
+                  })
+                -}}
+              {% endset %}
+              {% include "components/button.twig" with {
+                variant: "nav",
+                label: toggle_label,
+                attributes: {
+                  "@click": "open = !open",
+                  type: "button",
+                  class: "text-tight h-full cursor-pointer select-none gap-1.5 rounded-none font-normal text-white! "
+                    ~ item_padding
+                }
+              } %}
+              <div
+                x-show="open"
+                @click.outside="open = false"
+                class="bg-red absolute top-full left-0 z-50 flex min-w-[180px] flex-col shadow-lg"
+              >
+                {% for child in item.children %}
+                  {% include "components/button.twig" with {
+                    as_link: true,
+                    variant: "nav",
+                    label: child.title,
+                    attributes: {
+                      href: child.url,
+                      class: "text-tight w-full justify-start rounded-none text-sm font-normal text-white! "
+                        ~ item_padding
+                        ~ " py-3 h-auto"
+                    }
+                  } %}
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            {% include "components/button.twig" with {
+              as_link: true,
+              variant: "nav",
+              label: item.title,
+              attributes: {
+                href: item.url,
+                class: "text-tight h-full rounded-none font-normal text-white! "
+                  ~ item_padding
+              }
+            } %}
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% endif %}
+  {% elseif current_section == "industry" %}
+    <!-- Industry -->
+  {% elseif current_section == "campus" %}
+    <!-- Campus -->
+  {% endif %}
+</div>

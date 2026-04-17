@@ -77,6 +77,17 @@
   @apply outline outline-red-500;
 }
 
+/* ScrollSmoother */
+#smooth-wrapper {
+  overflow: hidden;
+}
+
+/* Scroll blur-in animation — initial state for FOUC prevention.
+   GSAP overrides with SVG filter on DOMContentLoaded. */
+.blur-in {
+  filter: blur(40px);
+}
+
 @utility pressable {
   @apply cursor-pointer transition-transform duration-150 ease-in-out active:scale-98;
 }
@@ -87,4 +98,27 @@
 
 @utility focusable {
   @apply outline-offset-3 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white focus-visible:outline-5 focus-visible:outline-black motion-safe:transition-all;
+}
+
+@utility link-underline {
+  --link-underline-height: 2px;
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: var(--link-underline-height);
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
 }

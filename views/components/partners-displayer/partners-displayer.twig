@@ -1,7 +1,7 @@
-<section class="w-full">
-  <div class="grid w-full grid-cols-3 3xl:grid-cols-4">
+<section class="blur-in w-full">
+  <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
     <div
-      class="col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10! 3xl:col-span-1"
+      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
     >
       {% if component.title %}
         <h2 class="display-h2">{{ component.title }}</h2>
@@ -10,9 +10,9 @@
         <a
           href="{{ component.link.url }}"
           target="{{ component.link.target ? : "_self" }}"
-          class="text-tight text-red group flex items-center gap-2 text-xl font-semibold underline-offset-3 transition-all duration-500 ease-out hover:underline"
+          class="text-tight text-red group flex items-center gap-2 text-xl font-semibold"
         >
-          {{ component.link.title }}
+          <span class="link-underline">{{ component.link.title }}</span>
           {{
             include("icons/generic/arrow-right.svg")|attr({
               class: "size-6 transition-transform duration-500 ease-out group-hover:translate-x-2"
@@ -23,7 +23,7 @@
     </div>
 
     <div
-      class="border-stroke col-span-3 grid grid-cols-2 border-t md:grid-cols-3 lg:grid-cols-4 xl:col-span-2 xl:border-t-0 3xl:col-span-3 3xl:grid-cols-6"
+      class="border-stroke 3xl:col-span-3 3xl:grid-cols-6 col-span-3 grid grid-cols-2 border-t md:grid-cols-3 lg:grid-cols-4 xl:col-span-2 xl:border-t-0"
     >
       {% for i in 1..12 %}
         <div

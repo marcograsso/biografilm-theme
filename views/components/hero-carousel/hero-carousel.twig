@@ -20,23 +20,27 @@
         : null
       %}
       <div
-        class="swiper-slide relative min-h-160 w-full overflow-hidden bg-zinc-900 bg-cover bg-center"
-        style="height: calc(100vh - 108px);{{
-        slide.background_image and not slide.background_video
-          ? " background-image: url(" ~ slide.background_image.url ~ ");"
-          : ""
-        }}{{ fp_bg_style }}"
+        class="swiper-slide relative min-h-160 w-full overflow-hidden bg-zinc-900"
+        style="height: calc(100vh - 108px);"
       >
         {% if slide.background_video %}
           <video
-            class="absolute inset-0 h-full w-full object-cover"
+            class="hero-carousel-bg absolute inset-x-0 -top-24 -bottom-24 w-full object-cover"
             src="{{ slide.background_video.url }}"
             autoplay
             muted
             loop
             playsinline
           ></video>
+        {% elseif slide.background_image %}
+          <div
+            class="hero-carousel-bg absolute inset-x-0 -top-24 -bottom-24 bg-cover bg-center"
+            style="background-image: url({{ slide.background_image.url }});{{ fp_bg_style }}"
+          ></div>
         {% endif %}
+        <div
+          class="overlay-blur absolute inset-0 z-30 bg-transparent backdrop-blur-[50px]"
+        ></div>
         <div
           class="glass-effect absolute bottom-0 left-0 flex flex-col gap-6 bg-white/20 p-6 pb-20 md:pb-6 lg:pl-10 {{
           slide.text_width == "w-1/3"

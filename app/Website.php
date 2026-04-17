@@ -133,6 +133,7 @@ class Website extends Site
             $context["menus"][$location] = $menu;
         }
 
+        $context["menu_festival"] = Timber::get_menu("festival-it");
         $context["current_url"] = URLHelper::get_current_url();
         $context["header_show_date_location"] = get_field("header_show_date_location", "option");
         $context["header_date"] = get_field("header_date", "option") ?: "5 — 15.06.2026";

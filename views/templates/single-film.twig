@@ -37,12 +37,15 @@
       : null
     %}
     <div
-      class="relative mt-[108px] h-[550px] w-full overflow-hidden lg:h-[600px]"
+      class="film-hero relative mt-[108px] h-[550px] w-full overflow-hidden lg:h-[600px]"
     >
+      <div
+        class="overlay-blur overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+      ></div>
       <img
         src="{{ post.thumbnail.src("full") }}"
         alt="{{ post.title }}"
-        class="h-full w-full object-cover"
+        class="film-hero-img absolute inset-x-0 -top-16 -bottom-16 w-full object-cover"
         style="{{ fp_style }}"
       />
       {% if badges %}
@@ -71,7 +74,7 @@
       class="3xl:col-span-3 col-span-3 flex flex-col gap-10 pt-20 pr-6 pb-20 pl-6 lg:gap-20 xl:col-span-2 xl:pr-10 xl:pb-30 2xl:pr-10 2xl:pr-30 2xl:pl-10"
     >
       {# Header #}
-      <div class="flex flex-col gap-6">
+      <div class="blur-in flex flex-col gap-6">
         {{ include("parts/breadcrumbs.twig") }}
         {% if sezione %}
           {% include "components/button.twig" with {
@@ -80,11 +83,11 @@
             label: sezione.post_title,
             attributes: {
               href: function("get_permalink", sezione.ID),
-              class: "text-red h-auto p-0 text-sm font-semibold uppercase w-fit"
+              class: "text-red h-auto p-0 text-sm font-semibold uppercase w-fit blur-in"
             }
           } %}
         {% endif %}
-        <h1 class="display-h1-tertiary">{{ post.title }}</h1>
+        <h1 class="display-h1-tertiary blur-in">{{ post.title }}</h1>
       </div>
 
       {# Info table #}
@@ -94,12 +97,12 @@
         {% if regista %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b pr-8 pb-6 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b pr-8 pb-6 text-base lg:pr-16 lg:text-xl"
             >
               Regista
             </span>
             <span
-              class="border-stroke text-tight border-b pb-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b pb-6 text-base font-semibold lg:text-xl"
             >
               {{ regista }}
             </span>
@@ -108,12 +111,12 @@
         {% if titolo_alternativo %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Titolo alternativo
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {{ titolo_alternativo }}
             </span>
@@ -122,12 +125,12 @@
         {% if durata %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Durata
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {{ durata }}
             </span>
@@ -136,12 +139,12 @@
         {% if paese %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Paese
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {{ paese|map(t => t.name)|join(", ") }}
             </span>
@@ -150,12 +153,12 @@
         {% if anno %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Anno
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {{ anno }}
             </span>
@@ -164,12 +167,12 @@
         {% if genere %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Genere
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {{ genere.name }}
             </span>
@@ -178,12 +181,12 @@
         {% if area_tematica %}
           <div class="contents">
             <span
-              class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               Aree tematiche
             </span>
             <span
-              class="border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {% for term in area_tematica %}
                 {% include "components/button.twig" with {
@@ -204,7 +207,7 @@
         {% endif %}
         {% if info_aggiuntive %}
           {% for row in info_aggiuntive %}
-            <div class="contents">
+            <div class="blur-in contents">
               <span
                 class="border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
               >
@@ -223,7 +226,7 @@
       {# Description #}
       {% if description %}
         <div
-          class="prose font-regular max-w-none text-base leading-[150%] text-black/80"
+          class="blur-in prose font-regular max-w-none text-base leading-[150%] text-black/80"
         >
           {{ description }}
         </div>
@@ -235,7 +238,9 @@
       <div
         class="border-l-stroke col-span-3 flex flex-col gap-10 pb-12 lg:border-l xl:col-span-1 xl:py-12"
       >
-        <h2 class="heading-h6 px-6 font-semibold xl:px-10">Programmazione</h2>
+        <h2 class="heading-h6 blur-in px-6 font-semibold xl:px-10">
+          Programmazione
+        </h2>
         <div class="flex flex-col gap-12">
           {% for proiezione in proiezioni %}
             {% set location =
@@ -260,14 +265,14 @@
             %}
 
             {% if not loop.first %}
-              <div class="flex items-center gap-4">
+              <div class="blur-in flex items-center gap-4">
                 <span class="border-stroke flex-1 border-t"></span>
                 <span class="text-tight text-xl text-black">oppure</span>
                 <span class="border-stroke flex-1 border-t"></span>
               </div>
             {% endif %}
 
-            <div class="flex flex-col gap-6 px-6 xl:px-10">
+            <div class="blur-in flex flex-col gap-6 px-6 xl:px-10">
               <div class="flex flex-col gap-6">
                 <div class="flex flex-col gap-2">
                   {% if p_data or p_orario %}
@@ -317,19 +322,20 @@
                       }
                     } %}
                   {% endif %}
-                  {% if p_mymovies %}
-                    {% include "components/button.twig" with {
-                      as_link: true,
-                      variant: "secondary",
-                      size: "lg",
-                      label: p_mymovies.title ? : "Guarda online su MyMovies",
-                      attributes: {
-                        href: p_mymovies.url ?? p_mymovies,
-                        target: p_mymovies.target ?? "_self",
-                        class: "xl:w-full md:w-fit md:bg-black/3 xl:bg-white w-full"
-                      }
-                    } %}
-                  {% endif %}
+                  <span class="mt-2 text-center md:text-left xl:text-center">
+                    {% if p_mymovies %}
+                      {% include "components/button.twig" with {
+                        as_link: true,
+                        variant: "link",
+                        label: p_mymovies.title ? : "Guarda online su MyMovies",
+                        attributes: {
+                          href: p_mymovies.url ?? p_mymovies,
+                          target: p_mymovies.target ?? "_self",
+                          class: "p-0! m-0!"
+                        }
+                      } %}
+                    {% endif %}
+                  </span>
                 </div>
               {% endif %}
             </div>

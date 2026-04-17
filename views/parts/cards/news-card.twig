@@ -1,14 +1,30 @@
 {% set permalink = function("get_permalink", news.ID) %}
 {% set image_url = function("get_the_post_thumbnail_url", news.ID, "large") %}
 {% set thumb_id = function("get_post_thumbnail_id", news.ID) %}
-{% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
-{% set fp_style = fp ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;" : null %}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
 
 <a
   href="{{ permalink }}"
-  class="group border-stroke relative col-span-1 flex flex-col border-b transition-colors duration-300 {{ extra_class }}"
+  class="group border-stroke relative col-span-1 flex flex-col border-b transition-colors duration-300 {{
+  extra_class
+  }}"
 >
-  <div class="aspect-video w-full overflow-hidden bg-gray-200">
+  <div
+    class="overlay-blur absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+  ></div>
+  <div class="relative aspect-video w-full overflow-hidden bg-gray-200">
+    <div
+      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+    ></div>
     <img
       src="{{
       image_url
@@ -16,20 +32,33 @@
         : site.theme.link ~ "/assets/images/fallback-img.jpg"
       }}"
       alt="{{ news.post_title }}"
-      class="h-full w-full object-cover"
+      class="h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.1]"
       style="{{ fp_style }}"
     />
   </div>
   <div class="border-l-stroke flex flex-1 flex-col gap-8 px-6 py-6 md:border-l">
-    <h5 class="text-tight line-clamp-2 text-2xl font-semibold">
+    <h5 class="text-tight blur-in line-clamp-2 text-2xl font-semibold">
       {{ news.post_title }}
     </h5>
     <div class="flex items-center justify-between gap-2">
-      <p class="text-tight text-base text-black">
+      <p class="text-tight blur-in text-base text-black">
         {{ news.post_date|date("d F Y") }}
       </p>
-      <span>
-        {{ include("icons/generic/arrow-right.svg")|attr({ class: "size-6" }) }}
+      <span class="blur-in relative block h-6 w-6 overflow-hidden">
+        <span
+          class="absolute inset-0 transition-transform duration-500 ease-in-out group-hover:translate-x-6"
+        >
+          {{
+            include("icons/generic/arrow-right.svg")|attr({ class: "size-6" })
+          }}
+        </span>
+        <span
+          class="absolute inset-0 -translate-x-6 transition-transform duration-500 ease-in-out group-hover:translate-x-0"
+        >
+          {{
+            include("icons/generic/arrow-right.svg")|attr({ class: "size-6" })
+          }}
+        </span>
       </span>
     </div>
   </div>

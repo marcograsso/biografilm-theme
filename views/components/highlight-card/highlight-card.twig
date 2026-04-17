@@ -22,9 +22,7 @@
     ? alt_image.ID
     : film_id ? function("get_post_thumbnail_id", film_id) : null
   %}
-  {% set sezione = film_id
-    ? function("get_field", "sezione", film_id)[0]
-    : null
+  {% set sezione = film_id ? function("get_field", "sezione", film_id)[0] : null
   %}
   {% set badges = alt_badges
     ?
@@ -114,11 +112,24 @@
   %}
   <a
     href="{{ permalink }}"
-    class="group relative flex h-[547px] w-full items-end justify-end bg-zinc-900 bg-cover bg-center md:items-center"
-    style="background-image: url({{ image_url ?: site.theme.link ~ "/assets/images/fallback-img.jpg" }});{{ fp_bg_style }}"
+    class="group relative flex h-[547px] w-full items-end justify-end overflow-hidden bg-zinc-900 md:items-center"
   >
+    <div
+      class="overlay-blur absolute inset-0 z-30 bg-transparent backdrop-blur-[50px]"
+    ></div>
+    <div
+      class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-in-out group-hover:scale-[1.1]"
+      style="background-image: url({{
+      image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }});{{ fp_bg_style }}"
+    ></div>
+    <div
+      class="absolute inset-0 z-20 bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+    ></div>
     {% if badges %}
-      <div class="absolute top-0 left-0 flex flex-wrap gap-0">
+      <div class="absolute top-0 left-0 z-40 flex flex-wrap gap-0">
         {% for badge in badges %}
           <span
             class="bg-black/20 px-2 py-1 text-sm font-semibold text-white uppercase backdrop-blur-[50px] {{
@@ -138,15 +149,21 @@
     >
       <div class="flex flex-col gap-3">
         {% if sezione %}
-          <p class="text-tight text-sm font-semibold text-white uppercase">
+          <p
+            class="text-tight blur-in text-sm font-semibold text-white uppercase"
+          >
             {{ sezione.post_title }}
           </p>
         {% endif %}
         {% if title %}
-          <h2 class="heading-h6 font-semibold transition-opacity group-hover:opacity-80">{{ title }}</h2>
+          <h2
+            class="blur-in heading-h6 font-semibold transition-opacity duration-300"
+          >
+            {{ title }}
+          </h2>
         {% endif %}
         {% if preview %}
-          <p class="text-tight text-base">
+          <p class="text-tight blur-in text-base">
             {{ preview }}
           </p>
         {% endif %}
@@ -154,14 +171,14 @@
       {% if data or orario or location %}
         <div class="flex flex-col gap-3">
           {% if data or orario %}
-            <p class="text-tight text-base font-semibold">
+            <p class="text-tight blur-in text-base font-semibold">
               {{ data|date("d F Y") }}{% if orario %}
                 · {{ orario|date("H:i") }}
               {% endif %}
             </p>
           {% endif %}
           {% if location %}
-            <p class="text-tight text-base font-semibold">
+            <p class="text-tight blur-in text-base font-semibold">
               {{ location.name }}{{ sala_location ? " – " ~ sala_location : "" }}
             </p>
           {% endif %}

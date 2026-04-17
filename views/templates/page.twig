@@ -1,7 +1,7 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  {% for component in post.components %}
+  {% for component in post.page_components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
     {{
       include(

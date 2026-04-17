@@ -5,11 +5,13 @@
 {% block content %}
   {% for component in post.components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
-    {{
-      include(
-        "components/" ~ layout ~ "/" ~ layout ~ ".twig",
-        { component: component }
-      )
-    }}
+    {% if layout %}
+      {{
+        include(
+          "components/" ~ layout ~ "/" ~ layout ~ ".twig",
+          { component: component }
+        )
+      }}
+    {% endif %}
   {% endfor %}
 {% endblock content %}
