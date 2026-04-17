@@ -140,6 +140,7 @@ class Website extends Site
         $context["header_location"] = get_field("header_location", "option") ?: "Bologna";
         $context["footer_image"] = get_field("footer_image", "option");
         $context["footer_image_mobile"] = get_field("footer_image_mobile", "option");
+        $context["mapbox_token"] = get_field("mapbox_api_key", "option");
         $context["environment"] = $this->vite->environment;
 
         // Detect current section (festival = homepage, industry, campus)

@@ -11,8 +11,14 @@ class Bootstrap
     {
         Timber::init();
         $this->boot_classes();
+        $this->register_field_types();
         $this->register_fields();
         $this->load_integrations();
+    }
+
+    public function register_field_types()
+    {
+        acf_register_field_type(FieldTypes\ACFFieldMapbox::class);
     }
 
     // Initialize all the classes and register their hooks.

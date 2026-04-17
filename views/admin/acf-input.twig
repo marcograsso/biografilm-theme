@@ -1,0 +1,18 @@
+{% set attrs = attributes|default({}) %}
+
+<div class="relative w-full">
+  {% if label %}
+    <label
+      for="{{ attrs.id }}"
+      class="mb-1 block text-sm font-medium text-gray-700"
+    >
+      {{ label }}
+    </label>
+  {% endif %}
+  <input
+    type="text"
+    {% for key, val in attrs %}
+      {{ key }}="{{ val }}"
+    {% endfor %}
+  />
+</div>

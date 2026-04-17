@@ -1,0 +1,126 @@
+<div class="tailwind">
+  <div
+    class="acf-mapbox-field flex flex-col gap-[15px]"
+    {{
+    attr({
+      data: {
+        "api-key": mapbox_api_key,
+        country: default_country,
+        "field-key": field.key
+      }
+    })
+    }}
+  >
+    <div class="acf-mapbox-form flex flex-col gap-[15px] pb-[15px]" autocomplete="off">
+      {{
+        include(
+          "admin/acf-input.twig",
+          {
+            label: "Indirizzo",
+            attributes: {
+              id: field.name ~ "[address]",
+              name: field.name ~ "[address]",
+              class: "acf-mapbox-address-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+              placeholder: l10n.enter_address,
+              autocomplete: "address-line1",
+              value: value.address
+            }
+          }
+        )
+      }}
+
+      <div class="flex flex-wrap gap-[15px] md:flex-nowrap">
+        {{
+          include(
+            "admin/acf-input.twig",
+            {
+              label: "Città",
+              attributes: {
+                id: field.name ~ "[city]",
+                name: field.name ~ "[city]",
+                class: "acf-mapbox-city-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+                autocomplete: "address-level2",
+                value: value.city
+              }
+            }
+          )
+        }}
+
+        {{
+          include(
+            "admin/acf-input.twig",
+            {
+              label: "Provincia",
+              attributes: {
+                id: field.name ~ "[province]",
+                name: field.name ~ "[province]",
+                class: "acf-mapbox-province-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+                autocomplete: "address-level1",
+                value: value.province
+              }
+            }
+          )
+        }}
+
+        {{
+          include(
+            "admin/acf-input.twig",
+            {
+              label: "CAP",
+              attributes: {
+                id: field.name ~ "[cap]",
+                name: field.name ~ "[cap]",
+                class: "acf-mapbox-cap-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+                autocomplete: "postal-code",
+                value: value.cap
+              }
+            }
+          )
+        }}
+      </div>
+
+      <div class="flex gap-[15px]">
+        {{
+          include(
+            "admin/acf-input.twig",
+            {
+              label: "Latitudine",
+              attributes: {
+                id: field.name ~ "[latitude]",
+                name: field.name ~ "[latitude]",
+                class: "acf-mapbox-latitude-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+                value: value.latitude
+              }
+            }
+          )
+        }}
+
+        {{
+          include(
+            "admin/acf-input.twig",
+            {
+              label: "Longitudine",
+              attributes: {
+                id: field.name ~ "[longitude]",
+                name: field.name ~ "[longitude]",
+                class: "acf-mapbox-longitude-value w-full rounded border border-gray-300 px-3 py-2 text-sm",
+                value: value.longitude
+              }
+            }
+          )
+        }}
+      </div>
+    </div>
+
+    <div class="acf-mapbox-minimap-container">
+      <mapbox-address-minimap
+        satellite-toggle="true"
+        {{
+        attr({
+          "show-marker": value.latitude and value.longitude ? "true" : "false"
+        })
+        }}
+      ></mapbox-address-minimap>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+{% if component.locations %}
+  {# Build map data from locations that have coordinates #}
+  {% set map_locations = [] %}
+  {% for location in component.locations %}
+    {% if location.map_location and location.map_location.latitude %}
+      {% set map_locations =
+        map_locations|merge(
+          [
+            {
+              name: location.name,
+              address: location.map_location.address ? : location.address,
+              latitude: location.map_location.latitude|number_format(
+                7,
+                ".",
+                ""
+              ),
+              longitude: location.map_location.longitude|number_format(
+                7,
+                ".",
+                ""
+              ),
+              link: location.link.url ?? null
+            }
+          ]
+        )
+      %}
+    {% endif %}
+  {% endfor %}
+
+  <section class="w-full">
+    {# Map — full-width hero at the top #}
+    {% if map_locations and mapbox_token %}
+      <script>
+        window.mapboxKey = "{{ mapbox_token }}"
+      </script>
+      <div
+        class="locations-map border-stroke relative aspect-10/5 w-full border-b"
+        x-data="LocationsMap({{ map_locations|json_encode|e("html_attr") }})"
+        x-ref="map"
+        x-init="init()"
+      >
+        <div class="border-stroke absolute right-4 bottom-4 z-10 flex flex-col border">
+          <button
+            @click="zoomIn()"
+            class="border-stroke flex h-10 w-10 cursor-pointer items-center justify-center border-b bg-white text-xl font-semibold text-black transition-colors hover:bg-zinc-100"
+            aria-label="Zoom in"
+          >+</button>
+          <button
+            @click="zoomOut()"
+            class="flex h-10 w-10 cursor-pointer items-center justify-center bg-white text-xl font-semibold text-black transition-colors hover:bg-zinc-100"
+            aria-label="Zoom out"
+          >−</button>
+        </div>
+      </div>
+    {% endif %}
+
+    {# Heading + subtitle #}
+    {% if component.heading or component.subtitle %}
+      <div
+        class="flex flex-col gap-6 px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20"
+      >
+        {% if component.heading %}
+          <h2 class="heading-h5 blur-in font-semibold">
+            {{ component.heading }}
+          </h2>
+        {% endif %}
+        {% if component.subtitle %}
+          <p class="text-tight blur-in text-xl leading-[150%] text-black/70">
+            {{ component.subtitle }}
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {# Cards grid #}
+    {% set count = component.locations|length %}
+    <div class="3xl:grid-cols-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+      {% for location in component.locations %}
+        {% include "parts/cards/location-card.twig" with {
+          location: location
+        } %}
+      {% endfor %}
+
+      {# 2-col fillers #}
+      {% if count % 2 == 1 %}
+        <div class="border-stroke col-span-1 border-l xl:hidden"></div>
+      {% endif %}
+
+      {# 3-col fillers #}
+      {% if count % 3 == 1 %}
+        <div
+          class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
+        ></div>
+        <div class="3xl:hidden col-span-1 hidden xl:block"></div>
+      {% elseif count % 3 == 2 %}
+        <div
+          class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
+        ></div>
+      {% endif %}
+
+      {# 4-col fillers #}
+      {% if count % 4 == 1 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+      {% elseif count % 4 == 2 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+        <div class="3xl:block col-span-1 hidden"></div>
+      {% elseif count % 4 == 3 %}
+        <div class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}
