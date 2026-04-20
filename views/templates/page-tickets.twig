@@ -1,0 +1,15 @@
+{% extends "base.twig" %}
+
+{% block content %}
+  {{ include("components/tickets/tickets.twig", { component: post }) }}
+  {{ include("components/tickets/tickets.twig", { component: post.accrediti }) }}
+  {% for component in post.page_components %}
+    {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
+    {{
+      include(
+        "components/" ~ layout ~ "/" ~ layout ~ ".twig",
+        { component: component }
+      )
+    }}
+  {% endfor %}
+{% endblock content %}

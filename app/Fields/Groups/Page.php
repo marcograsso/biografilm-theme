@@ -37,6 +37,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/editorial-block/editorial-block.php",
                     ),
+                Layout::make("Simple Text", "simple_text")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/simple-text/simple-text.php",
+                    ),
                 Layout::make("Spacer", "spacer")
                     ->layout("block")
                     ->fields(

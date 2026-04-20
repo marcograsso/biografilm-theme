@@ -1,0 +1,21 @@
+<section
+  class="w-full {{ component.border_top ? "border-stroke border-t" : "" }} {{
+  component.border_bottom
+    ? "border-stroke border-b"
+    : ""
+  }}"
+>
+  <div class="flex flex-col gap-6 px-6 py-20 xl:px-10 xl:py-30">
+    {% if component.heading %}
+      <h2 class="heading-h4 blur-in font-semibold">{{ component.heading }}</h2>
+    {% endif %}
+    {% if component.title %}
+      <h6 class="heading-h5 blur-in font-semibold">{{ component.title }}</h6>
+    {% endif %}
+    {% if component.content %}
+      <div class="prose blur-in max-w-none text-xl leading-[150%]">
+        {{ component.content }}
+      </div>
+    {% endif %}
+  </div>
+</section>

@@ -49,6 +49,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/text-displayer/text-displayer.php",
                     ),
+                Layout::make("Simple Text", "simple_text")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/simple-text/simple-text.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
