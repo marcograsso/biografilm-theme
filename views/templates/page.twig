@@ -3,10 +3,12 @@
 {% block content %}
   {% for component in post.page_components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
+    {% set next_component = post.page_components[loop.index] %}
+    {% set next_layout = next_component ? next_component.acf_fc_layout|replace({ "_": "-" }) : null %}
     {{
       include(
         "components/" ~ layout ~ "/" ~ layout ~ ".twig",
-        { component: component }
+        { component: component, next_layout: next_layout }
       )
     }}
   {% endfor %}

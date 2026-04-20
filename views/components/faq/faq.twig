@@ -1,0 +1,88 @@
+{% if component.faqs %}
+  <section class="border-stroke w-full border-t">
+    <div class="3xl:grid-cols-4 grid w-full grid-cols-3 py-0">
+      {# Left 1/3: heading + subtitle #}
+      <div
+        class="3xl:col-span-1 border-stroke col-span-3 flex h-full flex-col gap-6 border-r border-b px-6 py-10 xl:col-span-1 xl:border-b-0 xl:p-10"
+      >
+        {% if component.heading %}
+          <h2 class="heading-h4 font-semibold text-black">
+            {{ component.heading }}
+          </h2>
+        {% endif %}
+        {% if component.subtitle %}
+          <p class="text-tight text-2xl leading-[150%] text-black">
+            {{ component.subtitle }}
+          </p>
+        {% endif %}
+      </div>
+
+      {# Right 2/3: FAQ list #}
+      <div class="3xl:col-span-3 col-span-3 flex flex-col xl:col-span-2">
+        {% for faq in component.faqs %}
+          <div
+            class="border-stroke flex flex-col {{
+            loop.last and next_layout == "faq"
+              ? ""
+              : "border-b"
+            }}"
+            x-data="{ open: {{ loop.first ? "true" : "false" }} }"
+          >
+            <button
+              class="flex w-full cursor-pointer items-start gap-4 p-6 text-left xl:p-10"
+              @click="open = !open"
+              aria-expanded="open"
+            >
+              <div class="flex flex-1 flex-col gap-3">
+                {% if faq.question %}
+                  <p class="text-tight heading-h6 font-semibold text-black">
+                    {{ faq.question }}
+                  </p>
+                {% endif %}
+              </div>
+              <span class="relative block size-9 shrink-0 self-start">
+                <span
+                  class="absolute inset-0"
+                  x-show="!open"
+                  x-transition:enter="transition duration-200 ease-out"
+                  x-transition:enter-start="opacity-0 scale-75"
+                  x-transition:enter-end="opacity-100 scale-100"
+                  x-transition:leave="transition duration-150 ease-in"
+                  x-transition:leave-start="opacity-100 scale-100"
+                  x-transition:leave-end="opacity-0 scale-75"
+                >
+                  {{
+                    include("icons/generic/plus.svg")|attr({ class: "size-9" })
+                  }}
+                </span>
+                <span
+                  class="absolute inset-0"
+                  x-show="open"
+                  x-transition:enter="transition duration-200 ease-out"
+                  x-transition:enter-start="opacity-0 scale-75"
+                  x-transition:enter-end="opacity-100 scale-100"
+                  x-transition:leave="transition duration-150 ease-in"
+                  x-transition:leave-start="opacity-100 scale-100"
+                  x-transition:leave-end="opacity-0 scale-75"
+                >
+                  {{
+                    include("icons/generic/minus.svg")|attr({ class: "size-9" })
+                  }}
+                </span>
+              </span>
+            </button>
+            {% if faq.answer %}
+              <div x-show="open" x-collapse>
+                <div
+                  class="text-tight prose px-6 pb-6 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-10"
+                >
+                  {{ faq.answer|raw }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}

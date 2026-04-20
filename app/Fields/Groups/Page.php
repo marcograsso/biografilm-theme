@@ -49,6 +49,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/spacer/spacer.php",
                     ),
+                Layout::make("FAQ", "faq")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/faq/faq.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
