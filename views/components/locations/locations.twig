@@ -34,7 +34,7 @@
         window.mapboxKey = "{{ mapbox_token }}"
       </script>
       <div
-        class="locations-map border-stroke relative aspect-10/5 w-full border-b"
+        class="locations-map border-stroke relative aspect-3/4 md:aspect-10/5 w-full border-b"
         x-data="LocationsMap({{ map_locations|json_encode|e("html_attr") }})"
         x-ref="map"
         x-init="init()"

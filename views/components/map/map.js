@@ -61,6 +61,7 @@ Alpine.data("LocationsMap", (locations) => {
 
         el.addEventListener("click", () => {
           marker.togglePopup();
+          map.flyTo({ center: [location.longitude, location.latitude], zoom: 16, duration: 600 });
         });
 
         markers.push(marker);
