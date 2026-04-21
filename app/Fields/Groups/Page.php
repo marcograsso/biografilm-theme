@@ -106,6 +106,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/team/team.php",
                     ),
+                Layout::make("Tabs", "tabs")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/tabs/tabs.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

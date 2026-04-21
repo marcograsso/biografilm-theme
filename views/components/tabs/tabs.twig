@@ -1,0 +1,155 @@
+{% if component.tabs %}
+  <section class="w-full" x-data="{ active: 0 }">
+    {# Tab headers #}
+    <div class="">
+      <div class="border-t-stroke flex overflow-x-auto border-t bg-black">
+        {% for tab in component.tabs %}
+          <button
+            type="button"
+            @click="active = {{ loop.index0 }}"
+            class="text-tight focusable shrink-0 cursor-pointer border-r border-white/20 px-6 py-3 text-base uppercase transition-colors {{
+            loop.first
+              ? "md:ml-10 border-l border-l-white/20"
+              : ""
+            }}"
+            :class="active === {{
+            loop.index0
+            }}
+            ? 'bg-white text-black font-semibold'
+            : 'bg-black text-white hover:bg-black-hover active:bg-black-active'"
+          >
+            {{ tab.title }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    {# Tab panels #}
+    <div class="px-6 py-10 xl:w-2/3 xl:px-10 xl:py-30">
+      {% for tab in component.tabs %}
+        <div
+          x-show="active === {{ loop.index0 }}"
+          x-cloak
+          class="flex flex-col gap-6"
+        >
+          {% if tab.title %}
+            <h4 class="heading-h4 font-semibold">{{ tab.title }}</h4>
+          {% endif %}
+          {% if tab.contents %}
+            <div class="flex flex-col gap-12">
+              {% for block in tab.contents %}
+                {% set layout = block.acf_fc_layout %}
+
+                {# Text #}
+                {% if layout == "text" %}
+                  <div
+                    class="prose text-tight max-w-none text-xl leading-[150%]"
+                  >
+                    {{ block.content }}
+                  </div>
+
+                  {# Links #}
+                {% elseif layout == "link" %}
+                  {% if block.links %}
+                    <div class="flex flex-wrap gap-4">
+                      {% for item in block.links %}
+                        {% if item.link %}
+                          {{
+                            include(
+                              "components/button.twig",
+                              {
+                                as_link: true,
+                                variant: "default",
+                                size: "lg",
+                                label: item.link.title,
+                                attributes: {
+                                  href: item.link.url,
+                                  target: item.link.target ? : "_self",
+                                  class: "py-7! text-xl leading-[130%] md:w-fit w-full"
+                                }
+                              }
+                            )
+                          }}
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  {# Accordion #}
+                {% elseif layout == "accordion" %}
+                  {% if block.items %}
+                    <div class="border-stroke flex flex-col gap-6">
+                      {% for item in block.items %}
+                        <div
+                          class="border-stroke flex flex-col border-x border-t border-b"
+                          x-data="{ open: false }"
+                        >
+                          <button
+                            class="flex w-full cursor-pointer items-start gap-4 p-6 text-left xl:p-10"
+                            @click="open = !open"
+                            :aria-expanded="open"
+                          >
+                            <p
+                              class="text-tight heading-h6 flex-1 font-semibold text-black"
+                            >
+                              {{ item.question }}
+                            </p>
+                            <span
+                              class="relative block size-9 shrink-0 self-start"
+                            >
+                              <span
+                                class="absolute inset-0"
+                                x-show="!open"
+                                x-transition:enter="transition duration-200 ease-out"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                x-transition:leave="transition duration-150 ease-in"
+                                x-transition:leave-start="opacity-100 scale-100"
+                                x-transition:leave-end="opacity-0 scale-75"
+                              >
+                                {{
+                                  include("icons/generic/plus.svg")|attr({
+                                    class: "size-9"
+                                  })
+                                }}
+                              </span>
+                              <span
+                                class="absolute inset-0"
+                                x-show="open"
+                                x-transition:enter="transition duration-200 ease-out"
+                                x-transition:enter-start="opacity-0 scale-75"
+                                x-transition:enter-end="opacity-100 scale-100"
+                                x-transition:leave="transition duration-150 ease-in"
+                                x-transition:leave-start="opacity-100 scale-100"
+                                x-transition:leave-end="opacity-0 scale-75"
+                              >
+                                {{
+                                  include("icons/generic/minus.svg")|attr({
+                                    class: "size-9"
+                                  })
+                                }}
+                              </span>
+                            </span>
+                          </button>
+                          {% if item.answer %}
+                            <div x-show="open" x-collapse>
+                              <div
+                                class="prose text-tight px-6 pb-6 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-10"
+                              >
+                                {{ item.answer|raw }}
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
