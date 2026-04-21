@@ -8,11 +8,44 @@ use Extended\ACF\Location;
 
 register_extended_field_group([
     "title" => "Page",
-    "location" => [Location::where("page_template", "=", "default")],
+    "location" => [
+        Location::where("page_template", "=", "default"),
+        Location::where("page_type", "=", "front_page"),
+    ],
     "fields" => [
         FlexibleContent::make("", "page_components")
             ->button("Aggiungi sezione")
             ->layouts([
+                Layout::make("Carousel", "carousel")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/carousel/carousel.php",
+                    ),
+                Layout::make("Hero Carousel", "hero_carousel")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/hero-carousel/hero-carousel.php",
+                    ),
+                Layout::make("Card Displayer", "card_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/card-displayer/card-displayer.php",
+                    ),
+                Layout::make("Partners Displayer", "partners_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/partners-displayer/partners-displayer.php",
+                    ),
+                Layout::make("Highlight Card", "highlight_card")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/highlight-card/highlight-card.php",
+                    ),
                 Layout::make("Text Displayer", "text_displayer")
                     ->layout("block")
                     ->fields(
@@ -55,6 +88,24 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/faq/faq.php",
                     ),
+                Layout::make("Link List", "link_list")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/link-list/link-list.php",
+                    ),
+                Layout::make("Banner", "banner_small")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/banner-small/banner-small.php",
+                    ),
+                Layout::make("Team", "team")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/team/team.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
@@ -65,8 +116,10 @@ register_extended_field_group([
                     "acfe_flexible_modal_edit_enabled" => "0",
                     "acfe_flexible_modal_edit_size" => "large",
                 ],
+                "acfe_flexible_layouts_thumbnails" => 1,
                 "acfe_flexible_modal" => [
-                    "acfe_flexible_modal_enabled" => "0",
+                    "acfe_flexible_modal_enabled" => "1",
+                    "acfe_flexible_modal_col"     => "4",
                 ],
             ]),
     ],

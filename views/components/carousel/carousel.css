@@ -1,0 +1,8 @@
+@reference "../../../src/main.css";
+
+.carousel-nav-below {
+  position: relative !important;
+  bottom: auto !important;
+  right: auto !important;
+  @apply border-stroke border-b;
+}

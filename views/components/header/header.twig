@@ -1,93 +1,117 @@
 <div
+  x-data="{ menuOpen: false }"
   class="fixed top-0 z-[40000] flex w-full flex-col transition-transform duration-200 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
 >
-  <div class="flex w-full items-stretch justify-between bg-white">
-    <!-- Logo and date -->
-    <div class="flex items-center justify-start gap-4 px-10 py-4">
-      <a href="/" class="focusable block">
-        {{
-          include("views/svgs/logo/logo-biografilm-red.svg")|attr({
-            class: "w-[153px] h-auto"
-          })
-        }}
-      </a>
-      {% if header_show_date_location %}
-        <div
-          class="header-dateline text-tight flex flex-col items-start justify-start gap-0 text-xs"
-        >
-          <span class="font-semibold">{{ header_date }}</span>
-          <span class="font-normal">{{ header_location }}</span>
-        </div>
-      {% endif %}
-    </div>
-    <!-- Navigation -->
-    <div
-      class="border-l-stroke flex flex-1 items-stretch justify-between border-l"
-    >
-      <!-- Language -->
-      <div>
-        <a
-          href="/"
-          class="focusable hover:bg-white-hover active:bg-white-active flex cursor-pointer items-center gap-2 bg-white p-6 pr-4!"
-        >
-          <span>ITA</span>
+  <div class="relative">
+    <div class="flex w-full items-stretch justify-between bg-white">
+      <div
+        x-show="menuOpen"
+        x-cloak
+        class="overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[2px]"
+      ></div>
+      <!-- Logo and date -->
+      <div class="flex items-center justify-start gap-4 px-10 py-4">
+        <a href="/" class="focusable block">
           {{
-            include("icons/generic/chevron-down.svg")|attr({ class: "size-5" })
+            include("views/svgs/logo/logo-biografilm-red.svg")|attr({
+              class: "w-[153px] h-auto"
+            })
           }}
         </a>
+        {% if header_show_date_location %}
+          <div
+            class="header-dateline text-tight flex flex-col items-start justify-start gap-0 text-xs"
+          >
+            <span class="font-semibold">{{ header_date }}</span>
+            <span class="font-normal">{{ header_location }}</span>
+          </div>
+        {% endif %}
       </div>
-      <!-- Right side -->
-      <div class="flex">
-        <!-- Tabs -->
-        <div class="flex items-stretch">
+      <!-- Navigation -->
+      <div
+        class="border-l-stroke flex flex-1 items-stretch justify-between border-l"
+      >
+        <!-- Language -->
+        <div>
           <a
             href="/"
-            class="text-tight flex items-center p-6 text-base transition-colors {{
-            current_section == "festival"
-              ? "bg-red font-semibold text-white"
-              : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
-            }}"
+            class="focusable hover:bg-white-hover active:bg-white-active flex cursor-pointer items-center gap-2 bg-white p-6 pr-4!"
           >
-            Festival
-          </a>
-          <a
-            href="{{ nav_urls.industry }}"
-            class="text-tight flex items-center p-6 text-base transition-colors {{
-            current_section == "industry"
-              ? "bg-red font-semibold text-white"
-              : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
-            }}"
-          >
-            Industry
-          </a>
-          <a
-            href="{{ nav_urls.campus }}"
-            class="text-tight flex items-center p-6 text-base transition-colors {{
-            current_section == "campus"
-              ? "bg-red font-semibold text-white"
-              : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
-            }}"
-          >
-            Campus
+            <span>ITA</span>
+            {{
+              include("icons/generic/chevron-down.svg")|attr({
+                class: "size-5"
+              })
+            }}
           </a>
         </div>
-        <!-- Search & Menu -->
-        <div class="flex items-stretch">
-          <a
-            href="/"
-            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
-          >
-            {{ include("icons/generic/search.svg")|attr({ class: "size-5" }) }}
-          </a>
-          <a
-            href="/"
-            class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
-          >
-            {{ include("icons/generic/menu.svg")|attr({ class: "size-5" }) }}
-          </a>
+        <!-- Right side -->
+        <div class="flex">
+          <!-- Tabs -->
+          <div class="flex items-stretch">
+            <a
+              href="/"
+              class="text-tight flex items-center p-6 text-base transition-colors {{
+              current_section == "festival"
+                ? "bg-red font-semibold text-white"
+                : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
+              }}"
+            >
+              Festival
+            </a>
+            <a
+              href="{{ nav_urls.industry }}"
+              class="text-tight flex items-center p-6 text-base transition-colors {{
+              current_section == "industry"
+                ? "bg-red font-semibold text-white"
+                : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
+              }}"
+            >
+              Industry
+            </a>
+            <a
+              href="{{ nav_urls.campus }}"
+              class="text-tight flex items-center p-6 text-base transition-colors {{
+              current_section == "campus"
+                ? "bg-red font-semibold text-white"
+                : "bg-white hover:bg-white-hover active:bg-white-active cursor-pointer text-black"
+              }}"
+            >
+              Campus
+            </a>
+          </div>
+          <!-- Search & Menu -->
+          <div class="flex items-stretch">
+            <a
+              href="/"
+              class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
+            >
+              {{
+                include("icons/generic/search.svg")|attr({ class: "size-5" })
+              }}
+            </a>
+            <button
+              type="button"
+              @click="menuOpen = !menuOpen"
+              class="hover:bg-white-hover active:bg-white-active focusable border-l-stroke relative z-40 flex aspect-square cursor-pointer items-center justify-center border-l bg-white p-6"
+            >
+              <span x-show="!menuOpen">
+                {{
+                  include("icons/generic/menu.svg")|attr({ class: "size-5" })
+                }}
+              </span>
+              <span x-show="menuOpen" x-cloak>
+                {{
+                  include("icons/generic/close.svg")|attr({ class: "size-5" })
+                }}
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
+    <!-- HEADER SUBMENU -->
+    {{ include("components/header/header-submenu.twig") }}
   </div>
   <!-- HEADER NAVIGATION BAR -->
   {{ include("components/header/header-nav-bar.twig") }}

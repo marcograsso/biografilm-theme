@@ -15,7 +15,7 @@ return [
 
     Tab::make("Contenuto", "content_tab"),
     WYSIWYGEditor::make("Testo", "content")
-        ->toolbar(["bold", "italic", "link"])
+        ->toolbar(["bold", "italic", "link", "bullist", "numlist"])
         ->tabs("all")
         ->disableMediaUpload(),
 
@@ -35,4 +35,10 @@ return [
             "right" => "Destra",
         ])
         ->default("left"),
+    Select::make("Proporzioni", "column_layout")
+        ->choices([
+            "60_40" => "60 / 40",
+            "40_60" => "40 / 60",
+        ])
+        ->default("60_40"),
 ];

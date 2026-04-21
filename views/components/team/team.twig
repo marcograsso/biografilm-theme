@@ -1,0 +1,19 @@
+<section class="border-stroke w-full border-t">
+  {% if component.title %}
+    <div class="px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20">
+      <h2 class="heading-h4 font-semibold">{{ component.title }}</h2>
+    </div>
+  {% endif %}
+  {% if component.members %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      {% for member in component.members %}
+        {{
+          include(
+            "components/giurie/member-card.twig",
+            { member: member, is_last: loop.last }
+          )
+        }}
+      {% endfor %}
+    </div>
+  {% endif %}
+</section>

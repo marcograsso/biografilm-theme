@@ -23,10 +23,26 @@ return [
     Select::make("Dimensione heading", "title_size")
         ->choices([
             "big" => "Grande uppercase",
+            "medium" => "Medium",
             "normal" => "Normale",
         ])
         ->default("normal"),
-    TrueFalse::make("Mostra bordi", "show_borders")
+    Select::make("Layout colonne", "column_layout")
+        ->choices([
+            "3_col" => "3 colonne (1/3 + 2/3)",
+            "40_60" => "40 / 60",
+        ])
+        ->default("3_col"),
+    Select::make("Direzione", "direction")
+        ->choices([
+            "ltr" => "Heading a sinistra",
+            "rtl" => "Heading a destra",
+        ])
+        ->default("ltr"),
+    TrueFalse::make("Mostra bordo superiore", "show_border_top")
+        ->stylized()
+        ->default(false),
+    TrueFalse::make("Mostra bordo inferiore", "show_border_bottom")
         ->stylized()
         ->default(false),
 ];

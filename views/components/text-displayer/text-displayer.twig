@@ -1,24 +1,45 @@
+{% set is_40_60 = component.column_layout == "40_60" %}
+{% set is_rtl = component.direction == "rtl" %}
+
 <section class="w-full">
   <div
-    class="3xl:grid-cols-4 grid w-full grid-cols-3 py-20 xl:py-0 {{
-    component.show_borders
-      ? "border-stroke border-y"
-      : ""
+    class="grid w-full py-20 xl:py-0 {{
+    is_40_60
+      ? "xl:grid-cols-[2fr_3fr]"
+      : "xl:grid-cols-3"
+    }} {{
+    component.show_border_top ? "border-stroke border-t" : ""
+    }} {{
+    component.show_border_bottom ? "border-stroke border-b" : ""
     }}"
   >
     <div
-      class="3xl:col-span-1 col-span-3 mb-10 flex flex-col gap-2 px-6 xl:col-span-1 xl:mb-0 xl:px-10 xl:py-30"
+      class="col-span-1 mb-10 flex flex-col gap-2 px-6 xl:mb-0 xl:px-10 xl:py-30 {{
+      is_rtl
+        ? "xl:order-last"
+        : ""
+      }}"
     >
       {% if component.heading %}
         {% set heading_class = component.title_size == "big"
           ? "display-h2"
-          : "heading-h4 font-semibold"
+          : component.title_size == "medium"
+            ? "heading-h3 font-semibold"
+            : "heading-h4 font-semibold"
         %}
         <h2 class="{{ heading_class }} blur-in">{{ component.heading }}</h2>
       {% endif %}
     </div>
     <div
-      class="3xl:col-span-3 col-span-3 flex flex-col gap-6 pr-6 pl-6 xl:col-span-2 xl:py-30 xl:pr-10 xl:pl-0"
+      class="col-span-1 flex flex-col gap-6 pr-6 pl-6 xl:py-30 xl:pl-0 {{
+      is_40_60
+        ? "xl:pr-20"
+        : "xl:pr-10"
+      }} {{ is_40_60 ? "" : "xl:col-span-2" }} {{
+      is_rtl
+        ? "xl:order-first"
+        : ""
+      }}"
     >
       {% if component.title %}
         <h6 class="heading-h6 blur-in font-semibold">{{ component.title }}</h6>

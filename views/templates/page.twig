@@ -5,10 +5,12 @@
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
     {% set next_component = post.page_components[loop.index] %}
     {% set next_layout = next_component ? next_component.acf_fc_layout|replace({ "_": "-" }) : null %}
+    {% set prev_component = loop.index0 > 0 ? post.page_components[loop.index0 - 1] : null %}
+    {% set prev_layout = prev_component ? prev_component.acf_fc_layout|replace({ "_": "-" }) : null %}
     {{
       include(
         "components/" ~ layout ~ "/" ~ layout ~ ".twig",
-        { component: component, next_layout: next_layout }
+        { component: component, next_layout: next_layout, prev_layout: prev_layout }
       )
     }}
   {% endfor %}
