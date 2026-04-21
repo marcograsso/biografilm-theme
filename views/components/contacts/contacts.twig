@@ -1,0 +1,26 @@
+<section class="border-stroke w-full border-t">
+  <div
+    class="grid grid-cols-1 gap-12 px-6 py-20 xl:grid-cols-2 xl:gap-20 xl:px-10 xl:py-30"
+  >
+    {# Left: title + description #}
+    <div class="border-stroke flex flex-col gap-6">
+      {% if component.title %}
+        <h5 class="heading-h5 font-semibold text-black">
+          {{ component.title }}
+        </h5>
+      {% endif %}
+      {% if component.description %}
+        <div class="prose text-tight text-xl leading-[150%] text-black">
+          {{ component.description }}
+        </div>
+      {% endif %}
+    </div>
+
+    {# Right: form #}
+    <div class="">
+      {% if component.shortcode %}
+        {{ function("do_shortcode", component.shortcode) }}
+      {% endif %}
+    </div>
+  </div>
+</section>

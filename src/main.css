@@ -30,6 +30,7 @@
 }
 
 @import "./styles/fonts.css";
+@import "./gravity-forms.css";
 
 /* Instrument Sans headings */
 @utility heading-h3 {

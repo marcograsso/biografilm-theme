@@ -112,6 +112,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/tabs/tabs.php",
                     ),
+                Layout::make("Contacts", "contacts")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/contacts/contacts.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
