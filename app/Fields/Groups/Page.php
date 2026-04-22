@@ -11,6 +11,7 @@ register_extended_field_group([
     "location" => [
         Location::where("page_template", "=", "default"),
         Location::where("page_type", "=", "front_page"),
+        Location::where("page_template", "=", "page-locations.php"),
     ],
     "fields" => [
         FlexibleContent::make("", "page_components")
