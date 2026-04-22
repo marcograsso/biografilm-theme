@@ -1,10 +1,44 @@
+{% set borders = component.borders_group %}
+{% set is_rows = component.template == "righe" %}
+
 <section class="blur-in w-full">
-  <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
+  <div
+    class="{{
+    is_rows
+      ? "flex flex-col"
+      : "3xl:grid-cols-4 grid w-full grid-cols-3"
+    }}"
+  >
     <div
-      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
+      class="flex flex-col gap-2 px-6 {{
+      is_rows
+        ? "py-20 xl:px-10 xl:py-30"
+        : "pt-20 3xl:col-span-1 col-span-3 pb-10 xl:col-span-1 xl:p-10 xl:pb-5"
+      }} {{ component.title_style == "heading-h5" ? "font-semibold" : "" }} {{
+      borders.border_top or borders.border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.border_top ? "border-t" : "" }} {{
+      borders.border_bottom
+        ? "border-b"
+        : ""
+      }}"
     >
       {% if component.title %}
-        <h2 class="display-h2">{{ component.title }}</h2>
+        <h2
+          class="{{
+          component.title_style
+            ? component.title_style
+            : "display-h2"
+          }}"
+        >
+          {{ component.title }}
+        </h2>
+      {% endif %}
+      {% if is_rows and component.subtitle %}
+        <p class="mt-4 text-xl leading-[150%] font-normal">
+          {{ component.subtitle }}
+        </p>
       {% endif %}
       {% if component.link %}
         <a
@@ -23,13 +57,170 @@
     </div>
 
     <div
-      class="border-stroke 3xl:col-span-3 3xl:grid-cols-6 col-span-3 grid grid-cols-2 border-t md:grid-cols-3 lg:grid-cols-4 xl:col-span-2 xl:border-t-0"
+      class="{{
+      is_rows
+        ? "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 3xl:grid-cols-8"
+        : "3xl:col-span-3 3xl:grid-cols-6 col-span-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:col-span-2"
+      }} {{
+      borders.cards_border_top or borders.cards_border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.cards_border_top ? "border-t" : "" }} {{
+      borders.cards_border_bottom
+        ? "border-b"
+        : ""
+      }}"
     >
-      {% for i in 1..12 %}
-        <div
-          class="border-stroke col-span-1 aspect-video w-full border-b border-l"
-        ></div>
+      {% set col_units = 0 %}
+      {% for item in component.items %}
+        {% set col_units = col_units + item.wide ? 2 : 1 %}
       {% endfor %}
+      {% set f2 = (2 - col_units % 2) % 2 %}
+      {% set f3 = (3 - col_units % 3) % 3 %}
+      {% set f4 = (4 - col_units % 4) % 4 %}
+      {% set f6 = (6 - col_units % 6) % 6 %}
+      {% set f8 = (8 - col_units % 8) % 8 %}
+
+      {% for item in component.items %}
+        {% set partner = item.partner %}
+        {% set wide = item.wide %}
+        {% set page_visible =
+          function("get_field", "page_visible", partner.ID)
+        %}
+        {% set alt_url = function("get_field", "url", partner.ID) %}
+        {% set image_url =
+          function("get_the_post_thumbnail_url", partner.ID, "large")
+        %}
+
+        {% if page_visible %}
+          {% set href = function("get_permalink", partner.ID) %}
+        {% elseif alt_url %}
+          {% set href = alt_url %}
+        {% else %}
+          {% set href = null %}
+        {% endif %}
+
+        {% set cell_class = "border-stroke flex w-full items-center justify-center border-b border-l p-6 "
+          ~ (wide ? "col-span-2 aspect-8/3" : "col-span-1 aspect-4/3")
+        %}
+
+        {% if href %}
+          <a
+            href="{{ href }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group {{ cell_class }}"
+          >
+            {% if image_url %}
+              <img
+                src="{{ image_url }}"
+                alt="{{ partner.post_title }}"
+                class="h-full w-full scale-90 object-contain transition-all duration-300 group-hover:scale-100"
+              />
+            {% endif %}
+          </a>
+        {% else %}
+          <div class="{{ cell_class }}">
+            {% if image_url %}
+              <img
+                src="{{ image_url }}"
+                alt="{{ partner.post_title }}"
+                class="h-full w-full object-contain"
+              />
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      {% set filler_base = "border-stroke col-span-1 aspect-4/3 w-full"
+        ~ (borders.filler_border_bottom ? " border-b" : "")
+      %}
+
+      {% if f2 > 0 %}
+        {% for i in 1..f2 %}
+          <div
+            class="{{ filler_base }} {{
+            loop.first
+              ? "border-l"
+              : ""
+            }} md:hidden"
+          ></div>
+        {% endfor %}
+      {% endif %}
+
+      {% if f3 > 0 %}
+        {% for i in 1..f3 %}
+          <div
+            class="{{ filler_base }} {{
+            loop.first
+              ? "border-l"
+              : ""
+            }} hidden md:block lg:hidden"
+          ></div>
+        {% endfor %}
+      {% endif %}
+
+      {% if is_rows %}
+        {% if f4 > 0 %}
+          {% for i in 1..f4 %}
+            <div
+              class="{{ filler_base }} {{
+              loop.first
+                ? "border-l"
+                : ""
+              }} hidden lg:block xl:hidden"
+            ></div>
+          {% endfor %}
+        {% endif %}
+
+        {% if f6 > 0 %}
+          {% for i in 1..f6 %}
+            <div
+              class="{{ filler_base }} {{
+              loop.first
+                ? "border-l"
+                : ""
+              }} 3xl:hidden hidden xl:block"
+            ></div>
+          {% endfor %}
+        {% endif %}
+
+        {% if f8 > 0 %}
+          {% for i in 1..f8 %}
+            <div
+              class="{{ filler_base }} {{
+              loop.first
+                ? "border-l"
+                : ""
+              }} 3xl:block hidden"
+            ></div>
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% if f4 > 0 %}
+          {% for i in 1..f4 %}
+            <div
+              class="{{ filler_base }} {{
+              loop.first
+                ? "border-l"
+                : ""
+              }} 3xl:hidden hidden lg:block"
+            ></div>
+          {% endfor %}
+        {% endif %}
+
+        {% if f6 > 0 %}
+          {% for i in 1..f6 %}
+            <div
+              class="{{ filler_base }} {{
+              loop.first
+                ? "border-l"
+                : ""
+              }} 3xl:block hidden"
+            ></div>
+          {% endfor %}
+        {% endif %}
+      {% endif %}
     </div>
   </div>
 </section>

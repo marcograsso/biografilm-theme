@@ -5,43 +5,27 @@
     <div class="flex flex-col gap-6 xl:w-2/3">
       {{ include("parts/breadcrumbs.twig") }}
       <h1 class="display-h1-news">{{ post.title }}</h1>
-      <p class="text-tight text-sm text-black">
-        {{ post.post_date|date("d F Y") }}
-      </p>
     </div>
   </div>
 {% endblock hero %}
 
 {% block content %}
-  <article class="">
-    <div class="flex flex-col gap-10 xl:w-2/3 xl:gap-12">
-      {% if post.thumbnail %}
-        {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
-        {% set fp = thumb_id
-          ? function("get_post_meta", thumb_id, "focalpoint", true)
-          : null
-        %}
-        {% set fp_style = fp
-          ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
-            ~ ((fp.top * 100)|round)
-            ~ "%;"
-          : null
-        %}
-        <div class="aspect-video w-full overflow-hidden">
-          <img
-            src="{{ post.thumbnail.src("large") }}"
-            alt="{{ post.thumbnail.alt }}"
-            class="h-full w-full object-cover xl:pb-8"
-            style="{{ fp_style }}"
-          />
+  <article>
+    <div class="xl:w-2/3">
+      {% if post.content or post.thumbnail %}
+        <div
+          class="prose-content prose border-stroke max-w-none px-6 pb-10 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-12"
+        >
+          {% if post.thumbnail %}
+            <img
+              src="{{ post.thumbnail.src("large") }}"
+              alt="{{ post.thumbnail.alt }}"
+              class="not-prose mb-10 max-h-24 w-auto object-contain xl:mb-12"
+            />
+          {% endif %}
+          {{ post.content }}
         </div>
       {% endif %}
-
-      <div
-        class="prose-content prose border-stroke max-w-none px-6 text-xl leading-[150%] text-black/80 xl:px-10"
-      >
-        {{ post.content }}
-      </div>
 
       {% set approfondimenti =
         function("get_field", "approfondimenti", post.ID)
@@ -193,20 +177,4 @@
       {% endif %}
     </div>
   </article>
-
-  {% if related_news %}
-    {{
-      include(
-        "components/card-displayer/card-displayer.twig",
-        {
-          component: {
-            title: "Leggi anche",
-            title_class: "heading-h4 font-semibold",
-            items: related_news,
-            always_even: true
-          }
-        }
-      )
-    }}
-  {% endif %}
 {% endblock content %}

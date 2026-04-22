@@ -15,22 +15,38 @@
         <nav class="flex justify-between gap-3">
           {% for item in menu_submenu.items %}
             <div class="flex flex-col gap-4">
-              <a
-                href="{{ item.url }}"
-                class="text-tight focusable link-underline py-0.4 w-fit cursor-pointer text-2xl leading-[125%] font-semibold text-black active:text-black-active [&::after]:bottom-0"
-              >
-                {{ item.title }}
-              </a>
+              {% if item.url == '#no-link' %}
+                <span
+                  class="text-tight py-0.4 w-fit text-2xl leading-[125%] font-semibold text-black"
+                >
+                  {{ item.title }}
+                </span>
+              {% else %}
+                <a
+                  href="{{ item.url }}"
+                  class="text-tight focusable link-underline py-0.4 active:text-black-active w-fit cursor-pointer text-2xl leading-[125%] font-semibold text-black [&::after]:bottom-0"
+                >
+                  {{ item.title }}
+                </a>
+              {% endif %}
               {% if item.children %}
-                <ul class="flex flex-col gap-4">
+                <ul class="flex flex-col gap-3">
                   {% for child in item.children %}
                     <li>
-                      <a
-                        href="{{ child.url }}"
-                        class="text-tight focusable link-underline w-fit cursor-pointer py-0.5 text-base font-normal text-black/80 active:text-black-active [--link-underline-height:1px] [&::after]:bottom-0"
-                      >
-                        {{ child.title }}
-                      </a>
+                      {% if child.url == '#no-link' %}
+                        <span
+                          class="text-tight w-fit text-base font-normal text-black/80"
+                        >
+                          {{ child.title }}
+                        </span>
+                      {% else %}
+                        <a
+                          href="{{ child.url }}"
+                          class="text-tight focusable link-underline active:text-black-active w-fit cursor-pointer py-0.5 text-base font-normal text-black/80 [--link-underline-height:1px] [&::after]:bottom-0"
+                        >
+                          {{ child.title }}
+                        </a>
+                      {% endif %}
                     </li>
                   {% endfor %}
                 </ul>

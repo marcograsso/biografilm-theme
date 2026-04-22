@@ -1,0 +1,146 @@
+<div
+  x-show="mobileMenuOpen"
+  x-cloak
+  x-transition:enter="transition-[grid-template-rows] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
+  x-transition:enter-start="grid-rows-[0fr]"
+  x-transition:enter-end="grid-rows-[1fr]"
+  x-transition:leave="transition-[grid-template-rows] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]"
+  x-transition:leave-start="grid-rows-[1fr]"
+  x-transition:leave-end="grid-rows-[0fr]"
+  class="grid w-full bg-white lg:hidden"
+>
+  <div class="overflow-hidden">
+    {# Nav bar links (red bg) #}
+    {% set nav_menu = current_section == "festival"
+      ? menu_festival
+      : current_section == "industry"
+        ? menu_industry
+        : current_section == "campus" ? menu_campus : null
+    %}
+    {% if nav_menu %}
+      <div class="bg-red py-6">
+        <nav class="flex flex-col gap-6">
+          {% for item in nav_menu.items %}
+            {% if item.children %}
+              <div x-data="{ open: false }">
+                <button
+                  type="button"
+                  @click="open = !open"
+                  class="text-tight flex w-full items-center justify-between px-6 text-2xl font-semibold text-white"
+                >
+                  {{ item.title }}
+                  {{
+                    include("icons/generic/chevron-down.svg")|attr({
+                      class: "size-6 transition-transform duration-200",
+                      ":class": "open ? 'rotate-180' : ''"
+                    })
+                  }}
+                </button>
+                <div x-show="open" x-collapse>
+                  <ul class="mt-4 flex flex-col gap-4">
+                    {% for child in item.children %}
+                      <li>
+                        {% if child.url == '#no-link' %}
+                          <span
+                            class="text-tight block px-10 text-base font-normal text-white"
+                          >
+                            {{ child.title }}
+                          </span>
+                        {% else %}
+                          <a
+                            href="{{ child.url }}"
+                            class="text-tight block px-10 text-base font-normal text-white active:opacity-70"
+                          >
+                            {{ child.title }}
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              {% if item.url == '#no-link' %}
+                <span
+                  class="text-tight block px-6 text-2xl font-semibold text-white"
+                >
+                  {{ item.title }}
+                </span>
+              {% else %}
+                <a
+                  href="{{ item.url }}"
+                  class="text-tight block px-6 text-2xl font-semibold text-white active:opacity-70"
+                >
+                  {{ item.title }}
+                </a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </nav>
+      </div>
+    {% endif %}
+    {# Submenu links #}
+    <div class="border-t-stroke border-b-stroke border-t border-b px-6 py-6">
+      {% if menu_submenu %}
+        <nav class="flex flex-col gap-6">
+          {% for item in menu_submenu.items %}
+            {% if item.children %}
+              <div x-data="{ open: false }">
+                <button
+                  type="button"
+                  @click="open = !open"
+                  class="text-tight active:text-black-active flex w-full items-center justify-between text-2xl font-semibold text-black"
+                >
+                  {{ item.title }}
+                  {{
+                    include("icons/generic/chevron-down.svg")|attr({
+                      class: "size-6 transition-transform duration-200",
+                      ":class": "open ? 'rotate-180' : ''"
+                    })
+                  }}
+                </button>
+                <div x-show="open" x-collapse>
+                  <ul class="mt-4 flex flex-col gap-4">
+                    {% for child in item.children %}
+                      <li>
+                        {% if child.url == '#no-link' %}
+                          <span
+                            class="text-tight block pl-4 text-base font-normal text-black"
+                          >
+                            {{ child.title }}
+                          </span>
+                        {% else %}
+                          <a
+                            href="{{ child.url }}"
+                            class="text-tight focusable active:text-black-active block pl-4 text-base font-normal text-black"
+                          >
+                            {{ child.title }}
+                          </a>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+            {% else %}
+              {% if item.url == '#no-link' %}
+                <span
+                  class="text-tight block text-2xl font-semibold text-black"
+                >
+                  {{ item.title }}
+                </span>
+              {% else %}
+                <a
+                  href="{{ item.url }}"
+                  class="text-tight focusable active:text-black-active block text-2xl font-semibold text-black"
+                >
+                  {{ item.title }}
+                </a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>

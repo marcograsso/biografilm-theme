@@ -28,6 +28,7 @@ class Website extends Site
         PostTypes\Film::register();
         PostTypes\Proiezione::register();
         PostTypes\News::register();
+        PostTypes\Partner::register();
     }
 
     #[Action("init")]
@@ -182,6 +183,10 @@ class Website extends Site
             } elseif (get_post_type($post->ID) === 'sezione') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('sezione'), "title" => "Sezioni"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'partner') {
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+                $breadcrumbs[] = ["url" => get_permalink(get_page_by_path('partners')), "title" => "Partners"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } else {
                 $ancestors = get_post_ancestors($post->ID);

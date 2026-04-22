@@ -68,34 +68,17 @@
           }}
         {% endif %}
       {% endfor %}
-      {# 2-col filler: only when not always_even (otherwise last card is hidden, making count even) #}
+      {% set remainder_3col = count % 3 %}
+      {% set filler_3col = remainder_3col > 0 ? 3 - remainder_3col : 0 %}
+
       {% if is_odd and not always_even %}
-        <div
-          class="border-stroke 3xl:hidden col-span-1 border-r border-l {{
-          filler_border
-            ? "xl:border-b"
-            : ""
-          }}"
-        ></div>
+        <div class="border-stroke 3xl:hidden col-span-1 border-l {{ filler_border }}"></div>
       {% endif %}
-      {# 3-col fillers: shown only at 3xl when count % 3 != 0 #}
-      {% if count % 3 == 1 %}
-        <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
-          filler_border
-          }}"
-        ></div>
-        <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
-          filler_border
-          }}"
-        ></div>
-      {% elseif count % 3 == 2 %}
-        <div
-          class="border-stroke 3xl:block col-span-1 hidden border-r border-l {{
-          filler_border
-          }}"
-        ></div>
+
+      {% if filler_3col > 0 %}
+        {% for i in 1..filler_3col %}
+          <div class="border-stroke hidden 3xl:block col-span-1 border-l {{ filler_border }}"></div>
+        {% endfor %}
       {% endif %}
     </div>
   </div>

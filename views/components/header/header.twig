@@ -1,5 +1,5 @@
 <div
-  x-data="{ menuOpen: false }"
+  x-data="{ menuOpen: false, mobileMenuOpen: false }"
   class="fixed top-0 z-[40000] flex w-full flex-col transition-transform duration-200 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
 >
   <div class="relative">
@@ -10,7 +10,7 @@
         class="overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[2px]"
       ></div>
       <!-- Logo and date -->
-      <div class="flex items-center justify-start gap-4 px-10 py-4">
+      <div class="flex items-center justify-start gap-4 px-6 py-4 lg:px-10">
         <a href="/" class="focusable block">
           {{
             include("views/svgs/logo/logo-biografilm-red.svg")|attr({
@@ -27,9 +27,22 @@
           </div>
         {% endif %}
       </div>
+      <!-- Mobile menu button -->
+      <button
+        type="button"
+        @click="mobileMenuOpen = !mobileMenuOpen"
+        class="hover:bg-white-hover active:bg-white-active focusable relative z-40 flex aspect-square cursor-pointer items-center justify-center bg-white px-5 lg:hidden"
+      >
+        <span x-show="!mobileMenuOpen">
+          {{ include("icons/generic/menu.svg")|attr({ class: "size-5" }) }}
+        </span>
+        <span x-show="mobileMenuOpen" x-cloak>
+          {{ include("icons/generic/close.svg")|attr({ class: "size-5" }) }}
+        </span>
+      </button>
       <!-- Navigation -->
       <div
-        class="border-l-stroke flex flex-1 items-stretch justify-between border-l"
+        class="border-l-stroke hidden flex-1 items-stretch justify-between border-l lg:flex"
       >
         <!-- Language -->
         <div>
@@ -113,6 +126,10 @@
     <!-- HEADER SUBMENU -->
     {{ include("components/header/header-submenu.twig") }}
   </div>
+  <!-- MOBILE TABS -->
+  {{ include("components/header/header-mobile-tabs.twig") }}
+  <!-- MOBILE MENU -->
+  {{ include("components/header/header-mobile-menu.twig") }}
   <!-- HEADER NAVIGATION BAR -->
   {{ include("components/header/header-nav-bar.twig") }}
 </div>

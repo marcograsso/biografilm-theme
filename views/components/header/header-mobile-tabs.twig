@@ -1,0 +1,32 @@
+<div class="border-t-stroke flex w-full border-t lg:hidden">
+  <a
+    href="/"
+    class="text-tight flex flex-1 items-center justify-center p-4 text-base transition-colors {{
+    current_section == "festival"
+      ? "bg-red font-semibold text-white"
+      : "bg-white hover:bg-white-hover active:bg-white-active text-black"
+    }}"
+  >
+    Festival
+  </a>
+  <a
+    href="{{ nav_urls.industry }}"
+    class="text-tight border-l-stroke flex flex-1 items-center justify-center border-l p-4 text-base transition-colors {{
+    current_section == "industry"
+      ? "bg-red font-semibold text-white"
+      : "bg-white hover:bg-white-hover active:bg-white-active text-black"
+    }}"
+  >
+    Industry
+  </a>
+  <a
+    href="{{ nav_urls.campus }}"
+    class="text-tight border-l-stroke flex flex-1 items-center justify-center border-l p-4 text-base transition-colors {{
+    current_section == "campus"
+      ? "bg-red font-semibold text-white"
+      : "bg-white hover:bg-white-hover active:bg-white-active text-black"
+    }}"
+  >
+    Campus
+  </a>
+</div>

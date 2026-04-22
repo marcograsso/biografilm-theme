@@ -1,4 +1,4 @@
-<div class="bg-red relative h-[44px] w-full">
+<div class="bg-red relative hidden h-[44px] w-full lg:block">
   {% if current_section == "festival" %}
     <!-- Festival -->
     {% if menu_festival %}
@@ -37,31 +37,47 @@
                 class="bg-red absolute top-full left-0 z-50 flex min-w-[180px] flex-col shadow-lg"
               >
                 {% for child in item.children %}
-                  {% include "components/button.twig" with {
-                    as_link: true,
-                    variant: "nav",
-                    label: child.title,
-                    attributes: {
-                      href: child.url,
-                      class: "text-tight w-full justify-start rounded-none text-base font-normal text-white! "
-                        ~ item_padding
-                        ~ " py-3 h-auto"
-                    }
-                  } %}
+                  {% if child.url == '#no-link' %}
+                    <span
+                      class="text-tight inline-flex w-full items-center rounded-none text-base font-normal text-white! {{ item_padding }} py-3"
+                    >
+                      {{ child.title }}
+                    </span>
+                  {% else %}
+                    {% include "components/button.twig" with {
+                      as_link: true,
+                      variant: "nav",
+                      label: child.title,
+                      attributes: {
+                        href: child.url,
+                        class: "text-tight w-full justify-start rounded-none text-base font-normal text-white! "
+                          ~ item_padding
+                          ~ " py-3 h-auto"
+                      }
+                    } %}
+                  {% endif %}
                 {% endfor %}
               </div>
             </div>
           {% else %}
-            {% include "components/button.twig" with {
-              as_link: true,
-              variant: "nav",
-              label: item.title,
-              attributes: {
-                href: item.url,
-                class: "text-tight h-full rounded-none font-normal text-white! "
-                  ~ item_padding
-              }
-            } %}
+            {% if item.url == '#no-link' %}
+              <span
+                class="text-tight inline-flex h-full items-center rounded-none font-normal text-white! {{ item_padding }}"
+              >
+                {{ item.title }}
+              </span>
+            {% else %}
+              {% include "components/button.twig" with {
+                as_link: true,
+                variant: "nav",
+                label: item.title,
+                attributes: {
+                  href: item.url,
+                  class: "text-tight h-full rounded-none font-normal text-white! "
+                    ~ item_padding
+                }
+              } %}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </nav>
