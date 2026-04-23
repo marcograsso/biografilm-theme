@@ -20,9 +20,16 @@ return [
         ->disableMediaUpload(),
 
     Tab::make("Stile", "stile_tab"),
-    Select::make("Dimensione heading", "title_size")
+    Select::make("Dimensione heading", "heading_size")
         ->choices([
             "big" => "Grande uppercase",
+            "medium" => "Medium",
+            "normal" => "Normale",
+        ])
+        ->default("normal"),
+    Select::make("Dimensione titolo", "title_size")
+        ->choices([
+            "big" => "Grande",
             "medium" => "Medium",
             "normal" => "Normale",
         ])

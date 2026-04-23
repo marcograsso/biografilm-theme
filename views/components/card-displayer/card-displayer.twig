@@ -1,7 +1,16 @@
 <section class="w-full">
+  {% set borders = component.borders_group %}
   <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
     <div
-      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10!"
+      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10! {{
+      borders.border_top or borders.border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.border_top ? "border-t" : "" }} {{
+      borders.border_bottom
+        ? "border-b"
+        : "border-b border-stroke xl:border-b-0"
+      }}"
     >
       {% if component.title %}
         <h2 class="{{ component.title_class ? : "display-h2" }} blur-in">
@@ -24,12 +33,20 @@
       {% endif %}
     </div>
     <div
-      class="border-stroke 3xl:col-span-3 3xl:grid-cols-3 col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2"
+      class="3xl:col-span-3 3xl:grid-cols-3 col-span-3 grid grid-cols-1 md:grid-cols-2 xl:col-span-2 {{
+      borders.cards_border_top or borders.cards_border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.cards_border_top ? "border-t" : "" }} {{
+      borders.cards_border_bottom
+        ? "border-b"
+        : ""
+      }}"
     >
       {% set count = component.items|length %}
       {% set always_even = component.always_even %}
       {% set is_odd = count % 2 == 1 %}
-      {% set filler_border = component.filler_border_bottom ? "border-b" : "" %}
+      {% set filler_border = borders.filler_border_bottom ? "border-b" : "" %}
       {% for item in component.items %}
         {% set is_last = loop.last %}
         {% set hide_last = always_even and is_odd and is_last %}
@@ -72,12 +89,20 @@
       {% set filler_3col = remainder_3col > 0 ? 3 - remainder_3col : 0 %}
 
       {% if is_odd and not always_even %}
-        <div class="border-stroke 3xl:hidden col-span-1 border-l {{ filler_border }}"></div>
+        <div
+          class="border-stroke 3xl:hidden col-span-1 border-l {{
+          filler_border
+          }}"
+        ></div>
       {% endif %}
 
       {% if filler_3col > 0 %}
         {% for i in 1..filler_3col %}
-          <div class="border-stroke hidden 3xl:block col-span-1 border-l {{ filler_border }}"></div>
+          <div
+            class="border-stroke 3xl:block col-span-1 hidden border-l {{
+            filler_border
+            }}"
+          ></div>
         {% endfor %}
       {% endif %}
     </div>

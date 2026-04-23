@@ -29,6 +29,7 @@ class Website extends Site
         PostTypes\Proiezione::register();
         PostTypes\News::register();
         PostTypes\Partner::register();
+        PostTypes\Ospitalita::register();
     }
 
     #[Action("init")]
@@ -171,6 +172,9 @@ class Website extends Site
         } elseif (is_post_type_archive('news')) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => "", "title" => "News"];
+        } elseif (is_post_type_archive('ospitalita')) {
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+            $breadcrumbs[] = ["url" => "", "title" => "Ospitalità"];
         } elseif ($post && !is_front_page()) {
             if (get_post_type($post->ID) === 'news') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
@@ -184,13 +188,19 @@ class Website extends Site
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('sezione'), "title" => "Sezioni"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'ospitalita') {
+                $ospitalita_page = get_page_by_path('ospitality');
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+                $breadcrumbs[] = ["url" => $ospitalita_page ? get_permalink($ospitalita_page) : home_url("/"), "title" => "Ospitalità"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } elseif (get_post_type($post->ID) === 'partner') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => get_permalink(get_page_by_path('partners')), "title" => "Partners"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } else {
                 $ancestors = get_post_ancestors($post->ID);
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => empty($ancestors) ? "Biografilm" : "Festival"];
+                $home_label = (empty($ancestors) || in_array($section, ["industry", "campus"])) ? "Biografilm" : "Festival";
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => $home_label];
                 $front_page_id = (int) get_option('page_on_front');
                 foreach (array_reverse($ancestors) as $ancestor_id) {
                     if ($ancestor_id === $front_page_id) {
@@ -239,6 +249,17 @@ class Website extends Site
             }
 
             $context['related_news'] = array_map(fn($p) => Timber::get_post($p->ID), $related);
+        }
+
+        if (is_singular('ospitalita') && $post) {
+            $related = get_posts([
+                'post_type'      => 'ospitalita',
+                'posts_per_page' => 3,
+                'post__not_in'   => [$post->ID],
+                'orderby'        => 'date',
+                'order'          => 'DESC',
+            ]);
+            $context['related_ospitalita'] = array_map(fn($p) => Timber::get_post($p->ID), $related);
         }
 
         if (is_singular('film') && $post) {

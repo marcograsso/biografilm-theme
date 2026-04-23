@@ -16,6 +16,24 @@
             {{ section.subtitle }}
           </div>
         {% endif %}
+        {% if section.link %}
+          {{
+            include(
+              "components/button.twig",
+              {
+                as_link: true,
+                variant: "default",
+                size: "lg",
+                label: section.link.title,
+                attributes: {
+                  href: section.link.url,
+                  target: section.link.target ? : "_self",
+                  class: "md:w-fit w-full"
+                }
+              }
+            )
+          }}
+        {% endif %}
       </div>
 
       {% if section.members %}

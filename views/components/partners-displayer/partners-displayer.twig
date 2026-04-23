@@ -21,7 +21,7 @@
       }} {{ borders.border_top ? "border-t" : "" }} {{
       borders.border_bottom
         ? "border-b"
-        : ""
+        : "border-b border-stroke xl:border-b-0"
       }}"
     >
       {% if component.title %}
@@ -94,10 +94,13 @@
 
         {% if page_visible %}
           {% set href = function("get_permalink", partner.ID) %}
+          {% set target = "_self" %}
         {% elseif alt_url %}
           {% set href = alt_url %}
+          {% set target = "_blank" %}
         {% else %}
           {% set href = null %}
+          {% set target = "_self" %}
         {% endif %}
 
         {% set cell_class = "border-stroke flex w-full items-center justify-center border-b border-l p-6 "
@@ -107,7 +110,7 @@
         {% if href %}
           <a
             href="{{ href }}"
-            target="_blank"
+            target="{{ target }}"
             rel="noopener noreferrer"
             class="group {{ cell_class }}"
           >

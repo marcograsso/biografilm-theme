@@ -17,6 +17,7 @@ register_extended_field_group([
     "location" => [
         Location::where("post_type", "news"),
         Location::where("post_type", "partner"),
+        Location::where("post_type", "ospitalita"),
     ],
     "fields"   => [
         FlexibleContent::make("Approfondimenti", "approfondimenti")

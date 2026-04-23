@@ -7,10 +7,10 @@
     is_40_60
       ? "xl:grid-cols-[2fr_3fr]"
       : "xl:grid-cols-3"
-    }} {{
-    component.show_border_top ? "border-stroke border-t" : ""
-    }} {{
-    component.show_border_bottom ? "border-stroke border-b" : ""
+    }} {{ component.show_border_top ? "border-stroke border-t" : "" }} {{
+    component.show_border_bottom
+      ? "border-stroke border-b"
+      : ""
     }}"
   >
     <div
@@ -21,9 +21,9 @@
       }}"
     >
       {% if component.heading %}
-        {% set heading_class = component.title_size == "big"
+        {% set heading_class = component.heading_size == "big"
           ? "display-h2"
-          : component.title_size == "medium"
+          : component.heading_size == "medium"
             ? "heading-h3 font-semibold"
             : "heading-h4 font-semibold"
         %}
@@ -42,7 +42,13 @@
       }}"
     >
       {% if component.title %}
-        <h6 class="heading-h6 blur-in font-semibold">{{ component.title }}</h6>
+        {% set title_class = component.title_size == "big"
+          ? "heading-h4"
+          : component.title_size == "medium"
+            ? "heading-h5 font-semibold"
+            : "heading-h6 font-semibold"
+        %}
+        <h6 class="{{ title_class }} blur-in">{{ component.title }}</h6>
       {% endif %}
       {% if component.content %}
         <div

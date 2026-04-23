@@ -300,7 +300,7 @@
                     {% include "components/button.twig" with {
                       as_link: true,
                       variant: "default",
-                      size: "lg",
+                      size: "sm",
                       label: p_biglietto.title ? : "Compra biglietto",
                       attributes: {
                         href: p_biglietto.url ?? p_biglietto,
@@ -313,7 +313,7 @@
                     {% include "components/button.twig" with {
                       as_link: true,
                       variant: "default",
-                      size: "lg",
+                      size: "sm",
                       label: p_link_extra.title,
                       attributes: {
                         href: p_link_extra.url,

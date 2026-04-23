@@ -5,6 +5,7 @@ use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\WYSIWYGEditor;
+use Extended\ACF\Fields\Link;
 
 return [
     Repeater::make("Sezioni", "sections")
@@ -17,6 +18,7 @@ return [
                 ->toolbar(["bold", "italic", "link"])
                 ->tabs("all")
                 ->disableMediaUpload(),
+            Link::make("Link", "link")->format("array"),
             Repeater::make("Giurati", "members")
                 ->layout("block")
                 ->collapsed("title")

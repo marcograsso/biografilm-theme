@@ -20,19 +20,19 @@ return [
             Image::make("Immagine di sfondo", "background_image")->format(
                 "array",
             ),
-            File::make("Video di sfondo", "background_video")
-                ->format("array"),
+            File::make("Video di sfondo", "background_video")->format("array"),
             Tab::make("Testi")->placement("left"),
             Text::make("Titolo", "title"),
             Text::make("Sottotitolo", "subtitle"),
+            WYSIWYGEditor::make("Descrizione", "description")
+                ->toolbar(["bold", "italic"])
+                ->tabs("all")
+                ->disableMediaUpload()
+                ->withSettings(["acfe_wysiwyg_height" => 60]),
 
             Tab::make("Extra")->placement("left"),
             Link::make("Link", "link")->format("array"),
             Image::make("Logo superiore", "logo")->format("array"),
-            WYSIWYGEditor::make("Descrizione", "description")
-                ->toolbar(["bold", "italic"])
-                ->tabs("all")
-                ->disableMediaUpload(),
 
             Tab::make("Stile")->placement("left"),
             ColorPicker::make("Colore testo", "text_color")
@@ -44,5 +44,12 @@ return [
                     "w-1/2" => "1/2 colonna",
                 ])
                 ->default("w-1/2"),
+            Select::make("Stile titolo", "title_style")
+                ->choices([
+                    "big" => "Grande uppercase",
+                    "medium" => "Medium",
+                    "normal" => "Normale",
+                ])
+                ->default("normal"),
         ]),
 ];
