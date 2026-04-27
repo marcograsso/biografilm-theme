@@ -1,12 +1,9 @@
 {% extends "base.twig" %}
 
 {% block hero %}
-  <div class="mt-[108px] w-full px-6 py-20 xl:px-10 xl:py-20">
-    <div class="flex flex-col gap-6 xl:w-2/3">
-      {{ include("parts/breadcrumbs.twig") }}
-      <h1 class="display-h1-news">{{ post.title }}</h1>
-    </div>
-  </div>
+  {% set hero_title = post.title %}
+  {% set hero_title_style = "news" %}
+  {{ include("components/hero/hero.twig") }}
 {% endblock hero %}
 
 {% block content %}

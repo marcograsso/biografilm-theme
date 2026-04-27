@@ -1,0 +1,80 @@
+{% set permalink = function("get_permalink", progetto.ID) %}
+{% set fields = function("get_field", "progetto", progetto.ID) %}
+{% set tipologia = function("wp_get_post_terms", progetto.ID, "tipologia-progetto") %}
+{% set luogo = function("wp_get_post_terms", progetto.ID, "luogo-progetto") %}
+
+{% set thumb_id = function("get_post_thumbnail_id", progetto.ID) %}
+{% set image_url = thumb_id
+  ? function("get_the_post_thumbnail_url", progetto.ID, "large")
+  : null
+%}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+{% set date_format = {
+  anno: "Y",
+  anno_mese: "F Y",
+  anno_mese_giorno: "d F Y"
+}[fields.precisione_date ?? "anno_mese_giorno"] ?? "d F Y" %}
+
+<a
+  href="{{ permalink }}"
+  class="group border-b-stroke relative col-span-1 flex flex-col border-b bg-white {{ extra_class }}"
+>
+  <div
+    class="overlay-blur overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+  ></div>
+
+  <div class="relative aspect-video w-full overflow-hidden bg-gray-200">
+    <div
+      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+    ></div>
+    <img
+      src="{{ image_url ?: site.theme.link ~ "/assets/images/fallback-img.jpg" }}"
+      alt="{{ progetto.post_title }}"
+      class="h-full w-full object-cover transition-all duration-700 group-hover:scale-[1.1]"
+      style="{{ fp_style }}"
+    />
+  </div>
+
+  <div class="border-l-stroke flex flex-1 flex-col gap-10 bg-white px-6 py-10 transition-all duration-500 lg:border-l">
+    <!-- Up -->
+    <div class="flex flex-col gap-3">
+      {% if tipologia %}
+        <p class="text-tight text-red blur-in text-sm font-semibold uppercase">
+          {{ tipologia|map(t => t.name)|join(" · ") }}
+        </p>
+      {% endif %}
+      <h5 class="text-tight blur-in line-clamp-2 text-2xl font-semibold">
+        {{ progetto.post_title }}
+      </h5>
+      {% if fields.descrizione_breve %}
+        <p class="text-tight blur-in line-clamp-3 text-base text-black">
+          {{ fields.descrizione_breve }}
+        </p>
+      {% endif %}
+    </div>
+    <!-- Down -->
+    <div class="flex flex-col gap-3">
+      {% if fields.periodo_inizio or fields.periodo_fine %}
+        <p class="text-tight blur-in text-base font-semibold text-black">
+          {% if fields.periodo_inizio %}{{ fields.periodo_inizio|date(date_format) }}{% endif %}
+          {% if fields.periodo_fine %} — {{ fields.periodo_fine|date(date_format) }}{% endif %}
+        </p>
+      {% endif %}
+      {% if luogo %}
+        <p class="text-tight blur-in text-base text-black">
+          {{ luogo|map(t => t.name)|join(" / ") }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</a>

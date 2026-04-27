@@ -119,6 +119,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/contacts/contacts.php",
                     ),
+                Layout::make("Media Displayer", "media_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/media-displayer/media-displayer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

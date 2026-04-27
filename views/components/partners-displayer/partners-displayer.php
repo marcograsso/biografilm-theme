@@ -13,10 +13,9 @@ use Extended\ACF\Fields\TrueFalse;
 return [
     Tab::make("Titolo", "titolo_tab"),
     Text::make("Titolo", "title"),
-    Text::make("Sottotitolo", "subtitle")
-        ->conditionalLogic([
-            ConditionalLogic::where("template", "==", "righe"),
-        ]),
+    Text::make("Sottotitolo", "subtitle")->conditionalLogic([
+        ConditionalLogic::where("template", "==", "righe"),
+    ]),
     Link::make("Link", "link")->format("array"),
 
     Tab::make("Partners", "partners_tab"),
@@ -27,15 +26,14 @@ return [
             PostObject::make("Partner", "partner")
                 ->postTypes(["partner"])
                 ->format("object"),
-            TrueFalse::make("Doppia larghezza", "wide")
-                ->stylized(),
+            TrueFalse::make("Doppia larghezza", "wide")->stylized(),
         ]),
 
     Tab::make("Template", "template_tab"),
     Select::make("Template", "template")
         ->choices([
             "colonne" => "Colonne",
-            "righe"   => "Righe",
+            "righe" => "Righe",
         ])
         ->default("colonne"),
 
@@ -43,6 +41,7 @@ return [
     Select::make("Stile titolo", "title_style")
         ->choices([
             "display-h2" => "Grande",
+            "heading-h4" => "Medio",
             "heading-h5" => "Piccolo",
         ])
         ->default("display-h2"),
@@ -61,7 +60,10 @@ return [
             TrueFalse::make("Cards — bordo inferiore", "cards_border_bottom")
                 ->stylized()
                 ->default(false),
-            TrueFalse::make("Celle vuote — bordo inferiore", "filler_border_bottom")
+            TrueFalse::make(
+                "Celle vuote — bordo inferiore",
+                "filler_border_bottom",
+            )
                 ->stylized()
                 ->default(false),
         ]),

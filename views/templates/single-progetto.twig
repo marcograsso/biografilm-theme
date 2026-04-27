@@ -1,0 +1,179 @@
+{% extends "base.twig" %}
+
+{% set progetto = function("get_field", "progetto", post.ID) %}
+{% set tipologia =
+  function("wp_get_post_terms", post.ID, "tipologia-progetto")
+%}
+{% set target = function("wp_get_post_terms", post.ID, "target-progetto") %}
+{% set status = function("wp_get_post_terms", post.ID, "status-progetto") %}
+{% set luogo = function("wp_get_post_terms", post.ID, "luogo-progetto") %}
+
+{% set date_format = {
+  anno: "Y",
+  anno_mese: "F Y",
+  anno_mese_giorno: "d F Y"
+}[progetto.precisione_date ?? "anno_mese_giorno"]
+  ?? "d F Y"
+%}
+
+{% block hero %}
+  {% set hero_title = post.title %}
+  {% set hero_title_style = "news" %}
+  {{ include("components/hero/hero.twig") }}
+{% endblock hero %}
+
+{% block content %}
+  <div class="border-b-stroke mx-auto grid grid-cols-3 border-b">
+    {# Tabs — cols 1–2 #}
+    <div class="col-span-3 xl:col-span-2">
+      {% if progetto.tabs %}
+        {{
+          include(
+            "components/tabs/tabs.twig",
+            { component: { tabs: progetto.tabs, full_width: true } }
+          )
+        }}
+      {% endif %}
+    </div>
+
+    {# Informazioni — col 3 #}
+    <div
+      class="border-stroke col-span-3 flex flex-col gap-10 border-t border-l px-6 py-10 xl:col-span-1 xl:p-10"
+    >
+      <h2 class="heading-h6 font-semibold">Informazioni</h2>
+
+      {% if progetto.periodo_inizio or progetto.periodo_fine %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Periodo
+          </span>
+          <span class="text-tight text-xl">
+            {% if progetto.periodo_inizio %}{{
+              progetto.periodo_inizio|date(date_format)
+            }}{% endif %}
+            {% if progetto.periodo_fine %}
+              — {{ progetto.periodo_fine|date(date_format) }}
+            {% endif %}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if status %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Status
+          </span>
+          <span class="text-tight text-xl">
+            {{ status|map(t => t.name)|join(" · ") }}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if tipologia %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Tipologia
+          </span>
+          <span class="text-tight text-xl">
+            {{ tipologia|map(t => t.name)|join(" · ") }}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if target %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Target
+          </span>
+          <span class="text-tight text-xl">
+            {{ target|map(t => t.name)|join(" · ") }}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if luogo %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">Luogo</span>
+          <span class="text-tight text-xl">
+            {{ luogo|map(t => t.name)|join(" · ") }}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if progetto.relatori_tutor %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Relatori / Tutor
+          </span>
+          <span class="text-tight text-xl">
+            {{ progetto.relatori_tutor|map(r => r.nome)|join(" · ") }}
+          </span>
+        </div>
+      {% endif %}
+
+      {% if progetto.beneficiari %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Beneficiari
+          </span>
+          <div class="prose text-tight max-w-none text-xl">
+            {{ progetto.beneficiari }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if progetto.restituzione_finale %}
+        <div class="flex flex-col gap-2">
+          <span class="text-tight text-xl font-semibold text-black">
+            Restituzione finale
+          </span>
+          <div class="prose text-tight max-w-none text-xl">
+            {{ progetto.restituzione_finale }}
+          </div>
+        </div>
+      {% endif %}
+
+      {% if progetto.links %}
+        <div class="mt-10 flex flex-col gap-3">
+          {% for item in progetto.links %}
+            {% if item.link %}
+              {% include "components/button.twig" with {
+                as_link: true,
+                size: "lg",
+                variant: item.stile == "secondary"
+                  ? "outline"
+                  : item.stile == "link" ? "link" : "default",
+                label: item.link.title,
+                attributes: {
+                  href: item.link.url,
+                  target: item.link.target ? : "_self",
+                  class: "w-full"
+                }
+              } %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% set galleria = function("get_field", "galleria", post.ID) %}
+  {% if galleria.items %}
+    {{
+      include(
+        "components/media-displayer/media-displayer.twig",
+        { component: galleria }
+      )
+    }}
+  {% endif %}
+
+  {% set partners_displayer = function("get_field", "partners_displayer", post.ID) %}
+  {% if partners_displayer.items %}
+    {{
+      include(
+        "components/partners-displayer/partners-displayer.twig",
+        { component: partners_displayer }
+      )
+    }}
+  {% endif %}
+{% endblock content %}

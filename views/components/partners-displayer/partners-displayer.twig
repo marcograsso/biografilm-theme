@@ -14,7 +14,11 @@
       is_rows
         ? "py-20 xl:px-10 xl:py-30"
         : "pt-20 3xl:col-span-1 col-span-3 pb-10 xl:col-span-1 xl:p-10 xl:pb-5"
-      }} {{ component.title_style == "heading-h5" ? "font-semibold" : "" }} {{
+      }} {{
+      component.title_style starts with "heading-"
+        ? "font-semibold"
+        : ""
+      }} {{
       borders.border_top or borders.border_bottom
         ? "border-stroke"
         : ""

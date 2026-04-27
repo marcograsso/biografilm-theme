@@ -72,6 +72,17 @@
               }
             )
           }}
+        {% elseif item.post_type == "progetto" %}
+          {{
+            include(
+              "parts/cards/progetto-card.twig",
+              {
+                progetto: item,
+                is_last: is_last,
+                extra_class: hide_last ? "hidden 3xl:block" : ""
+              }
+            )
+          }}
         {% else %}
           {{
             include(

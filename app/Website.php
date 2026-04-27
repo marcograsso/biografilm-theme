@@ -30,12 +30,14 @@ class Website extends Site
         PostTypes\News::register();
         PostTypes\Partner::register();
         PostTypes\Ospitalita::register();
+        PostTypes\Progetti::register();
     }
 
     #[Action("init")]
     public function register_taxonomies()
     {
         Taxonomies\FilmTaxonomies::register();
+        Taxonomies\ProgettiTaxonomies::register();
     }
 
     #[Action("wp_enqueue_scripts")]
@@ -175,6 +177,10 @@ class Website extends Site
         } elseif (is_post_type_archive('ospitalita')) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => "", "title" => "Ospitalità"];
+        } elseif (is_post_type_archive('progetto')) {
+            $campus_page = get_page_by_path('campus');
+            $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+            $breadcrumbs[] = ["url" => "", "title" => "Progetti e formazione"];
         } elseif ($post && !is_front_page()) {
             if (get_post_type($post->ID) === 'news') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
@@ -196,6 +202,11 @@ class Website extends Site
             } elseif (get_post_type($post->ID) === 'partner') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => get_permalink(get_page_by_path('partners')), "title" => "Partners"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'progetto') {
+                $campus_page = get_page_by_path('campus');
+                $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('progetto'), "title" => "Progetti e formazione"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } else {
                 $ancestors = get_post_ancestors($post->ID);

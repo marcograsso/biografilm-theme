@@ -25,7 +25,13 @@
     </div>
 
     {# Tab panels #}
-    <div class="px-6 py-10 xl:w-2/3 xl:px-10 xl:py-30">
+    <div
+      class="px-6 py-10 xl:px-10 xl:py-30 {{
+      component.full_width
+        ? "xl:w-full"
+        : "xl:w-2/3"
+      }}"
+    >
       {% for tab in component.tabs %}
         <div
           x-show="active === {{ loop.index0 }}"
