@@ -10,7 +10,7 @@ return [
     Text::make("Titolo", "title"),
     Link::make("Link", "link")->format("array"),
     Relationship::make("Contenuti", "items")
-        ->postTypes(["film", "proiezione", "news", "progetto"])
+        ->postTypes(["film", "proiezione", "news", "progetto", "evento"])
         ->format("object")
         ->withSettings(["allow_duplicates" => 1]),
     TrueFalse::make("Sempre pari", "always_even")

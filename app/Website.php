@@ -31,6 +31,7 @@ class Website extends Site
         PostTypes\Partner::register();
         PostTypes\Ospitalita::register();
         PostTypes\Progetti::register();
+        PostTypes\Eventi::register();
     }
 
     #[Action("init")]
@@ -38,6 +39,7 @@ class Website extends Site
     {
         Taxonomies\FilmTaxonomies::register();
         Taxonomies\ProgettiTaxonomies::register();
+        Taxonomies\EventiTaxonomies::register();
     }
 
     #[Action("wp_enqueue_scripts")]
@@ -138,6 +140,7 @@ class Website extends Site
         }
 
         $context["menu_festival"] = Timber::get_menu("festival-it");
+        $context["menu_campus"] = Timber::get_menu("campus-it");
         $context["menu_submenu"] = Timber::get_menu("submenu-it");
         $context["current_url"] = URLHelper::get_current_url();
         $context["header_show_date_location"] = get_field("header_show_date_location", "option");
@@ -160,6 +163,8 @@ class Website extends Site
                     break;
                 }
             }
+        } elseif (is_post_type_archive(["progetto", "evento"]) || is_singular(["progetto", "evento"])) {
+            $section = "campus";
         }
         $context["current_section"] = $section;
 
@@ -177,6 +182,10 @@ class Website extends Site
         } elseif (is_post_type_archive('ospitalita')) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => "", "title" => "Ospitalità"];
+        } elseif (is_post_type_archive('evento')) {
+            $campus_page = get_page_by_path('campus');
+            $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+            $breadcrumbs[] = ["url" => "", "title" => "Eventi"];
         } elseif (is_post_type_archive('progetto')) {
             $campus_page = get_page_by_path('campus');
             $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
@@ -202,6 +211,11 @@ class Website extends Site
             } elseif (get_post_type($post->ID) === 'partner') {
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => get_permalink(get_page_by_path('partners')), "title" => "Partners"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'evento') {
+                $campus_page = get_page_by_path('campus');
+                $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('evento'), "title" => "Eventi"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } elseif (get_post_type($post->ID) === 'progetto') {
                 $campus_page = get_page_by_path('campus');

@@ -5,11 +5,14 @@
 {% set image_right = component.image_position == "right" %}
 {% set grid_cols = component.column_layout == "40_60"
   ? "xl:grid-cols-[2fr_3fr]"
-  : "xl:grid-cols-[3fr_2fr]"
+  : component.column_layout == "50_50"
+    ? "xl:grid-cols-2"
+    : "xl:grid-cols-[3fr_2fr]"
 %}
+{% set grid_gap = component.column_layout == "50_50" ? "xl:gap-20" : "" %}
 
 <section class="w-full">
-  <div class="grid grid-cols-1 {{ grid_cols }}">
+  <div class="grid grid-cols-1 {{ grid_cols }} {{ grid_gap }}">
     <div class="{{ image_right ? "xl:order-last" : "" }} relative overflow-hidden">
       {% if component.image %}
         <div

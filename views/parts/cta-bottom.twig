@@ -1,0 +1,36 @@
+{% if cta_title or cta_desc or cta_link %}
+  <section class="w-full">
+    <div
+      class="flex w-full flex-col gap-4 px-6 py-20 xl:flex-row xl:items-start xl:justify-between xl:px-10 xl:py-30"
+    >
+      <div class="flex flex-col gap-4 xl:w-1/2">
+        {% if cta_title %}
+          <h4 class="heading-h4 blur-in font-semibold">{{ cta_title }}</h4>
+        {% endif %}
+        {% if cta_desc %}
+          <p class="blur-in text-xl text-black">{{ cta_desc }}</p>
+        {% endif %}
+      </div>
+      {% if cta_link %}
+        <div class="flex xl:w-1/2 xl:justify-end">
+          {{
+            include(
+              "components/button.twig",
+              {
+                label: cta_link.title,
+                variant: "default",
+                size: "lg",
+                as_link: true,
+                attributes: {
+                  href: cta_link.url,
+                  target: cta_link.target ?: "_self",
+                  class: "w-full xl:w-fit"
+                }
+              }
+            )
+          }}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}

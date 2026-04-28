@@ -4,6 +4,6 @@ use Extended\ACF\Fields\PostObject;
 
 return [
     PostObject::make("Contenuto in evidenza", "post")
-        ->postTypes(["film", "proiezione", "progetto"])
+        ->postTypes(["film", "proiezione", "progetto", "evento"])
         ->format("object"),
 ];

@@ -37,6 +37,13 @@ class ThemeOptions
             "page_title" => get_bloginfo("name"),
             "position" => 2.1,
         ]);
+
+        acf_add_options_sub_page([
+            "parent_slug" => "theme-options",
+            "menu_slug"   => "theme-archivi",
+            "menu_title"  => "Archivi",
+            "page_title"  => "Archivi",
+        ]);
     }
 
     private function register_fields()
@@ -69,7 +76,7 @@ class ThemeOptions
                     ->format("array"),
             ],
             "style" => "",
-            "location" => [Location::where("options_page", "theme-options")],
+            "location" => [Location::where("options_page", "theme-archivi")],
         ]);
     }
 }

@@ -1,0 +1,137 @@
+{% set permalink = function("get_permalink", evento.ID) %}
+{% set fields = function("get_field", "evento", evento.ID) %}
+{% set tipologia =
+  function("wp_get_post_terms", evento.ID, "tipologia-evento")
+%}
+{% set luogo = function("wp_get_post_terms", evento.ID, "luogo-evento") %}
+
+{% set thumb_id = function("get_post_thumbnail_id", evento.ID) %}
+{% set image_url = thumb_id
+  ? function("get_the_post_thumbnail_url", evento.ID, "large")
+  : null
+%}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+{% set date_format = {
+  anno: "Y",
+  anno_mese: "F Y",
+  anno_mese_giorno: "d F Y"
+}[fields.precisione_date ?? "anno_mese_giorno"]
+  ?? "d F Y"
+%}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke relative col-span-1 flex flex-col border-b transition-colors duration-300 {{
+  extra_class
+  }}"
+>
+  <div
+    class="overlay-blur absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+  ></div>
+  <div class="relative aspect-video w-full overflow-hidden bg-gray-200">
+    <div
+      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+    ></div>
+    <img
+      src="{{
+      image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ evento.post_title }}"
+      class="h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.1]"
+      style="{{ fp_style }}"
+    />
+  </div>
+  <div class="border-l-stroke flex flex-1 flex-col gap-8 px-6 py-6 md:border-l">
+    <div class="flex flex-1 flex-col">
+      <h5 class="text-tight blur-in line-clamp-2 text-2xl font-semibold">
+        {{ evento.post_title }}
+      </h5>
+    </div>
+    <div class="flex items-center items-end justify-between gap-x-5 gap-y-2">
+      <div class="flex flex-col gap-2">
+        {% if fields.data_inizio or fields.data_fine %}
+          <p class="text-tight blur-in text-base text-black">
+            {% set precision = fields.precisione_date ?? "anno_mese_giorno" %}
+            {% if fields.data_inizio and fields.data_fine %}
+              {% set same_year = (fields.data_inizio|date("Y"))
+                == (fields.data_fine|date("Y"))
+              %}
+              {% set same_month = same_year
+                and (fields.data_inizio|date("m"))
+                  == (fields.data_fine|date("m"))
+              %}
+              {% if precision == "anno" %}
+                {{ fields.data_inizio|date("Y") }}{% if not same_year %}
+                  — {{ fields.data_fine|date("Y") }}
+                {% endif %}
+              {% elseif precision == "anno_mese" %}
+                {% if same_month %}
+                  {{ fields.data_inizio|date("F Y") }}
+                {% elseif same_year %}
+                  {{ fields.data_inizio|date("F") }} — {{
+                    fields.data_fine|date("F Y")
+                  }}
+                {% else %}
+                  {{ fields.data_inizio|date("F Y") }} — {{
+                    fields.data_fine|date("F Y")
+                  }}
+                {% endif %}
+              {% else %}
+                {% if same_month %}
+                  {{ fields.data_inizio|date("d") }} — {{
+                    fields.data_fine|date("d F Y")
+                  }}
+                {% elseif same_year %}
+                  {{ fields.data_inizio|date("d F") }} — {{
+                    fields.data_fine|date("d F Y")
+                  }}
+                {% else %}
+                  {{ fields.data_inizio|date("d F Y") }} — {{
+                    fields.data_fine|date("d F Y")
+                  }}
+                {% endif %}
+              {% endif %}
+            {% elseif fields.data_inizio %}
+              {{ fields.data_inizio|date(date_format) }}
+            {% else %}
+              {{ fields.data_fine|date(date_format) }}
+            {% endif %}
+          </p>
+        {% endif %}
+        {% if luogo %}
+          <p class="text-tight blur-in text-base font-semibold text-black">
+            {{ luogo|map(t => t.name)|join(" / ") }}
+          </p>
+        {% endif %}
+      </div>
+      <span class="blur-in relative block h-6 w-6 shrink-0 overflow-hidden">
+        <span
+          class="absolute inset-0 transition-transform duration-500 ease-in-out group-hover:translate-x-6"
+        >
+          {{
+            include("icons/generic/arrow-right.svg")|attr({ class: "size-6" })
+          }}
+        </span>
+        <span
+          class="absolute inset-0 -translate-x-6 transition-transform duration-500 ease-in-out group-hover:translate-x-0"
+        >
+          {{
+            include("icons/generic/arrow-right.svg")|attr({ class: "size-6" })
+          }}
+        </span>
+      </span>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,40 @@
+{% if component.cta_title or component.cta_desc or component.cta_link %}
+  <section
+    class="w-full {{ component.border_top ? "border-stroke border-t" : "" }} {{
+    component.border_bottom ? "border-stroke border-b" : ""
+    }}"
+  >
+    <div
+      class="flex w-full flex-col gap-4 px-6 py-20 xl:flex-row xl:items-start xl:justify-between xl:px-10 xl:py-30"
+    >
+      <div class="flex flex-col gap-4 xl:w-1/2">
+        {% if component.cta_title %}
+          <h4 class="heading-h4 blur-in font-semibold">{{ component.cta_title }}</h4>
+        {% endif %}
+        {% if component.cta_desc %}
+          <p class="blur-in text-xl text-black">{{ component.cta_desc }}</p>
+        {% endif %}
+      </div>
+      {% if component.cta_link %}
+        <div class="flex xl:w-1/2 xl:justify-end">
+          {{
+            include(
+              "components/button.twig",
+              {
+                label: component.cta_link.title,
+                variant: "default",
+                size: "lg",
+                as_link: true,
+                attributes: {
+                  href: component.cta_link.url,
+                  target: component.cta_link.target ?: "_self",
+                  class: "w-full xl:w-fit"
+                }
+              }
+            )
+          }}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endif %}

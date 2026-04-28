@@ -57,7 +57,7 @@
               {
                 news: item,
                 is_last: is_last,
-                extra_class: hide_last ? "hidden 3xl:block" : ""
+                extra_class: hide_last ? "hidden 3xl:flex" : ""
               }
             )
           }}
@@ -68,7 +68,7 @@
               {
                 film: item,
                 is_last: is_last,
-                extra_class: hide_last ? "hidden 3xl:block" : ""
+                extra_class: hide_last ? "hidden 3xl:flex" : ""
               }
             )
           }}
@@ -79,7 +79,18 @@
               {
                 progetto: item,
                 is_last: is_last,
-                extra_class: hide_last ? "hidden 3xl:block" : ""
+                extra_class: hide_last ? "hidden 3xl:flex" : ""
+              }
+            )
+          }}
+        {% elseif item.post_type == "evento" %}
+          {{
+            include(
+              "parts/cards/evento-card.twig",
+              {
+                evento: item,
+                is_last: is_last,
+                extra_class: hide_last ? "hidden 3xl:flex" : ""
               }
             )
           }}
@@ -90,7 +101,7 @@
               {
                 proiezione: item,
                 is_last: is_last,
-                extra_class: hide_last ? "hidden 3xl:block" : ""
+                extra_class: hide_last ? "hidden 3xl:flex" : ""
               }
             )
           }}

@@ -125,6 +125,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/media-displayer/media-displayer.php",
                     ),
+                Layout::make("CTA Bottom", "cta_bottom")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/cta-bottom/cta-bottom.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

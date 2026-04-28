@@ -1,18 +1,20 @@
 {% extends "base.twig" %}
 
-{% set progetto = function("get_field", "progetto", post.ID) %}
-{% set tipologia =
-  function("wp_get_post_terms", post.ID, "tipologia-progetto")
+{% set evento = function("get_field", "evento", post.ID) %}
+{% set tipologia = function("wp_get_post_terms", post.ID, "tipologia-evento") %}
+{% set luogo = function("wp_get_post_terms", post.ID, "luogo-evento") %}
+
+{% set progetto_fields = evento.usa_contenuti_progetto and evento.progetto_correlato
+  ? function("get_field", "progetto", evento.progetto_correlato.ID)
+  : null
 %}
-{% set target = function("wp_get_post_terms", post.ID, "target-progetto") %}
-{% set status = function("wp_get_post_terms", post.ID, "status-progetto") %}
-{% set luogo = function("wp_get_post_terms", post.ID, "luogo-progetto") %}
+{% set active_tabs = progetto_fields ? progetto_fields.tabs : evento.tabs %}
 
 {% set date_format = {
   anno: "Y",
   anno_mese: "F Y",
   anno_mese_giorno: "d F Y"
-}[progetto.precisione_date ?? "anno_mese_giorno"]
+}[evento.precisione_date ?? "anno_mese_giorno"]
   ?? "d F Y"
 %}
 
@@ -26,11 +28,11 @@
   <div class="border-b-stroke mx-auto grid grid-cols-3 border-b">
     {# Tabs — cols 1–2 #}
     <div class="col-span-3 xl:col-span-2">
-      {% if progetto.tabs %}
+      {% if active_tabs %}
         {{
           include(
             "components/tabs/tabs.twig",
-            { component: { tabs: progetto.tabs, full_width: true } }
+            { component: { tabs: active_tabs, full_width: true } }
           )
         }}
       {% endif %}
@@ -42,29 +44,18 @@
     >
       <h2 class="heading-h6 font-semibold">Informazioni</h2>
 
-      {% if progetto.periodo_inizio or progetto.periodo_fine %}
+      {% if evento.data_inizio or evento.data_fine %}
         <div class="flex flex-col gap-2">
           <span class="text-tight text-xl font-semibold text-black">
-            Periodo
+            Data
           </span>
           <span class="text-tight text-xl">
-            {% if progetto.periodo_inizio %}{{
-              progetto.periodo_inizio|date(date_format)
+            {% if evento.data_inizio %}{{
+              evento.data_inizio|date(date_format)
             }}{% endif %}
-            {% if progetto.periodo_fine %}
-              — {{ progetto.periodo_fine|date(date_format) }}
+            {% if evento.data_fine %}
+              — {{ evento.data_fine|date(date_format) }}
             {% endif %}
-          </span>
-        </div>
-      {% endif %}
-
-      {% if status %}
-        <div class="flex flex-col gap-2">
-          <span class="text-tight text-xl font-semibold text-black">
-            Status
-          </span>
-          <span class="text-tight text-xl">
-            {{ status|map(t => t.name)|join(" · ") }}
           </span>
         </div>
       {% endif %}
@@ -80,17 +71,6 @@
         </div>
       {% endif %}
 
-      {% if target %}
-        <div class="flex flex-col gap-2">
-          <span class="text-tight text-xl font-semibold text-black">
-            Target
-          </span>
-          <span class="text-tight text-xl">
-            {{ target|map(t => t.name)|join(" · ") }}
-          </span>
-        </div>
-      {% endif %}
-
       {% if luogo %}
         <div class="flex flex-col gap-2">
           <span class="text-tight text-xl font-semibold text-black">Luogo</span>
@@ -100,42 +80,31 @@
         </div>
       {% endif %}
 
-      {% if progetto.relatori_tutor %}
+      {% if evento.relatori_ospiti %}
         <div class="flex flex-col gap-2">
           <span class="text-tight text-xl font-semibold text-black">
-            Relatori / Tutor
+            Relatori / Ospiti
           </span>
           <span class="text-tight text-xl">
-            {{ progetto.relatori_tutor|map(r => r.nome)|join(" · ") }}
+            {{ evento.relatori_ospiti|map(r => r.nome)|join(" · ") }}
           </span>
         </div>
       {% endif %}
 
-      {% if progetto.beneficiari %}
+      {% if evento.descrizione_estesa %}
         <div class="flex flex-col gap-2">
           <span class="text-tight text-xl font-semibold text-black">
-            Beneficiari
+            Descrizione
           </span>
           <div class="prose text-tight max-w-none text-xl">
-            {{ progetto.beneficiari }}
+            {{ evento.descrizione_estesa }}
           </div>
         </div>
       {% endif %}
 
-      {% if progetto.restituzione_finale %}
-        <div class="flex flex-col gap-2">
-          <span class="text-tight text-xl font-semibold text-black">
-            Restituzione finale
-          </span>
-          <div class="prose text-tight max-w-none text-xl">
-            {{ progetto.restituzione_finale }}
-          </div>
-        </div>
-      {% endif %}
-
-      {% if progetto.links %}
+      {% if evento.links %}
         <div class="mt-auto flex flex-col gap-3">
-          {% for item in progetto.links %}
+          {% for item in evento.links %}
             {% if item.link %}
               {% include "components/button.twig" with {
                 as_link: true,
@@ -157,7 +126,7 @@
     </div>
   </div>
 
-  {% set galleria = function("get_field", "galleria", post.ID) %}
+  {% set galleria = function("get_field", "galleria_evento", post.ID) %}
   {% if galleria.items %}
     {{
       include(
@@ -167,7 +136,7 @@
     }}
   {% endif %}
 
-  {% set partners_displayer = function("get_field", "partners_displayer", post.ID) %}
+  {% set partners_displayer = function("get_field", "partners_displayer_evento", post.ID) %}
   {% if partners_displayer.items %}
     {{
       include(
@@ -176,10 +145,4 @@
       )
     }}
   {% endif %}
-
-  {% include "parts/cta-bottom.twig" with {
-    cta_title: function("get_field", "progetti_cta_titolo", "option"),
-    cta_desc: function("get_field", "progetti_cta_descrizione", "option"),
-    cta_link: function("get_field", "progetti_cta_link", "option")
-  } %}
 {% endblock content %}

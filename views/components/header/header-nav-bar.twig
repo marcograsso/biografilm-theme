@@ -86,5 +86,86 @@
     <!-- Industry -->
   {% elseif current_section == "campus" %}
     <!-- Campus -->
+    {% if menu_campus %}
+      <nav class="flex h-full items-stretch">
+        {% for item in menu_campus.items %}
+          {% set is_first = loop.first %}
+          {% set item_padding = is_first ? "pl-10 pr-5" : "px-5" %}
+          {% if item.children %}
+            <div
+              x-data="{ open: false }"
+              class="relative flex items-center items-stretch gap-2"
+            >
+              {% set toggle_label %}
+                {{- item.title -}}
+                {{-
+                  include("icons/generic/chevron-down.svg")|attr({
+                    class: "size-6! transition-transform duration-200",
+                    ":class": "open ? 'rotate-180' : ''"
+                  })
+                -}}
+              {% endset %}
+              {% include "components/button.twig" with {
+                variant: "nav",
+                label: toggle_label,
+                attributes: {
+                  "@click": "open = !open",
+                  type: "button",
+                  class: "text-tight h-full cursor-pointer select-none gap-1.5 rounded-none font-normal text-white! "
+                    ~ item_padding
+                }
+              } %}
+              <div
+                x-show="open"
+                x-cloak
+                @click.outside="open = false"
+                class="bg-red absolute top-full left-0 z-50 flex min-w-[180px] flex-col shadow-lg"
+              >
+                {% for child in item.children %}
+                  {% if child.url == '#no-link' %}
+                    <span
+                      class="text-tight inline-flex w-full items-center rounded-none text-base font-normal text-white! {{ item_padding }} py-3"
+                    >
+                      {{ child.title }}
+                    </span>
+                  {% else %}
+                    {% include "components/button.twig" with {
+                      as_link: true,
+                      variant: "nav",
+                      label: child.title,
+                      attributes: {
+                        href: child.url,
+                        class: "text-tight w-full justify-start rounded-none text-base font-normal text-white! "
+                          ~ item_padding
+                          ~ " py-3 h-auto"
+                      }
+                    } %}
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            {% if item.url == '#no-link' %}
+              <span
+                class="text-tight inline-flex h-full items-center rounded-none font-normal text-white! {{ item_padding }}"
+              >
+                {{ item.title }}
+              </span>
+            {% else %}
+              {% include "components/button.twig" with {
+                as_link: true,
+                variant: "nav",
+                label: item.title,
+                attributes: {
+                  href: item.url,
+                  class: "text-tight h-full rounded-none font-normal text-white! "
+                    ~ item_padding
+                }
+              } %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      </nav>
+    {% endif %}
   {% endif %}
 </div>

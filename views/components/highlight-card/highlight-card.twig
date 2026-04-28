@@ -82,6 +82,28 @@
   {% set location = null %}
   {% set data = null %}
   {% set orario = null %}
+{% elseif post_type == "evento" %}
+  {% set title = post.post_title %}
+  {% set fields = function("get_field", "evento", post_id) %}
+  {% set thumb_id = function("get_post_thumbnail_id", post_id) %}
+  {% set image_url = thumb_id
+    ? function("get_the_post_thumbnail_url", post_id, "full")
+    : null
+  %}
+  {% set fp_source_id = thumb_id %}
+  {% set evento_tipologia = function("wp_get_post_terms", post_id, "tipologia-evento") %}
+  {% set evento_luogo = function("wp_get_post_terms", post_id, "luogo-evento") %}
+  {% set evento_date_format = {
+    anno: "Y",
+    anno_mese: "F Y",
+    anno_mese_giorno: "d F Y"
+  }[fields.precisione_date ?? "anno_mese_giorno"] ?? "d F Y" %}
+  {% set preview = fields.descrizione_breve ?? null %}
+  {% set badges = [] %}
+  {% set sezione = null %}
+  {% set location = null %}
+  {% set data = null %}
+  {% set orario = null %}
 {% elseif post_type == "film" %}
   {% set film_id = post_id %}
   {% set title = post.post_title %}
@@ -176,6 +198,12 @@
           >
             {{ tipologia|map(t => t.name)|join(" · ") }}
           </p>
+        {% elseif post_type == "evento" and evento_tipologia %}
+          <p
+            class="text-tight blur-in text-sm font-semibold text-white uppercase"
+          >
+            {{ evento_tipologia|map(t => t.name)|join(" · ") }}
+          </p>
         {% elseif sezione %}
           <p
             class="text-tight blur-in text-sm font-semibold text-white uppercase"
@@ -196,7 +224,34 @@
           </p>
         {% endif %}
       </div>
-      {% if post_type == "progetto" and (fields.periodo_inizio or fields.periodo_fine or progetto_luogo) %}
+      {% if post_type == "evento" and (fields.data_inizio or fields.data_fine or evento_luogo) %}
+        <div class="flex flex-col gap-3">
+          {% if fields.data_inizio or fields.data_fine %}
+            {% set same_year = fields.data_inizio and fields.data_fine and fields.data_inizio|date("Y") == fields.data_fine|date("Y") %}
+            {% set same_month = same_year and fields.data_inizio|date("m") == fields.data_fine|date("m") %}
+            <p class="text-tight blur-in text-base font-semibold">
+              {% if fields.data_inizio and fields.data_fine %}
+                {% if same_month %}
+                  {{ fields.data_inizio|date("d") }} — {{ fields.data_fine|date("d F Y") }}
+                {% elseif same_year %}
+                  {{ fields.data_inizio|date("d F") }} — {{ fields.data_fine|date("d F Y") }}
+                {% else %}
+                  {{ fields.data_inizio|date(evento_date_format) }} — {{ fields.data_fine|date(evento_date_format) }}
+                {% endif %}
+              {% elseif fields.data_inizio %}
+                {{ fields.data_inizio|date(evento_date_format) }}
+              {% else %}
+                {{ fields.data_fine|date(evento_date_format) }}
+              {% endif %}
+            </p>
+          {% endif %}
+          {% if evento_luogo %}
+            <p class="text-tight blur-in text-base font-semibold">
+              {{ evento_luogo|map(t => t.name)|join(" / ") }}
+            </p>
+          {% endif %}
+        </div>
+      {% elseif post_type == "progetto" and (fields.periodo_inizio or fields.periodo_fine or progetto_luogo) %}
         <div class="flex flex-col gap-3">
           {% if fields.periodo_inizio or fields.periodo_fine %}
             <p class="text-tight blur-in text-base font-semibold">
