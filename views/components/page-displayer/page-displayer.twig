@@ -1,0 +1,100 @@
+<section class="w-full">
+  {% set borders = component.borders_group %}
+  <div class="3xl:grid-cols-4 grid w-full grid-cols-3">
+    <div
+      class="3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pt-20 pb-10 xl:col-span-1 xl:p-10! {{
+      borders.border_top or borders.border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.border_top ? "border-t" : "" }} {{
+      borders.border_bottom
+        ? "border-b"
+        : "border-b border-stroke xl:border-b-0"
+      }}"
+    >
+      {% if component.title %}
+        <h2 class="{{ component.title_class ? : "display-h2" }} blur-in">
+          {{ component.title }}
+        </h2>
+      {% endif %}
+      {% if component.link %}
+        <a
+          href="{{ component.link.url }}"
+          target="{{ component.link.target ? : "_self" }}"
+          class="blur-in text-tight text-red group flex items-center gap-2 text-xl font-semibold"
+        >
+          <span class="link-underline">{{ component.link.title }}</span>
+          {{
+            include("icons/generic/arrow-right.svg")|attr({
+              class: "size-6 transition-transform duration-500 ease-out group-hover:translate-x-2"
+            })
+          }}
+        </a>
+      {% endif %}
+    </div>
+
+    <div
+      class="3xl:col-span-3 col-span-3 xl:col-span-2 {{
+      borders.cards_border_top or borders.cards_border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.cards_border_top ? "border-t" : "" }} {{
+      borders.cards_border_bottom
+        ? "border-b"
+        : ""
+      }}"
+    >
+      {% for item in component.items %}
+        <div
+          class="border-stroke flex flex-col items-center justify-between border-b"
+        >
+          {% if item.image %}
+            <div
+              class="aspect-video w-full shrink-0 overflow-hidden xl:aspect-8/3"
+            >
+              <img
+                src="{{ item.image.url }}"
+                alt="{{ item.image.alt }}"
+                class="h-full w-full object-cover"
+              />
+            </div>
+          {% endif %}
+          <div
+            class="border-stroke flex flex-col gap-10 border-l px-6 py-10 xl:p-10"
+          >
+            <div class="flex flex-col gap-6">
+              {% if item.title %}
+                <h6 class="heading-h6 font-semibold text-black">
+                  {{ item.title }}
+                </h6>
+              {% endif %}
+              {% if item.description %}
+                <div class="text-xl text-black/80">
+                  {{ item.description|striptags }}
+                </div>
+              {% endif %}
+            </div>
+            {% if item.link %}
+              {{
+                include(
+                  "components/button.twig",
+                  {
+                    as_link: true,
+                    variant: "default",
+                    size: "lg",
+                    label: item.link.title,
+                    attributes: {
+                      href: item.link.url,
+                      target: item.link.target ? : "_self",
+                      class: "w-full"
+                    }
+                  }
+                )
+              }}
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>

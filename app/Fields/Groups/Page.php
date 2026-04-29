@@ -137,6 +137,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/page-access/page-access.php",
                     ),
+                Layout::make("Page Displayer", "page_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/page-displayer/page-displayer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
