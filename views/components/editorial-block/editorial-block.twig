@@ -7,13 +7,23 @@
   ? "xl:grid-cols-[2fr_3fr]"
   : component.column_layout == "50_50"
     ? "xl:grid-cols-2"
-    : "xl:grid-cols-[3fr_2fr]"
+    : component.column_layout == "1_3"
+      ? "xl:grid-cols-[1fr_2fr] 3xl:grid-cols-[1fr_3fr]"
+      : component.column_layout == "3_1"
+        ? "xl:grid-cols-[2fr_1fr] 3xl:grid-cols-[3fr_1fr]"
+        : "xl:grid-cols-[3fr_2fr]"
 %}
 {% set grid_gap = component.column_layout == "50_50" ? "xl:gap-20" : "" %}
+{% set content_self = component.content_align == "center"
+  ? "xl:self-center"
+  : "xl:self-start"
+%}
 
 <section class="w-full">
   <div class="grid grid-cols-1 {{ grid_cols }} {{ grid_gap }}">
-    <div class="{{ image_right ? "xl:order-last" : "" }} relative overflow-hidden">
+    <div
+      class="{{ image_right ? "xl:order-last" : "" }} relative overflow-hidden"
+    >
       {% if component.image %}
         <div
           class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
@@ -21,13 +31,15 @@
         <img
           src="{{ component.image.url }}"
           alt="{{ component.image.alt }}"
-          class="aspect-3/4 h-full w-full object-cover xl:aspect-auto"
+          class="aspect-3/4 h-full w-full object-cover lg:aspect-video 2xl:aspect-2/1"
         />
       {% endif %}
     </div>
 
     <div
-      class="flex flex-col gap-6 self-start px-6 pt-20 pb-10 xl:px-10 xl:py-0"
+      class="flex flex-col gap-6 self-start px-6 pt-20 pb-10 xl:px-10 xl:py-0 {{
+      content_self
+      }}"
     >
       {% if component.heading %}
         <h2 class="{{ heading_class }} blur-in">{{ component.heading }}</h2>
@@ -40,6 +52,32 @@
           class="prose text-black0 blur-in max-w-none text-xl leading-[150%]"
         >
           {{ component.content }}
+        </div>
+      {% endif %}
+      {% if component.links %}
+        <div class="mt-10 flex flex-col gap-6">
+          {% for item in component.links %}
+            {% if item.link %}
+              {{
+                include(
+                  "components/button.twig",
+                  {
+                    as_link: true,
+                    size: "lg",
+                    variant: item.stile == "secondary"
+                      ? "outline"
+                      : item.stile == "link" ? "link" : "default",
+                    label: item.link.title,
+                    attributes: {
+                      href: item.link.url,
+                      target: item.link.target ? : "_self",
+                      class: "w-full"
+                    }
+                  }
+                )
+              }}
+            {% endif %}
+          {% endfor %}
         </div>
       {% endif %}
     </div>

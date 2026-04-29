@@ -24,7 +24,7 @@
         {% endif %}
 
         {% if item.logo %}
-          <div class="absolute bottom-0 left-0 z-10 aspect-square h-26 xl:h-70">
+          <div class="blur-in absolute bottom-0 left-0 z-10 aspect-square h-26 xl:h-70">
             <img
               src="{{ item.logo.url }}"
               alt="{{ item.logo.alt }}"
@@ -43,11 +43,11 @@
       >
         <div class="flex flex-col gap-6">
           {% if item.title %}
-            <h5 class="heading-h5 font-semibold">{{ item.title }}</h5>
+            <h5 class="heading-h5 font-semibold blur-in">{{ item.title }}</h5>
           {% endif %}
 
           {% if item.description %}
-            <div class="prose text-xl text-black/80">
+            <div class="prose text-xl text-black/80 blur-in">
               {{ item.description }}
             </div>
           {% endif %}
@@ -65,7 +65,7 @@
                 attributes: {
                   href: item.link.url,
                   target: item.link.target ? : "_self",
-                  class: "w-full"
+                  class: "w-full blur-in"
                 }
               }
             )

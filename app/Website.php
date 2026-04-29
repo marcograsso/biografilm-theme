@@ -184,10 +184,12 @@ class Website extends Site
             $breadcrumbs[] = ["url" => "", "title" => "Ospitalità"];
         } elseif (is_post_type_archive('evento')) {
             $campus_page = get_page_by_path('campus');
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
             $breadcrumbs[] = ["url" => "", "title" => "Eventi"];
         } elseif (is_post_type_archive('progetto')) {
             $campus_page = get_page_by_path('campus');
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
             $breadcrumbs[] = ["url" => "", "title" => "Progetti e formazione"];
         } elseif ($post && !is_front_page()) {
@@ -214,11 +216,13 @@ class Website extends Site
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } elseif (get_post_type($post->ID) === 'evento') {
                 $campus_page = get_page_by_path('campus');
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('evento'), "title" => "Eventi"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } elseif (get_post_type($post->ID) === 'progetto') {
                 $campus_page = get_page_by_path('campus');
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('progetto'), "title" => "Progetti e formazione"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
