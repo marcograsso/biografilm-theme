@@ -1,0 +1,77 @@
+<section class="grid w-full grid-cols-1 xl:grid-cols-2">
+  {% for item in component.items %}
+    <div
+      class="col-span-1 {{ item.border_top ? "border-stroke border-t" : "" }} {{
+      item.border_bottom
+        ? "border-stroke border-b"
+        : ""
+      }}"
+    >
+      <div
+        class="relative h-70 overflow-hidden {{
+        item.hide_background_desktop
+          ? "xl:[&>img]:hidden "
+            ~ (loop.index is odd ? "border-stroke xl:border-r" : "")
+          : ""
+        }}"
+      >
+        {% if item.background %}
+          <img
+            src="{{ item.background.url }}"
+            alt="{{ item.background.alt }}"
+            class="absolute inset-0 h-full w-full object-cover"
+          />
+        {% endif %}
+
+        {% if item.logo %}
+          <div class="absolute bottom-0 left-0 z-10 aspect-square h-26 xl:h-70">
+            <img
+              src="{{ item.logo.url }}"
+              alt="{{ item.logo.alt }}"
+              class="aspect-square w-auto object-contain"
+            />
+          </div>
+        {% endif %}
+      </div>
+
+      <div
+        class="flex flex-col gap-10 px-6 py-10 xl:px-10 xl:pt-10 xl:pb-20 {{
+        loop.index is odd
+          ? "border-stroke xl:border-r"
+          : ""
+        }}"
+      >
+        <div class="flex flex-col gap-6">
+          {% if item.title %}
+            <h5 class="heading-h5 font-semibold">{{ item.title }}</h5>
+          {% endif %}
+
+          {% if item.description %}
+            <div class="prose text-xl text-black/80">
+              {{ item.description }}
+            </div>
+          {% endif %}
+        </div>
+
+        {% if item.link %}
+          {{
+            include(
+              "components/button.twig",
+              {
+                as_link: true,
+                variant: "default",
+                size: "lg",
+                label: item.link.title,
+                attributes: {
+                  href: item.link.url,
+                  target: item.link.target ? : "_self",
+                  class: "w-full"
+                }
+              }
+            )
+          }}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</section>

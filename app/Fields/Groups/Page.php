@@ -131,6 +131,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/cta-bottom/cta-bottom.php",
                     ),
+                Layout::make("Page Access", "page_access")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/page-access/page-access.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,
