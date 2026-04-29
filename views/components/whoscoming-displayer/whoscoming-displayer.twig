@@ -1,0 +1,72 @@
+<section class="w-full">
+  {% set borders = component.borders_group %}
+  {% set items = get_whoscoming_random(component.tipologie) %}
+  {% if component.title or component.link %}
+    <div
+      class="flex flex-col items-start justify-between gap-y-3 px-6 py-10 xl:flex-row xl:items-center xl:px-10 xl:pt-30 {{
+      borders.header_border_top or borders.header_border_bottom
+        ? "border-stroke"
+        : ""
+      }} {{ borders.header_border_top ? "border-t" : "" }} {{
+      borders.header_border_bottom ? "border-b" : ""
+      }}"
+    >
+      {% if component.title %}
+        <h2 class="display-h2 blur-in">{{ component.title }}</h2>
+      {% endif %}
+      {% if component.link %}
+        <a
+          href="{{ component.link.url }}"
+          target="{{ component.link.target ? : "_self" }}"
+          class="blur-in text-tight text-red group flex items-center gap-2 text-xl font-semibold"
+        >
+          <span class="link-underline">{{ component.link.title }}</span>
+          {{
+            include("icons/generic/arrow-right.svg")|attr({
+              class: "size-6 transition-transform duration-500 ease-out group-hover:translate-x-2"
+            })
+          }}
+        </a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <div
+    class="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 {{
+    borders.cards_border_top or borders.cards_border_bottom
+      ? "border-stroke"
+      : ""
+    }} {{ borders.cards_border_top ? "border-t" : "" }} {{
+    borders.cards_border_bottom ? "border-b" : ""
+    }}"
+  >
+    {% set count = items|length %}
+    {% for person in items %}
+      {{
+        include(
+          "parts/cards/whos-coming-card.twig",
+          { person: person, extra_class: "" }
+        )
+      }}
+    {% endfor %}
+
+    {# 2-col fillers #}
+    {% if count % 2 == 1 %}
+      <div
+        class="border-stroke col-span-1 hidden border-l md:block xl:hidden"
+      ></div>
+    {% endif %}
+
+    {# 4-col fillers #}
+    {% if count % 4 == 1 %}
+      <div class="border-stroke col-span-1 hidden border-l xl:block"></div>
+      <div class="col-span-1 hidden xl:block"></div>
+      <div class="col-span-1 hidden xl:block"></div>
+    {% elseif count % 4 == 2 %}
+      <div class="border-stroke col-span-1 hidden border-l xl:block"></div>
+      <div class="col-span-1 hidden xl:block"></div>
+    {% elseif count % 4 == 3 %}
+      <div class="border-stroke col-span-1 hidden border-l xl:block"></div>
+    {% endif %}
+  </div>
+</section>

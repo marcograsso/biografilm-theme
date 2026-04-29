@@ -143,6 +143,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/page-displayer/page-displayer.php",
                     ),
+                Layout::make("Who's Coming Displayer", "whoscoming_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/whoscoming-displayer/whoscoming-displayer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

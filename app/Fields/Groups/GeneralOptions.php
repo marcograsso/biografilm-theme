@@ -34,6 +34,10 @@ register_extended_field_group([
         Textarea::make("Descrizione", "eventi_descrizione")->helperText(
             "Testo introduttivo mostrato nella pagina archivio Eventi.",
         ),
+        Tab::make("Who's Coming"),
+        Link::make("Documento", "whoscoming_documento")->helperText(
+            "Link al documento scaricabile dalla pagina archivio Who's Coming.",
+        )->format("array"),
     ],
     "style" => "default",
 ]);

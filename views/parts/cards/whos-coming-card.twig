@@ -1,0 +1,92 @@
+{% set permalink = function("get_permalink", person.ID) %}
+{% set fields = function("get_field", "whos_coming", person.ID) %}
+{% set accredito =
+  function("wp_get_post_terms", person.ID, "accredito-whos-coming")
+%}
+{% set professione_tax =
+  function("wp_get_post_terms", person.ID, "professione-whos-coming")
+%}
+{% set paese = function("wp_get_post_terms", person.ID, "paese-whos-coming") %}
+
+{% set thumb_id = function("get_post_thumbnail_id", person.ID) %}
+{% set image_url = thumb_id
+  ? function("get_the_post_thumbnail_url", person.ID, "large")
+  : null
+%}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
+{% set fp_style = fp
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
+  : null
+%}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke relative col-span-1 flex flex-col border-b {{
+  extra_class
+  }}"
+>
+  <div
+    class="overlay-blur overlay absolute z-30 h-full w-full bg-transparent backdrop-blur-[50px]"
+  ></div>
+
+  <div class="relative aspect-video w-full overflow-hidden bg-gray-200">
+    <div
+      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-700 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px]"
+    ></div>
+    <img
+      src="{{
+      image_url
+        ?
+        : site.theme.link ~ "/assets/images/fallback-img.jpg"
+      }}"
+      alt="{{ person.post_title }}"
+      class="h-full w-full object-cover transition-all duration-700 group-hover:scale-[1.1]"
+      style="{{ fp_style }}"
+    />
+  </div>
+
+  <div class="border-l-stroke flex flex-1 flex-col gap-3 border-l px-6 py-10">
+    {% if accredito %}
+      <p class="text-tight text-red blur-in text-sm font-semibold uppercase">
+        {{ accredito|map(t => t.name)|join(" · ") }}
+      </p>
+    {% endif %}
+
+    <h5 class="text-tight blur-in text-2xl font-semibold">
+      {{ person.post_title }}
+    </h5>
+
+    <div class="flex flex-1 flex-col justify-between gap-4">
+      <div class="flex flex-col gap-1">
+        {% if fields.azienda.titolo %}
+          <p class="text-tight blur-in line-clamp-1 text-base text-black">
+            {{ fields.azienda.titolo }}
+          </p>
+        {% endif %}
+        {% if fields.professione_libera %}
+          <p
+            class="text-tight blur-in line-clamp-1 text-base font-semibold text-black"
+          >
+            {{ fields.professione_libera }}
+          </p>
+        {% elseif professione_tax %}
+          <p
+            class="text-tight blur-in line-clamp-1 text-base font-semibold text-black"
+          >
+            {{ professione_tax|map(t => t.name)|join(", ") }}
+          </p>
+        {% endif %}
+      </div>
+      {% if paese %}
+        <p class="text-tight blur-in text-base text-black/60">
+          {{ paese|map(t => t.name)|join(", ") }}
+        </p>
+      {% endif %}
+    </div>
+  </div>
+</a>

@@ -1,0 +1,177 @@
+{% extends "base.twig" %}
+
+{% set whos_coming = function("get_field", "whos_coming", post.ID) %}
+{% set accredito =
+  function("wp_get_post_terms", post.ID, "accredito-whos-coming")
+%}
+{% set professione_tax =
+  function("wp_get_post_terms", post.ID, "professione-whos-coming")
+%}
+{% set paese = function("wp_get_post_terms", post.ID, "paese-whos-coming") %}
+
+{% block hero %}
+  <div class="mt-[108px] w-full px-6 py-20 xl:px-10 xl:py-20">
+    <div class="flex flex-col gap-6 xl:w-2/3">
+      {{ include("parts/breadcrumbs.twig") }}
+      <h1 class="display-h1-news blur-in">{{ post.title }}</h1>
+    </div>
+  </div>
+{% endblock hero %}
+
+{% block content %}
+  <article>
+    <div class="flex flex-col gap-10 xl:w-2/3 xl:gap-12">
+      {% if post.thumbnail %}
+        {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
+        {% set fp = thumb_id
+          ? function("get_post_meta", thumb_id, "focalpoint", true)
+          : null
+        %}
+        {% set fp_style = fp
+          ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+            ~ ((fp.top * 100)|round)
+            ~ "%;"
+          : null
+        %}
+        <div class="aspect-video w-full overflow-hidden">
+          <img
+            src="{{ post.thumbnail.src("large") }}"
+            alt="{{ post.thumbnail.alt }}"
+            class="h-full w-full object-cover"
+            style="{{ fp_style }}"
+          />
+        </div>
+      {% endif %}
+
+      {# Info table #}
+      <div
+        class="grid grid-cols-[auto_1fr] px-6 lg:grid-cols-[minmax(auto,_220px)_1fr] xl:px-10"
+      >
+        <div class="contents">
+          <span
+            class="blur-in border-stroke text-tight border-b pr-8 pb-6 text-base lg:pr-16 lg:text-xl"
+          >
+            Nome
+          </span>
+          <span
+            class="blur-in border-stroke text-tight border-b pb-6 text-base font-semibold lg:text-xl"
+          >
+            {{ post.title }}
+          </span>
+        </div>
+        {% if whos_coming.professione_libera %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Professione
+            </span>
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ whos_coming.professione_libera }}
+            </span>
+          </div>
+        {% elseif professione_tax %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Professione
+            </span>
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ professione_tax|map(t => t.name)|join(", ") }}
+            </span>
+          </div>
+        {% endif %}
+        {% if whos_coming.azienda.titolo %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Azienda
+            </span>
+            <span class="blur-in border-stroke text-tight border-b py-6">
+              <span
+                class="mb-2 block text-base font-semibold text-black lg:text-xl"
+              >
+                {{ whos_coming.azienda.titolo }}
+              </span>
+              {% if whos_coming.azienda.descrizione %}
+                <span
+                  class="block text-base leading-[150%] font-normal text-black/80"
+                >
+                  {{ whos_coming.azienda.descrizione }}
+                </span>
+              {% endif %}
+            </span>
+          </div>
+        {% endif %}
+        {% if paese %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Paese
+            </span>
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ paese|map(t => t.name)|join(", ") }}
+            </span>
+          </div>
+        {% endif %}
+        {% if accredito %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Accredito
+            </span>
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {{ accredito|map(t => t.name)|join(", ") }}
+            </span>
+          </div>
+        {% endif %}
+        {% if whos_coming.link_utili %}
+          <div class="contents">
+            <span
+              class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
+            >
+              Link utili
+            </span>
+            <div
+              class="blur-in border-stroke flex flex-wrap items-center border-b py-6 text-base font-semibold lg:text-xl"
+            >
+              {% for item in whos_coming.link_utili %}
+                {% if item.link %}
+                  <a
+                    href="{{ item.link.url }}"
+                    target="{{ item.link.target ? : "_self" }}"
+                    class="text-red link-underline text-tight"
+                  >
+                    {{ item.link.title }}
+                  </a>{% if not loop.last %}
+                    <span class="text-red mr-1">,</span>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      {% if whos_coming.testo %}
+        <div
+          class="prose-content prose border-stroke max-w-none px-6 pb-20 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-30"
+        >
+          {{ whos_coming.testo }}
+        </div>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}
