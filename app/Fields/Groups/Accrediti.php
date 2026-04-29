@@ -10,7 +10,10 @@ $tickets_fields = require get_stylesheet_directory() .
 
 register_extended_field_group([
     "title" => "Accrediti",
-    "location" => [Location::where("post_slug", "==", "tickets")],
+    "location" => [
+        Location::where("post_slug", "==", "tickets"),
+        Location::where("post_slug", "==", "tickets-industry"),
+    ],
     "fields" => [
         Group::make("Accrediti", "accrediti")
             ->fields($tickets_fields),

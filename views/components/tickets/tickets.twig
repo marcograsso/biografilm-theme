@@ -28,7 +28,7 @@
               ? ""
               : "border-b"
             }} {{
-            ticket.description_title or ticket.description
+            ticket.sub_tickets or ticket.description_title or ticket.description
               ? "gap-6"
               : "gap-3"
             }}"
@@ -40,7 +40,7 @@
                 <div class="flex items-start justify-between gap-4">
                   {% if ticket.name %}
                     <div
-                      class="text-tight prose heading-h6 [&_a]:hover:text-black-hover [&_a]:active:text-black-active font-semibold text-black [&_a]:underline-offset-5"
+                      class="text-tight prose heading-h6 [&_a]:hover:text-black-hover [&_a]:active:text-black-active font-semibold text-black [&_a]:underline [&_a]:underline-offset-5"
                     >
                       {{ ticket.name|raw }}
                     </div>
@@ -53,24 +53,24 @@
                     </span>
                   {% endif %}
                 </div>
-                {% if ticket.subtitle or ticket.subtitle_price %}
+                {% for sub in ticket.sub_tickets %}
                   <div class="flex items-start justify-between gap-4">
-                    {% if ticket.subtitle %}
+                    {% if sub.name %}
                       <div
-                        class="[&_p]:text-tight text-2xl leading-[150%] text-black/80"
+                        class="[&_p]:text-tight [&_a]:hover:text-black-hover [&_a]:active:text-black-active text-2xl leading-[150%] text-black/80 [&_a]:underline [&_a]:underline-offset-5"
                       >
-                        {{ ticket.subtitle|raw }}
+                        {{ sub.name|raw }}
                       </div>
                     {% endif %}
-                    {% if ticket.subtitle_price %}
+                    {% if sub.price %}
                       <span
                         class="text-tight heading-h6 block text-right text-2xl font-semibold"
                       >
-                        {{ ticket.subtitle_price }}
+                        {{ sub.price }}
                       </span>
                     {% endif %}
                   </div>
-                {% endif %}
+                {% endfor %}
               </div>
               {# Chevron toggle #}
               {% if ticket.description_title or ticket.description %}

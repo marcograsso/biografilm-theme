@@ -77,7 +77,7 @@
     >
       {% set col_units = 0 %}
       {% for item in component.items %}
-        {% set col_units = col_units + item.wide ? 2 : 1 %}
+        {% set col_units = col_units + (item.wide ? 2 : 1) %}
       {% endfor %}
       {% set f2 = (2 - col_units % 2) % 2 %}
       {% set f3 = (3 - col_units % 3) % 3 %}

@@ -53,7 +53,23 @@
   <div class="border-l-stroke flex flex-1 flex-col gap-3 border-l px-6 py-10">
     {% if accredito %}
       <p class="text-tight text-red blur-in text-sm font-semibold uppercase">
-        {{ accredito|map(t => t.name)|join(" · ") }}
+        {% set names = accredito|map(t => t.name) %}
+        {% if names|length > 1 and "|" in names|first %}
+          {% set first_prefix = names|first|split(" | ")|first %}
+          {% set all_same_prefix = true %}
+          {% for name in names %}
+            {% if name|split(" | ")|first != first_prefix %}
+              {% set all_same_prefix = false %}
+            {% endif %}
+          {% endfor %}
+          {% if all_same_prefix %}
+            {{- first_prefix ~ " | " ~ names|map(n => n|split(" | ")|last)|join(" & ") -}}
+          {% else %}
+            {{- names|join(" · ") -}}
+          {% endif %}
+        {% else %}
+          {{- names|join(" · ") -}}
+        {% endif %}
       </p>
     {% endif %}
 

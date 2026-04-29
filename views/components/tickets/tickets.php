@@ -18,7 +18,7 @@ return [
         ->collapsed("name")
         ->button("Aggiungi biglietto")
         ->fields([
-            Tab::make("Biglietto", "biglietto_tab"),
+            Tab::make("Biglietto standard", "biglietto_tab"),
             WYSIWYGEditor::make("Nome", "name")
 
                 ->toolbar(["bold", "italic", "link"])
@@ -27,14 +27,20 @@ return [
                 ->withSettings(["acfe_wysiwyg_height" => 60]),
             Text::make("Prezzo", "price"),
 
-            Tab::make("Sottotitolo", "sottotitolo_tab"),
-            WYSIWYGEditor::make("Sottotitolo", "subtitle")
-
-                ->toolbar(["bold", "italic", "link"])
-                ->tabs("all")
-                ->disableMediaUpload()
-                ->withSettings(["acfe_wysiwyg_height" => 100]),
-            Text::make("Prezzo", "subtitle_price"),
+            Tab::make("Sub-biglietti", "sub_biglietti_tab"),
+            Repeater::make("Sub-biglietti", "sub_tickets")
+                ->layout("block")
+                ->collapsed("name")
+                ->button("Aggiungi sub-biglietto")
+                ->fields([
+                    WYSIWYGEditor::make("Nome", "name")
+                        ->toolbar(["bold", "italic", "link"])
+                        ->tabs("all")
+                        ->disableMediaUpload()
+                        ->withSettings(["acfe_wysiwyg_height" => 60])
+                        ->column(70),
+                    Text::make("Prezzo", "price")->column(30),
+                ]),
 
             Tab::make("Descrizione", "description_tab"),
             Text::make("Titolo", "description_title")->column(50),

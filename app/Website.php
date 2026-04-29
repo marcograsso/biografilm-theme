@@ -384,6 +384,35 @@ class Website extends Site
      *
      * @param Twig\Environment $twig get extension.
      */
+    #[Filter("acf/load_field/name=page_components")]
+    public function inject_anchor_field(array $field): array
+    {
+        if (empty($field["layouts"])) {
+            return $field;
+        }
+
+        foreach ($field["layouts"] as &$layout) {
+            $layout["sub_fields"][] = [
+                "key"   => "field_anchor_tab_" . $layout["key"],
+                "label" => "Impostazioni",
+                "name"  => "impostazioni_tab",
+                "type"  => "tab",
+            ];
+            $layout["sub_fields"][] = [
+                "key"         => "field_anchor_" . $layout["key"],
+                "label"       => "Ancora (ID)",
+                "name"        => "anchor",
+                "type"        => "text",
+                "instructions" => "ID per i link ancora. Inserisci senza il simbolo #.",
+                "placeholder" => "es: sezione-contatti",
+                "prepend"     => "#",
+                "wrapper"     => ["width" => "25"],
+            ];
+        }
+
+        return $field;
+    }
+
     #[Filter("timber/twig")]
     public function add_to_twig($twig)
     {
