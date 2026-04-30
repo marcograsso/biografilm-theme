@@ -3,6 +3,7 @@
 use Extended\ACF\Fields\Group;
 use Extended\ACF\Fields\Link;
 use Extended\ACF\Fields\Relationship;
+use Extended\ACF\Fields\Select;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\TrueFalse;
@@ -14,12 +15,16 @@ return [
 
     Tab::make("Contenuto"),
     Relationship::make("Contents", "items")
-        ->postTypes(["contents-doc"])
-        ->filters(["search"])
+        ->postTypes(["contents-doc", "contents-drama"])
+        ->filters(["search", "post_type"])
         ->elements(["featured_image"])
         ->minPosts(1),
 
     Tab::make("Stile"),
+    Select::make("Colonne", "colonne")
+        ->choices(["4" => "4 colonne", "3" => "3 colonne"])
+        ->default("4")
+        ->wrapper(["width" => 25]),
     Group::make("Bordi", "borders_group")
         ->layout("row")
         ->fields([

@@ -4,13 +4,14 @@
   {{
     include(
       "components/hero/hero.twig",
-      { hero_title: "Contents", hero_title_style: "primary" }
+      { hero_title: "Drama", hero_title_style: "primary" }
     )
   }}
 {% endblock hero %}
 
 {% block content %}
   {% include "parts/archive-contents.twig" with {
-    options_key: "contents_doc_intro"
+    options_key: "contents_drama_intro",
+    xl_cols: 3
   } %}
 {% endblock content %}

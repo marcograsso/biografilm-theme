@@ -1,0 +1,51 @@
+{% set intro = function("get_field", options_key, "option") %}
+{% if intro %}
+  {{
+    include(
+      "components/text-displayer/text-displayer.twig",
+      { component: intro }
+    )
+  }}
+{% endif %}
+
+<div class="facetwp-template">
+  <div
+    class="border-stroke grid w-full grid-cols-1 border-t md:grid-cols-2 {{
+    xl_cols == 3 ? "xl:grid-cols-3" : "xl:grid-cols-4"
+    }}"
+  >
+    {% for post in posts %}
+      {{
+        include(
+          "parts/cards/contents-card.twig",
+          { doc: post, extra_class: "" }
+        )
+      }}
+    {% else %}
+      <p
+        class="text-tight col-span-full py-30 text-center text-xl font-semibold text-black"
+      >
+        Nessun documento trovato.
+      </p>
+    {% endfor %}
+
+    {# 2-col fillers #}
+    {% set count = posts|length %}
+    {% if count % 2 == 1 %}
+      <div class="border-stroke col-span-1 hidden border-l md:block xl:hidden"></div>
+    {% endif %}
+
+    {# xl-col fillers #}
+    {% set cols = xl_cols ?? 4 %}
+    {% set remainder = count % cols %}
+    {% if remainder > 0 %}
+      {% for i in 1..(cols - remainder) %}
+        <div class="{% if loop.first %}border-stroke border-l {% endif %}col-span-1 hidden xl:block"></div>
+      {% endfor %}
+    {% endif %}
+  </div>
+</div>
+
+{% include "parts/pagination.twig" with {
+  pagination: posts.pagination({ show_all: false, mid_size: 3, end_size: 2 })
+} %}

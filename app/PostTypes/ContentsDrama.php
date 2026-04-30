@@ -13,12 +13,12 @@ use Extended\ACF\Fields\Textarea;
 use Extended\ACF\Fields\WYSIWYGEditor;
 use Extended\ACF\Location;
 
-class ContentsDoc extends \Timber\Post
+class ContentsDrama extends \Timber\Post
 {
     private static $names = [
-        "singular" => "Content Doc",
-        "plural" => "Contents Doc",
-        "slug" => "contents-doc",
+        "singular" => "Content Drama",
+        "plural" => "Contents Drama",
+        "slug" => "contents-drama",
     ];
 
     public static function register()
@@ -39,13 +39,13 @@ class ContentsDoc extends \Timber\Post
             "/views/components/tabs/tabs.php";
 
         register_extended_field_group([
-            "title" => "Content Doc",
+            "title" => "Content Drama",
             "location" => [Location::where("post_type", self::$names["slug"])],
             "hide_on_screen" => ["the_content"],
             "style" => "default",
             "position" => "normal",
             "fields" => [
-                Group::make("Content Doc", "content_doc")
+                Group::make("Content Drama", "content_doc")
                     ->layout("block")
                     ->fields([
                         Tab::make("Generali", "generali_tab"),
@@ -102,20 +102,20 @@ class ContentsDoc extends \Timber\Post
         $args = [
             "menu_icon" => "dashicons-video-alt2",
             "menu_position" => null,
-            "rewrite" => ["slug" => "industry/bio-to-b-doc/contents"],
+            "rewrite" => ["slug" => "industry/bio-to-b-drama/contents"],
             "supports" => ["title", "editor", "thumbnail"],
             "labels" => [
-                "name" => "Contents Doc",
-                "singular_name" => "Content Doc",
+                "name" => "Contents Drama",
+                "singular_name" => "Content Drama",
                 "add_new" => "Aggiungi nuovo",
-                "add_new_item" => "Aggiungi nuovo content doc",
-                "edit_item" => "Modifica content doc",
-                "new_item" => "Nuovo content doc",
-                "view_item" => "Visualizza content doc",
-                "search_items" => "Cerca contents doc",
-                "not_found" => "Nessun content doc trovato",
-                "not_found_in_trash" => "Nessun content doc nel cestino",
-                "all_items" => "Tutti i contents doc",
+                "add_new_item" => "Aggiungi nuovo content drama",
+                "edit_item" => "Modifica content drama",
+                "new_item" => "Nuovo content drama",
+                "view_item" => "Visualizza content drama",
+                "search_items" => "Cerca contents drama",
+                "not_found" => "Nessun content drama trovato",
+                "not_found_in_trash" => "Nessun content drama nel cestino",
+                "all_items" => "Tutti i contents drama",
             ],
         ];
 

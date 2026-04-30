@@ -41,18 +41,16 @@
       }}"
     >
       {% set count = component.items|length %}
-      {% set show_nav = count > 1 %}
       <div
-        class="swiper contents-displayer-swiper {{
-        show_nav ? "contents-displayer-swiper--has-nav" : ""
-        }}"
+        class="swiper contents-displayer-swiper contents-displayer-swiper--has-nav"
+        data-cols="{{ component.colonne ?? '4' }}"
       >
         <div class="swiper-wrapper">
           {% for doc in component.items %}
             <div class="swiper-slide">
               {{
                 include(
-                  "parts/cards/contents-doc-card.twig",
+                  "parts/cards/contents-card.twig",
                   {
                     doc: doc,
                     extra_class: (loop.last and count < 4) ? "border-r" : ""
@@ -62,19 +60,17 @@
             </div>
           {% endfor %}
         </div>
-        {% if show_nav %}
-          <div class="hero-carousel-nav contents-displayer-nav border-b-0">
-            <button
-              class="swiper-button-prev"
-              aria-label="Precedente"
-            ></button>
-            <div class="swiper-pagination" role="tablist"></div>
-            <button
-              class="swiper-button-next"
-              aria-label="Successivo"
-            ></button>
-          </div>
-        {% endif %}
+        <div class="hero-carousel-nav contents-displayer-nav border-b-0">
+          <button
+            class="swiper-button-prev"
+            aria-label="Precedente"
+          ></button>
+          <div class="swiper-pagination" role="tablist"></div>
+          <button
+            class="swiper-button-next"
+            aria-label="Successivo"
+          ></button>
+        </div>
       </div>
     </div>
   {% endif %}

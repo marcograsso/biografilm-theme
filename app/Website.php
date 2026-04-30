@@ -34,6 +34,7 @@ class Website extends Site
         PostTypes\Eventi::register();
         PostTypes\WhosComing::register();
         PostTypes\ContentsDoc::register();
+        PostTypes\ContentsDrama::register();
     }
 
     #[Action("init")]
@@ -147,11 +148,19 @@ class Website extends Site
         $context["menu_campus"] = Timber::get_menu("campus-it");
         $context["menu_submenu"] = Timber::get_menu("submenu-it");
         $context["current_url"] = URLHelper::get_current_url();
-        $context["header_show_date_location"] = get_field("header_show_date_location", "option");
-        $context["header_date"] = get_field("header_date", "option") ?: "5 — 15.06.2026";
-        $context["header_location"] = get_field("header_location", "option") ?: "Bologna";
+        $context["header_show_date_location"] = get_field(
+            "header_show_date_location",
+            "option",
+        );
+        $context["header_date"] =
+            get_field("header_date", "option") ?: "5 — 15.06.2026";
+        $context["header_location"] =
+            get_field("header_location", "option") ?: "Bologna";
         $context["footer_image"] = get_field("footer_image", "option");
-        $context["footer_image_mobile"] = get_field("footer_image_mobile", "option");
+        $context["footer_image_mobile"] = get_field(
+            "footer_image_mobile",
+            "option",
+        );
         $context["mapbox_token"] = get_field("mapbox_api_key", "option");
         $context["environment"] = $this->vite->environment;
 
@@ -167,180 +176,402 @@ class Website extends Site
                     break;
                 }
             }
-        } elseif (is_post_type_archive(["progetto", "evento"]) || is_singular(["progetto", "evento"])) {
+        } elseif (
+            is_post_type_archive(["progetto", "evento"]) ||
+            is_singular(["progetto", "evento"])
+        ) {
             $section = "campus";
-        } elseif (is_post_type_archive("whos-coming") || is_singular("whos-coming")
-            || is_post_type_archive("contents-doc") || is_singular("contents-doc")) {
+        } elseif (
+            is_post_type_archive("whos-coming") ||
+            is_singular("whos-coming") ||
+            is_post_type_archive("contents-doc") ||
+            is_singular("contents-doc") ||
+            is_post_type_archive("contents-drama") ||
+            is_singular("contents-drama")
+        ) {
             $section = "industry";
         }
         $context["current_section"] = $section;
 
         // Build breadcrumbs from page hierarchy
         $breadcrumbs = [];
-        if (is_post_type_archive('sezione')) {
+        if (is_post_type_archive("sezione")) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
             $breadcrumbs[] = ["url" => "", "title" => "Sezioni"];
-        } elseif (is_post_type_archive('film')) {
+        } elseif (is_post_type_archive("film")) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
             $breadcrumbs[] = ["url" => "", "title" => "Tutti i film"];
-        } elseif (is_post_type_archive('news')) {
+        } elseif (is_post_type_archive("news")) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => "", "title" => "News"];
-        } elseif (is_post_type_archive('ospitalita')) {
+        } elseif (is_post_type_archive("ospitalita")) {
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => "", "title" => "Ospitalità"];
-        } elseif (is_post_type_archive('whos-coming')) {
-            $industry_page = get_page_by_path('industry');
+        } elseif (is_post_type_archive("whos-coming")) {
+            $industry_page = get_page_by_path("industry");
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-            $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
+            $breadcrumbs[] = [
+                "url" => $industry_page
+                    ? get_permalink($industry_page)
+                    : home_url("/"),
+                "title" => "Industry",
+            ];
             $breadcrumbs[] = ["url" => "", "title" => "Who's Coming"];
-        } elseif (is_post_type_archive('contents-doc')) {
-            $industry_page = get_page_by_path('industry');
-            $bio_to_bdoc_page = get_page_by_path('industry/bio-to-bdoc');
+        } elseif (is_post_type_archive("contents-doc")) {
+            $industry_page = get_page_by_path("industry");
+            $bio_to_bdoc_page = get_page_by_path("industry/bio-to-b-doc");
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-            $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
-            $breadcrumbs[] = ["url" => $bio_to_bdoc_page ? get_permalink($bio_to_bdoc_page) : "", "title" => "Bio to B | Doc"];
+            $breadcrumbs[] = [
+                "url" => $industry_page
+                    ? get_permalink($industry_page)
+                    : home_url("/"),
+                "title" => "Industry",
+            ];
+            $breadcrumbs[] = [
+                "url" => $bio_to_bdoc_page
+                    ? get_permalink($bio_to_bdoc_page)
+                    : "",
+                "title" => "Bio to B | Doc",
+            ];
             $breadcrumbs[] = ["url" => "", "title" => "Contents"];
-        } elseif (is_post_type_archive('evento')) {
-            $campus_page = get_page_by_path('campus');
+        } elseif (is_post_type_archive("contents-drama")) {
+            $industry_page = get_page_by_path("industry");
+            $bio_to_bdrama_page = get_page_by_path("industry/bio-to-b-drama");
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-            $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+            $breadcrumbs[] = [
+                "url" => $industry_page
+                    ? get_permalink($industry_page)
+                    : home_url("/"),
+                "title" => "Industry",
+            ];
+            $breadcrumbs[] = [
+                "url" => $bio_to_bdrama_page
+                    ? get_permalink($bio_to_bdrama_page)
+                    : "",
+                "title" => "Bio to B | Drama",
+            ];
+            $breadcrumbs[] = ["url" => "", "title" => "Contents"];
+        } elseif (is_post_type_archive("evento")) {
+            $campus_page = get_page_by_path("campus");
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+            $breadcrumbs[] = [
+                "url" => $campus_page
+                    ? get_permalink($campus_page)
+                    : home_url("/"),
+                "title" => "Campus",
+            ];
             $breadcrumbs[] = ["url" => "", "title" => "Eventi"];
-        } elseif (is_post_type_archive('progetto')) {
-            $campus_page = get_page_by_path('campus');
+        } elseif (is_post_type_archive("progetto")) {
+            $campus_page = get_page_by_path("campus");
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-            $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
+            $breadcrumbs[] = [
+                "url" => $campus_page
+                    ? get_permalink($campus_page)
+                    : home_url("/"),
+                "title" => "Campus",
+            ];
             $breadcrumbs[] = ["url" => "", "title" => "Progetti e formazione"];
         } elseif ($post && !is_front_page()) {
-            if (get_post_type($post->ID) === 'news') {
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('news'), "title" => "News"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'film') {
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('film'), "title" => "Tutti i film"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'sezione') {
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Festival"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('sezione'), "title" => "Sezioni"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'ospitalita') {
-                $ospitalita_page = get_page_by_path('ospitality');
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => $ospitalita_page ? get_permalink($ospitalita_page) : home_url("/"), "title" => "Ospitalità"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'partner') {
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => get_permalink(get_page_by_path('partners')), "title" => "Partners"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'evento') {
-                $campus_page = get_page_by_path('campus');
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('evento'), "title" => "Eventi"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'progetto') {
-                $campus_page = get_page_by_path('campus');
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => $campus_page ? get_permalink($campus_page) : home_url("/"), "title" => "Campus"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('progetto'), "title" => "Progetti e formazione"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'whos-coming') {
-                $industry_page = get_page_by_path('industry');
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('whos-coming'), "title" => "Who's Coming"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
-            } elseif (get_post_type($post->ID) === 'contents-doc') {
-                $industry_page = get_page_by_path('industry');
-                $bio_to_bdoc_page = get_page_by_path('industry/bio-to-bdoc');
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
-                $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
-                $breadcrumbs[] = ["url" => $bio_to_bdoc_page ? get_permalink($bio_to_bdoc_page) : "", "title" => "Bio to B | Doc"];
-                $breadcrumbs[] = ["url" => get_post_type_archive_link('contents-doc'), "title" => "Contents"];
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            if (get_post_type($post->ID) === "news") {
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("news"),
+                    "title" => "News",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "film") {
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Festival",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("film"),
+                    "title" => "Tutti i film",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "sezione") {
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Festival",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("sezione"),
+                    "title" => "Sezioni",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "ospitalita") {
+                $ospitalita_page = get_page_by_path("ospitality");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $ospitalita_page
+                        ? get_permalink($ospitalita_page)
+                        : home_url("/"),
+                    "title" => "Ospitalità",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "partner") {
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_permalink(get_page_by_path("partners")),
+                    "title" => "Partners",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "evento") {
+                $campus_page = get_page_by_path("campus");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $campus_page
+                        ? get_permalink($campus_page)
+                        : home_url("/"),
+                    "title" => "Campus",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("evento"),
+                    "title" => "Eventi",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "progetto") {
+                $campus_page = get_page_by_path("campus");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $campus_page
+                        ? get_permalink($campus_page)
+                        : home_url("/"),
+                    "title" => "Campus",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("progetto"),
+                    "title" => "Progetti e formazione",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "whos-coming") {
+                $industry_page = get_page_by_path("industry");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $industry_page
+                        ? get_permalink($industry_page)
+                        : home_url("/"),
+                    "title" => "Industry",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("whos-coming"),
+                    "title" => "Who's Coming",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "contents-doc") {
+                $industry_page = get_page_by_path("industry");
+                $bio_to_bdoc_page = get_page_by_path("industry/bio-to-b-doc");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $industry_page
+                        ? get_permalink($industry_page)
+                        : home_url("/"),
+                    "title" => "Industry",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $bio_to_bdoc_page
+                        ? get_permalink($bio_to_bdoc_page)
+                        : "",
+                    "title" => "Bio to B | Doc",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("contents-doc"),
+                    "title" => "Contents",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
+            } elseif (get_post_type($post->ID) === "contents-drama") {
+                $industry_page = get_page_by_path("industry");
+                $bio_to_bdrama_page = get_page_by_path("industry/bio-to-b-drama");
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => "Biografilm",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $industry_page
+                        ? get_permalink($industry_page)
+                        : home_url("/"),
+                    "title" => "Industry",
+                ];
+                $breadcrumbs[] = [
+                    "url" => $bio_to_bdrama_page
+                        ? get_permalink($bio_to_bdrama_page)
+                        : "",
+                    "title" => "Bio to B | Drama",
+                ];
+                $breadcrumbs[] = [
+                    "url" => get_post_type_archive_link("contents-drama"),
+                    "title" => "Contents",
+                ];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
             } else {
                 $ancestors = get_post_ancestors($post->ID);
-                $home_label = (empty($ancestors) || in_array($section, ["industry", "campus"])) ? "Biografilm" : "Festival";
-                $breadcrumbs[] = ["url" => home_url("/"), "title" => $home_label];
-                $front_page_id = (int) get_option('page_on_front');
+                $home_label =
+                    empty($ancestors) ||
+                    in_array($section, ["industry", "campus"])
+                        ? "Biografilm"
+                        : "Festival";
+                $breadcrumbs[] = [
+                    "url" => home_url("/"),
+                    "title" => $home_label,
+                ];
+                $front_page_id = (int) get_option("page_on_front");
                 foreach (array_reverse($ancestors) as $ancestor_id) {
                     if ($ancestor_id === $front_page_id) {
                         continue;
                     }
                     $breadcrumbs[] = [
-                        "url"   => get_permalink($ancestor_id),
+                        "url" => get_permalink($ancestor_id),
                         "title" => get_the_title($ancestor_id),
                     ];
                 }
-                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+                $breadcrumbs[] = [
+                    "url" => "",
+                    "title" => get_the_title($post->ID),
+                ];
             }
         }
         $context["breadcrumbs"] = $breadcrumbs;
 
-        if (is_singular('news') && $post) {
-            $terms = wp_get_post_terms($post->ID, 'news-category', ['fields' => 'ids']);
+        if (is_singular("news") && $post) {
+            $terms = wp_get_post_terms($post->ID, "news-category", [
+                "fields" => "ids",
+            ]);
             $related = [];
 
             if (!empty($terms) && !is_wp_error($terms)) {
                 $related = get_posts([
-                    'post_type'      => 'news',
-                    'posts_per_page' => 3,
-                    'post__not_in'   => [$post->ID],
-                    'orderby'        => 'date',
-                    'order'          => 'DESC',
-                    'tax_query'      => [[
-                        'taxonomy' => 'news-category',
-                        'field'    => 'term_id',
-                        'terms'    => $terms,
-                    ]],
+                    "post_type" => "news",
+                    "posts_per_page" => 3,
+                    "post__not_in" => [$post->ID],
+                    "orderby" => "date",
+                    "order" => "DESC",
+                    "tax_query" => [
+                        [
+                            "taxonomy" => "news-category",
+                            "field" => "term_id",
+                            "terms" => $terms,
+                        ],
+                    ],
                 ]);
             }
 
             // Fall back to latest news if not enough results from category
             if (count($related) < 3) {
-                $exclude = array_merge([$post->ID], array_map(fn($p) => $p->ID, $related));
+                $exclude = array_merge(
+                    [$post->ID],
+                    array_map(fn($p) => $p->ID, $related),
+                );
                 $fallback = get_posts([
-                    'post_type'      => 'news',
-                    'posts_per_page' => 3 - count($related),
-                    'post__not_in'   => $exclude,
-                    'orderby'        => 'date',
-                    'order'          => 'DESC',
+                    "post_type" => "news",
+                    "posts_per_page" => 3 - count($related),
+                    "post__not_in" => $exclude,
+                    "orderby" => "date",
+                    "order" => "DESC",
                 ]);
                 $related = array_merge($related, $fallback);
             }
 
-            $context['related_news'] = array_map(fn($p) => Timber::get_post($p->ID), $related);
+            $context["related_news"] = array_map(
+                fn($p) => Timber::get_post($p->ID),
+                $related,
+            );
         }
 
-        if (is_singular('ospitalita') && $post) {
+        if (is_singular("ospitalita") && $post) {
             $related = get_posts([
-                'post_type'      => 'ospitalita',
-                'posts_per_page' => 3,
-                'post__not_in'   => [$post->ID],
-                'orderby'        => 'date',
-                'order'          => 'DESC',
+                "post_type" => "ospitalita",
+                "posts_per_page" => 3,
+                "post__not_in" => [$post->ID],
+                "orderby" => "date",
+                "order" => "DESC",
             ]);
-            $context['related_ospitalita'] = array_map(fn($p) => Timber::get_post($p->ID), $related);
+            $context["related_ospitalita"] = array_map(
+                fn($p) => Timber::get_post($p->ID),
+                $related,
+            );
         }
 
-        if (is_singular('film') && $post) {
-            $manual = get_field('film_correlati', $post->ID);
+        if (is_singular("film") && $post) {
+            $manual = get_field("film_correlati", $post->ID);
             $ids = !empty($manual)
-                ? array_map(fn($p) => is_object($p) ? $p->ID : (int) $p, $manual)
+                ? array_map(
+                    fn($p) => is_object($p) ? $p->ID : (int) $p,
+                    $manual,
+                )
                 : [];
             if (count($ids) < 3) {
-                $ids = array_merge($ids, self::get_related_films($post->ID, 3 - count($ids), $ids));
+                $ids = array_merge(
+                    $ids,
+                    self::get_related_films($post->ID, 3 - count($ids), $ids),
+                );
             }
-            $context['related_films'] = array_map(fn($id) => Timber::get_post($id), $ids);
+            $context["related_films"] = array_map(
+                fn($id) => Timber::get_post($id),
+                $ids,
+            );
         }
 
         $industry_page = get_page_by_path("industry");
         $campus_page = get_page_by_path("campus");
         $context["nav_urls"] = [
             "festival" => home_url("/"),
-            "industry" => $industry_page ? get_permalink($industry_page->ID) : home_url("/industry/"),
-            "campus"   => $campus_page ? get_permalink($campus_page->ID) : home_url("/campus/"),
+            "industry" => $industry_page
+                ? get_permalink($industry_page->ID)
+                : home_url("/industry/"),
+            "campus" => $campus_page
+                ? get_permalink($campus_page->ID)
+                : home_url("/campus/"),
         ];
 
         return $context;
@@ -424,25 +655,26 @@ class Website extends Site
             }),
         );
         $twig->addFunction(
-            new \Twig\TwigFunction(
-                "get_whoscoming_random",
-                function (mixed $term_ids = null) {
-                    $args = [
-                        "post_type"   => "whos-coming",
-                        "numberposts" => 4,
-                        "orderby"     => "rand",
-                    ];
-                    $ids = array_filter((array) ($term_ids ?? []));
-                    if (!empty($ids)) {
-                        $args["tax_query"] = [[
+            new \Twig\TwigFunction("get_whoscoming_random", function (
+                mixed $term_ids = null,
+            ) {
+                $args = [
+                    "post_type" => "whos-coming",
+                    "numberposts" => 4,
+                    "orderby" => "rand",
+                ];
+                $ids = array_filter((array) ($term_ids ?? []));
+                if (!empty($ids)) {
+                    $args["tax_query"] = [
+                        [
                             "taxonomy" => "accredito-whos-coming",
-                            "field"    => "term_id",
-                            "terms"    => $ids,
-                        ]];
-                    }
-                    return get_posts($args);
-                },
-            ),
+                            "field" => "term_id",
+                            "terms" => $ids,
+                        ],
+                    ];
+                }
+                return get_posts($args);
+            }),
         );
         return $twig;
     }
@@ -470,36 +702,39 @@ class Website extends Site
         if (is_page()) {
             $slug = get_queried_object()?->post_name;
             if ($slug) {
-                $classes[] = 'page-' . $slug;
+                $classes[] = "page-" . $slug;
             }
         }
         return $classes;
     }
 
-    public static function get_related_films(int $post_id, int $limit = 3, array $exclude_extra = []): array
-    {
-        $taxonomies = ['genere', 'area-tematica', 'paese'];
+    public static function get_related_films(
+        int $post_id,
+        int $limit = 3,
+        array $exclude_extra = [],
+    ): array {
+        $taxonomies = ["genere", "area-tematica", "paese"];
 
         // Collect taxonomy term IDs for the current film
         $term_ids = [];
         foreach ($taxonomies as $tax) {
-            $terms = wp_get_post_terms($post_id, $tax, ['fields' => 'ids']);
+            $terms = wp_get_post_terms($post_id, $tax, ["fields" => "ids"]);
             if (!is_wp_error($terms)) {
                 $term_ids = array_merge($term_ids, $terms);
             }
         }
 
         // Collect sezione post IDs from the CPT relationship field
-        $sezione_ids = self::extract_post_ids(get_field('sezione', $post_id));
+        $sezione_ids = self::extract_post_ids(get_field("sezione", $post_id));
 
         // Get all published films except the current one and any manual picks
-        $exclude    = array_merge([$post_id], $exclude_extra);
+        $exclude = array_merge([$post_id], $exclude_extra);
         $candidates = get_posts([
-            'post_type'      => 'film',
-            'post_status'    => 'publish',
-            'posts_per_page' => -1,
-            'fields'         => 'ids',
-            'post__not_in'   => $exclude,
+            "post_type" => "film",
+            "post_status" => "publish",
+            "posts_per_page" => -1,
+            "fields" => "ids",
+            "post__not_in" => $exclude,
         ]);
 
         if (empty($candidates)) {
@@ -508,20 +743,20 @@ class Website extends Site
 
         // Preload sezione meta for all candidates in one query (avoids N+1)
         global $wpdb;
-        $placeholders    = implode(',', array_fill(0, count($candidates), '%d'));
+        $placeholders = implode(",", array_fill(0, count($candidates), "%d"));
         $candidate_sezioni = [];
         if (!empty($sezione_ids)) {
             $rows = $wpdb->get_results(
                 $wpdb->prepare(
                     "SELECT post_id, meta_value FROM {$wpdb->postmeta}
                      WHERE meta_key = 'sezione' AND post_id IN ($placeholders)",
-                    ...$candidates
-                )
+                    ...$candidates,
+                ),
             );
             foreach ($rows as $row) {
                 $ids = @unserialize($row->meta_value);
                 $candidate_sezioni[(int) $row->post_id] = is_array($ids)
-                    ? array_map('intval', $ids)
+                    ? array_map("intval", $ids)
                     : [];
             }
         }
@@ -531,14 +766,19 @@ class Website extends Site
         foreach ($candidates as $candidate_id) {
             $shared = 0;
             foreach ($taxonomies as $tax) {
-                $candidate_terms = wp_get_post_terms($candidate_id, $tax, ['fields' => 'ids']);
+                $candidate_terms = wp_get_post_terms($candidate_id, $tax, [
+                    "fields" => "ids",
+                ]);
                 if (!is_wp_error($candidate_terms)) {
-                    $shared += count(array_intersect($term_ids, $candidate_terms));
+                    $shared += count(
+                        array_intersect($term_ids, $candidate_terms),
+                    );
                 }
             }
             if (!empty($sezione_ids)) {
                 $c_sezione_ids = $candidate_sezioni[$candidate_id] ?? [];
-                $shared += count(array_intersect($sezione_ids, $c_sezione_ids)) * 2;
+                $shared +=
+                    count(array_intersect($sezione_ids, $c_sezione_ids)) * 2;
             }
             if ($shared > 0) {
                 $scores[$candidate_id] = $shared;
@@ -553,12 +793,12 @@ class Website extends Site
         if (count($result) < $limit) {
             $exclude = array_merge([$post_id], $exclude_extra, $result);
             $fillers = get_posts([
-                'post_type'      => 'film',
-                'post_status'    => 'publish',
-                'posts_per_page' => $limit - count($result),
-                'fields'         => 'ids',
-                'post__not_in'   => $exclude,
-                'orderby'        => 'rand',
+                "post_type" => "film",
+                "post_status" => "publish",
+                "posts_per_page" => $limit - count($result),
+                "fields" => "ids",
+                "post__not_in" => $exclude,
+                "orderby" => "rand",
             ]);
             $result = array_merge($result, $fillers);
         }
@@ -574,7 +814,7 @@ class Website extends Site
         }
         return array_map(
             fn($p) => is_object($p) ? (int) $p->ID : (int) $p,
-            (array) $value
+            (array) $value,
         );
     }
 

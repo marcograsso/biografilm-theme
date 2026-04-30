@@ -36,12 +36,22 @@ register_extended_field_group([
             "Testo introduttivo mostrato nella pagina archivio Eventi.",
         ),
         Tab::make("Who's Coming"),
-        Link::make("Documento", "whoscoming_documento")->helperText(
-            "Link al documento scaricabile dalla pagina archivio Who's Coming.",
-        )->format("array"),
+        Link::make("Documento", "whoscoming_documento")
+            ->helperText(
+                "Link al documento scaricabile dalla pagina archivio Who's Coming.",
+            )
+            ->format("array"),
 
         Tab::make("Contents Doc"),
         Group::make("Intro", "contents_doc_intro")
+            ->layout("block")
+            ->fields(
+                require get_stylesheet_directory() .
+                    "/views/components/text-displayer/text-displayer.php",
+            ),
+
+        Tab::make("Contents Drama"),
+        Group::make("Intro", "contents_drama_intro")
             ->layout("block")
             ->fields(
                 require get_stylesheet_directory() .
