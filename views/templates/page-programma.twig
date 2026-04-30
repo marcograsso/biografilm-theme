@@ -1,105 +1,111 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  <div
-    x-data="{ desktopFiltersOpen: false, drawerOpen: false }"
-    x-effect="document.body.style.overflow = drawerOpen ? 'hidden' : ''"
-    @keydown.escape.window="drawerOpen = false"
-  >
-    <div id="filters-sentinel" class="h-0"></div>
+  {% if tipo == "doc" or tipo == "drama" %}
+    {% include "parts/archive-contents.twig" with {
+      xl_cols: tipo == "drama" ? 3 : 4
+    } %}
+  {% else %}
+    <div
+      x-data="{ desktopFiltersOpen: false, drawerOpen: false }"
+      x-effect="document.body.style.overflow = drawerOpen ? 'hidden' : ''"
+      @keydown.escape.window="drawerOpen = false"
+    >
+      <div id="filters-sentinel" class="h-0"></div>
 
-    {# ── Filter bar (single, always visible) ── #}
-    <div data-sticky-top class="top-0 z-50 mb-20">
-      <div class="filters-black flex w-full bg-black">
-        {# Mobile only: filter icon button #}
-        <button
-          type="button"
-          class="border-stroke hover:bg-white-hover active:bg-white-active relative flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
-          @click="drawerOpen = true"
-          aria-label="Apri filtri"
-        >
-          {{ include("icons/generic/filters.svg")|attr({ class: "size-5" }) }}
-          <span
-            class="filters-active-dot bg-red absolute top-2 right-2 hidden size-2 rounded-full"
+      {# ── Filter bar (single, always visible) ── #}
+      <div data-sticky-top class="top-0 z-50 mb-20">
+        <div class="filters-black flex w-full bg-black">
+          {# Mobile only: filter icon button #}
+          <button
+            type="button"
+            class="border-stroke hover:bg-white-hover active:bg-white-active relative flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
+            @click="drawerOpen = true"
+            aria-label="Apri filtri"
           >
+            {{ include("icons/generic/filters.svg")|attr({ class: "size-5" }) }}
+            <span
+              class="filters-active-dot bg-red absolute top-2 right-2 hidden size-2 rounded-full"
+            >
 
-          </span>
-        </button>
-        {# Days — rendered once, always visible, scrollable #}
-        <div
-          class="min-w-0 flex-1 overflow-x-auto bg-black [&_.facetwp-type-radio]:w-max [&_.facetwp-type-radio]:!flex-nowrap"
-        >
-          {{ function("do_shortcode", '[facetwp facet="days"]') }}
+            </span>
+          </button>
+          {# Days — rendered once, always visible, scrollable #}
+          <div
+            class="min-w-0 flex-1 overflow-x-auto bg-black [&_.facetwp-type-radio]:w-max [&_.facetwp-type-radio]:!flex-nowrap"
+          >
+            {{ function("do_shortcode", '[facetwp facet="days"]') }}
+          </div>
+          {# Desktop only: location + FILTRI toggle #}
+          <div class="hidden shrink-0 items-stretch lg:flex">
+            <div class="w-80">
+              {{ function("do_shortcode", '[facetwp facet="location"]') }}
+            </div>
+            <button
+              type="button"
+              class="filters-toggle text-tight -ml-px flex cursor-pointer items-center gap-2 px-4 py-3 text-base uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
+              :class="desktopFiltersOpen ? 'bg-white text-black hover:bg-white-hover active:bg-white-active border-y border-stroke!' : 'bg-black text-white hover:bg-black-hover active:bg-black-active border-y border-white/20'"
+              @click="desktopFiltersOpen = !desktopFiltersOpen"
+            >
+              FILTRI
+              <span class="filters-active-dot bg-red hidden size-2 rounded-full">
+
+              </span>
+              {{
+                include("icons/generic/chevron-down.svg")|attr({
+                  class: "size-6 transition-transform duration-300",
+                  ":class": "desktopFiltersOpen ? 'rotate-180' : ''"
+                })
+              }}
+            </button>
+          </div>
         </div>
-        {# Desktop only: location + FILTRI toggle #}
-        <div class="hidden shrink-0 items-stretch lg:flex">
-          <div class="w-80">
-            {{ function("do_shortcode", '[facetwp facet="location"]') }}
+
+        <div
+          x-show="desktopFiltersOpen"
+          x-collapse
+          class="filters-white hidden w-full bg-black lg:flex"
+        >
+          <div class="flex-1">
+            {{ function("do_shortcode", '[facetwp facet="program_sezione"]') }}
+          </div>
+          <div class="-ml-px flex-1">
+            {{ function("do_shortcode", '[facetwp facet="area_tematica"]') }}
+          </div>
+          <div class="-ml-px flex-1">
+            {{ function("do_shortcode", '[facetwp facet="paese"]') }}
+          </div>
+          <div class="-ml-px flex-1">
+            {{ function("do_shortcode", '[facetwp facet="genere"]') }}
+          </div>
+          <div class="-ml-px flex-1">
+            {{ function("do_shortcode", '[facetwp facet="program_search"]') }}
           </div>
           <button
             type="button"
-            class="filters-toggle text-tight -ml-px flex cursor-pointer items-center gap-2 px-4 py-3 text-base uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
-            :class="desktopFiltersOpen ? 'bg-white text-black hover:bg-white-hover active:bg-white-active border-y border-stroke!' : 'bg-black text-white hover:bg-black-hover active:bg-black-active border-y border-white/20'"
-            @click="desktopFiltersOpen = !desktopFiltersOpen"
+            class="text-tight border-stroke hover:bg-white-hover active:bg-white-active -ml-px cursor-pointer border bg-white px-4 py-3 text-base text-black uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
+            onclick="FWP.reset()"
           >
-            FILTRI
-            <span class="filters-active-dot bg-red hidden size-2 rounded-full">
-
-            </span>
-            {{
-              include("icons/generic/chevron-down.svg")|attr({
-                class: "size-6 transition-transform duration-300",
-                ":class": "desktopFiltersOpen ? 'rotate-180' : ''"
-              })
-            }}
+            Reset
           </button>
         </div>
       </div>
 
-      <div
-        x-show="desktopFiltersOpen"
-        x-collapse
-        class="filters-white hidden w-full bg-black lg:flex"
-      >
-        <div class="flex-1">
-          {{ function("do_shortcode", '[facetwp facet="program_sezione"]') }}
-        </div>
-        <div class="-ml-px flex-1">
-          {{ function("do_shortcode", '[facetwp facet="area_tematica"]') }}
-        </div>
-        <div class="-ml-px flex-1">
-          {{ function("do_shortcode", '[facetwp facet="paese"]') }}
-        </div>
-        <div class="-ml-px flex-1">
-          {{ function("do_shortcode", '[facetwp facet="genere"]') }}
-        </div>
-        <div class="-ml-px flex-1">
-          {{ function("do_shortcode", '[facetwp facet="program_search"]') }}
-        </div>
-        <button
-          type="button"
-          class="text-tight border-stroke hover:bg-white-hover active:bg-white-active -ml-px cursor-pointer border bg-white px-4 py-3 text-base text-black uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
-          onclick="FWP.reset()"
-        >
-          Reset
-        </button>
-      </div>
+      {% include "parts/filters-drawer.twig" with {
+        state_var: "drawerOpen",
+        facets: [
+          "location",
+          "program_search",
+          "sezione",
+          "area_tematica",
+          "paese",
+          "genere"
+        ]
+      } %}
+
+      <section class="w-full">
+        {{ function("do_shortcode", '[facetwp template="programma"]') }}
+      </section>
     </div>
-
-    {% include "parts/filters-drawer.twig" with {
-      state_var: "drawerOpen",
-      facets: [
-        "location",
-        "program_search",
-        "sezione",
-        "area_tematica",
-        "paese",
-        "genere"
-      ]
-    } %}
-
-    <section class="w-full">
-      {{ function("do_shortcode", '[facetwp template="programma"]') }}
-    </section>
-  </div>
+  {% endif %}
 {% endblock content %}
