@@ -1,6 +1,7 @@
 <?php
 
 use Extended\ACF\Location;
+use Extended\ACF\Fields\Group;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\Textarea;
@@ -38,6 +39,14 @@ register_extended_field_group([
         Link::make("Documento", "whoscoming_documento")->helperText(
             "Link al documento scaricabile dalla pagina archivio Who's Coming.",
         )->format("array"),
+
+        Tab::make("Contents Doc"),
+        Group::make("Intro", "contents_doc_intro")
+            ->layout("block")
+            ->fields(
+                require get_stylesheet_directory() .
+                    "/views/components/text-displayer/text-displayer.php",
+            ),
     ],
     "style" => "default",
 ]);

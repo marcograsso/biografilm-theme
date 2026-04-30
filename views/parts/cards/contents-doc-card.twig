@@ -1,0 +1,34 @@
+{% set permalink = function("get_permalink", doc.ID) %}
+{% set fields = function("get_field", "content_doc", doc.ID) %}
+
+<a
+  href="{{ permalink }}"
+  class="group border-stroke col-span-1 flex flex-col border-b bg-white {{
+  extra_class
+  }}"
+>
+  <div
+    class="flex aspect-video w-full items-start justify-start overflow-hidden"
+  >
+    <div class="bg-red flex aspect-square h-full items-center p-10">
+      {% if fields.icon %}
+        <img
+          src="{{ fields.icon.url }}"
+          alt="{{ fields.icon.alt }}"
+          class="h-full w-auto object-contain transition-transform duration-500 group-hover:scale-110"
+        />
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="border-stroke flex flex-1 flex-col gap-6 border-l px-6 py-10">
+    <h5 class="text-tight blur-in line-clamp-2 text-2xl font-semibold">
+      {{ doc.post_title }}
+    </h5>
+    {% if fields.descrizione_breve %}
+      <p class="text-tight blur-in line-clamp-3 text-base text-black">
+        {{ fields.descrizione_breve }}
+      </p>
+    {% endif %}
+  </div>
+</a>

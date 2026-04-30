@@ -45,4 +45,10 @@ return [
                 ])
                 ->default("w-1/2"),
         ]),
+    Tab::make("Impostazioni", "impostazioni_tab"),
+    Text::make("Ancora (ID)", "anchor")
+        ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")
+        ->placeholder("es: sezione-contatti")
+        ->prefix("#")
+        ->wrapper(["width" => 25]),
 ];

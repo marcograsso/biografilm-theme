@@ -22,6 +22,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
 
+  // Smooth-scroll to anchor links via ScrollSmoother instead of native jump.
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
+    const id = link.getAttribute("href").slice(1);
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (!target) return;
+    e.preventDefault();
+    const offset = headerEl ? headerEl.offsetHeight : 0;
+    smoother.scrollTo(target, true, `top ${offset}px`);
+  });
+
   // Date/location badge slides in from the left on load — homepage only.
   const dateline = document.querySelector(".header-dateline");
   if (dateline && document.body.classList.contains("home")) {

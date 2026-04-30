@@ -22,4 +22,10 @@ return [
     TrueFalse::make("Decorazione Industry", "industry_decoration")
         ->stylized()
         ->default(false),
+    Tab::make("Impostazioni", "impostazioni_tab"),
+    Text::make("Ancora (ID)", "anchor")
+        ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")
+        ->placeholder("es: sezione-contatti")
+        ->prefix("#")
+        ->wrapper(["width" => 25]),
 ];

@@ -65,7 +65,9 @@
                               "components/button.twig",
                               {
                                 as_link: true,
-                                variant: "default",
+                                variant: item.stile == "secondary"
+                                  ? "outline"
+                                  : item.stile == "link" ? "link" : "default",
                                 size: "lg",
                                 label: item.link.title,
                                 attributes: {

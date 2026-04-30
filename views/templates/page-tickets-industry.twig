@@ -4,9 +4,6 @@
   {{ include("components/tickets/tickets.twig", { component: post.accrediti }) }}
   {% for component in post.page_components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
-    {% if component.anchor %}
-      <div id="{{ component.anchor }}" class="scroll-mt-28"></div>
-    {% endif %}
     {{
       include(
         "components/" ~ layout ~ "/" ~ layout ~ ".twig",

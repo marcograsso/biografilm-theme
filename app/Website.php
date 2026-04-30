@@ -33,6 +33,7 @@ class Website extends Site
         PostTypes\Progetti::register();
         PostTypes\Eventi::register();
         PostTypes\WhosComing::register();
+        PostTypes\ContentsDoc::register();
     }
 
     #[Action("init")]
@@ -168,7 +169,8 @@ class Website extends Site
             }
         } elseif (is_post_type_archive(["progetto", "evento"]) || is_singular(["progetto", "evento"])) {
             $section = "campus";
-        } elseif (is_post_type_archive("whos-coming") || is_singular("whos-coming")) {
+        } elseif (is_post_type_archive("whos-coming") || is_singular("whos-coming")
+            || is_post_type_archive("contents-doc") || is_singular("contents-doc")) {
             $section = "industry";
         }
         $context["current_section"] = $section;
@@ -192,6 +194,13 @@ class Website extends Site
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
             $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
             $breadcrumbs[] = ["url" => "", "title" => "Who's Coming"];
+        } elseif (is_post_type_archive('contents-doc')) {
+            $industry_page = get_page_by_path('industry');
+            $bio_to_bdoc_page = get_page_by_path('industry/bio-to-bdoc');
+            $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+            $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
+            $breadcrumbs[] = ["url" => $bio_to_bdoc_page ? get_permalink($bio_to_bdoc_page) : "", "title" => "Bio to B | Doc"];
+            $breadcrumbs[] = ["url" => "", "title" => "Contents"];
         } elseif (is_post_type_archive('evento')) {
             $campus_page = get_page_by_path('campus');
             $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
@@ -241,6 +250,14 @@ class Website extends Site
                 $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
                 $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
                 $breadcrumbs[] = ["url" => get_post_type_archive_link('whos-coming'), "title" => "Who's Coming"];
+                $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
+            } elseif (get_post_type($post->ID) === 'contents-doc') {
+                $industry_page = get_page_by_path('industry');
+                $bio_to_bdoc_page = get_page_by_path('industry/bio-to-bdoc');
+                $breadcrumbs[] = ["url" => home_url("/"), "title" => "Biografilm"];
+                $breadcrumbs[] = ["url" => $industry_page ? get_permalink($industry_page) : home_url("/"), "title" => "Industry"];
+                $breadcrumbs[] = ["url" => $bio_to_bdoc_page ? get_permalink($bio_to_bdoc_page) : "", "title" => "Bio to B | Doc"];
+                $breadcrumbs[] = ["url" => get_post_type_archive_link('contents-doc'), "title" => "Contents"];
                 $breadcrumbs[] = ["url" => "", "title" => get_the_title($post->ID)];
             } else {
                 $ancestors = get_post_ancestors($post->ID);
@@ -384,35 +401,6 @@ class Website extends Site
      *
      * @param Twig\Environment $twig get extension.
      */
-    #[Filter("acf/load_field/name=page_components")]
-    public function inject_anchor_field(array $field): array
-    {
-        if (empty($field["layouts"])) {
-            return $field;
-        }
-
-        foreach ($field["layouts"] as &$layout) {
-            $layout["sub_fields"][] = [
-                "key"   => "field_anchor_tab_" . $layout["key"],
-                "label" => "Impostazioni",
-                "name"  => "impostazioni_tab",
-                "type"  => "tab",
-            ];
-            $layout["sub_fields"][] = [
-                "key"         => "field_anchor_" . $layout["key"],
-                "label"       => "Ancora (ID)",
-                "name"        => "anchor",
-                "type"        => "text",
-                "instructions" => "ID per i link ancora. Inserisci senza il simbolo #.",
-                "placeholder" => "es: sezione-contatti",
-                "prepend"     => "#",
-                "wrapper"     => ["width" => "25"],
-            ];
-        }
-
-        return $field;
-    }
-
     #[Filter("timber/twig")]
     public function add_to_twig($twig)
     {

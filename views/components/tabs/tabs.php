@@ -4,6 +4,7 @@ use Extended\ACF\Fields\FlexibleContent;
 use Extended\ACF\Fields\Layout;
 use Extended\ACF\Fields\Link;
 use Extended\ACF\Fields\Repeater;
+use Extended\ACF\Fields\Select;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\WYSIWYGEditor;
@@ -35,6 +36,13 @@ return [
                                 ->button("Aggiungi link")
                                 ->fields([
                                     Link::make("Link", "link")->format("array"),
+                                    Select::make("Stile", "stile")
+                                        ->choices([
+                                            "primary"   => "Bottone primario",
+                                            "secondary" => "Bottone secondario",
+                                            "link"      => "Link",
+                                        ])
+                                        ->default("primary"),
                                 ]),
                         ]),
                     Layout::make("Accordion", "accordion")
@@ -54,4 +62,10 @@ return [
                         ]),
                 ]),
         ]),
+    Tab::make("Impostazioni", "impostazioni_tab"),
+    Text::make("Ancora (ID)", "anchor")
+        ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")
+        ->placeholder("es: sezione-contatti")
+        ->prefix("#")
+        ->wrapper(["width" => 25]),
 ];

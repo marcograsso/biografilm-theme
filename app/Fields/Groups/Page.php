@@ -149,6 +149,12 @@ register_extended_field_group([
                         require get_stylesheet_directory() .
                             "/views/components/whoscoming-displayer/whoscoming-displayer.php",
                     ),
+                Layout::make("Contents Displayer", "contents_displayer")
+                    ->layout("block")
+                    ->fields(
+                        require get_stylesheet_directory() .
+                            "/views/components/contents-displayer/contents-displayer.php",
+                    ),
             ])
             ->withSettings([
                 "acfe_flexible_advanced" => 1,

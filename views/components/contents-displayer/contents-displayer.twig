@@ -3,7 +3,6 @@
   class="w-full {{ component.anchor ? "scroll-mt-28" : "" }}"
 >
   {% set borders = component.borders_group %}
-  {% set items = get_whoscoming_random(component.tipologie) %}
 
   {% if component.title or component.link %}
     <div
@@ -35,27 +34,27 @@
     </div>
   {% endif %}
 
-  {% if items %}
+  {% if component.items %}
     <div
       class="{{ borders.cards_border_top ? "border-stroke border-t" : "" }} {{
       borders.cards_border_bottom ? "border-stroke border-b" : ""
       }}"
     >
-      {% set count = items|length %}
+      {% set count = component.items|length %}
       {% set show_nav = count > 1 %}
       <div
-        class="swiper whoscoming-displayer-swiper {{
-        show_nav ? "whoscoming-displayer-swiper--has-nav" : ""
+        class="swiper contents-displayer-swiper {{
+        show_nav ? "contents-displayer-swiper--has-nav" : ""
         }}"
       >
         <div class="swiper-wrapper">
-          {% for person in items %}
+          {% for doc in component.items %}
             <div class="swiper-slide">
               {{
                 include(
-                  "parts/cards/whos-coming-card.twig",
+                  "parts/cards/contents-doc-card.twig",
                   {
-                    person: person,
+                    doc: doc,
                     extra_class: (loop.last and count < 4) ? "border-r" : ""
                   }
                 )
@@ -64,7 +63,7 @@
           {% endfor %}
         </div>
         {% if show_nav %}
-          <div class="hero-carousel-nav whoscoming-displayer-nav border-b-0">
+          <div class="hero-carousel-nav contents-displayer-nav border-b-0">
             <button
               class="swiper-button-prev"
               aria-label="Precedente"

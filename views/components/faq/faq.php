@@ -23,4 +23,10 @@ return [
                 ->disableMediaUpload()
                 ->withSettings(["acfe_wysiwyg_height" => 200]),
         ]),
+    Tab::make("Impostazioni", "impostazioni_tab"),
+    Text::make("Ancora (ID)", "anchor")
+        ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")
+        ->placeholder("es: sezione-contatti")
+        ->prefix("#")
+        ->wrapper(["width" => 25]),
 ];

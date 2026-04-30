@@ -1,0 +1,44 @@
+@reference "../../../src/main.css";
+
+.whoscoming-displayer-swiper {
+  border-bottom: 1px solid transparent !important;
+}
+
+.whoscoming-displayer-nav {
+  position: relative !important;
+  bottom: auto !important;
+  left: 0 !important;
+  right: 0 !important;
+  justify-content: space-between !important;
+}
+
+.hero-carousel-nav.whoscoming-displayer-nav .swiper-button-prev,
+.hero-carousel-nav.whoscoming-displayer-nav .swiper-button-next {
+  color: black;
+  --swiper-navigation-color: black;
+}
+
+
+.hero-carousel-nav.whoscoming-displayer-nav .swiper-pagination {
+  @apply gap-2 md:gap-4;
+}
+
+.hero-carousel-nav.whoscoming-displayer-nav .swiper-pagination-bullet {
+  @apply bg-black/20 opacity-100;
+}
+
+.hero-carousel-nav.whoscoming-displayer-nav .swiper-pagination-bullet-active {
+  @apply bg-red opacity-100;
+}
+
+.whoscoming-displayer-swiper .swiper-wrapper {
+  align-items: stretch;
+}
+
+.whoscoming-displayer-swiper .swiper-slide {
+  height: auto;
+}
+
+.whoscoming-displayer-swiper .swiper-slide > * {
+  height: 100%;
+}

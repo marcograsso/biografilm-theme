@@ -7,9 +7,6 @@
     {% set next_layout = next_component ? next_component.acf_fc_layout|replace({ "_": "-" }) : null %}
     {% set prev_component = loop.index0 > 0 ? post.page_components[loop.index0 - 1] : null %}
     {% set prev_layout = prev_component ? prev_component.acf_fc_layout|replace({ "_": "-" }) : null %}
-    {% if component.anchor %}
-      <div id="{{ component.anchor }}" class="scroll-mt-28"></div>
-    {% endif %}
     {{
       include(
         "components/" ~ layout ~ "/" ~ layout ~ ".twig",
