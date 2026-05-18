@@ -7,6 +7,7 @@ use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Select;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
+use Extended\ACF\Fields\TrueFalse;
 
 return [
     Tab::make("Intestazione", "intestazione_tab"),
@@ -43,6 +44,14 @@ return [
                     ConditionalLogic::where("tipo", "==", "document"),
                 ]),
         ]),
+    Tab::make("Stile", "stile_tab"),
+    TrueFalse::make("Mostra bordo superiore", "show_border_top")
+        ->stylized()
+        ->default(true),
+    TrueFalse::make("Mostra bordo inferiore", "show_border_bottom")
+        ->stylized()
+        ->default(false),
+
     Tab::make("Impostazioni", "impostazioni_tab"),
     Text::make("Ancora (ID)", "anchor")
         ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")

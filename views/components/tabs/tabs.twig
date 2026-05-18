@@ -93,7 +93,8 @@
                           x-data="{ open: false }"
                         >
                           <button
-                            class="flex w-full cursor-pointer items-start gap-4 p-6 text-left xl:p-10"
+                            class="flex w-full cursor-pointer items-start gap-4 p-6 text-left transition-colors xl:p-10"
+                            :class="!open && 'hover:bg-white-hover active:bg-white-active'"
                             @click="open = !open"
                             :aria-expanded="open"
                           >
