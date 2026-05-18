@@ -17,6 +17,7 @@
 %}
 
 {% block hero %}
+
 {% endblock hero %}
 
 {% block content %}
@@ -50,7 +51,11 @@
 
   {# Title + breadcrumbs #}
   <div
-    class="w-full px-6 py-20 xl:px-10 {{ not post.thumbnail ? 'mt-[108px]' : '' }}"
+    class="w-full px-6 py-20 xl:px-10 {{
+    not post.thumbnail
+      ? "mt-[108px]"
+      : ""
+    }}"
   >
     <div class="flex flex-col gap-6">
       {{ include("parts/breadcrumbs.twig") }}
@@ -75,7 +80,9 @@
     <div
       class="border-stroke col-span-3 flex flex-col gap-10 border-t border-l px-6 py-10 xl:col-span-1 xl:p-10"
     >
-      <h2 class="heading-h6 font-semibold">{{ function("pll__", "Informazioni") }}</h2>
+      <h2 class="heading-h6 font-semibold">
+        {{ function("pll__", "Informazioni") }}
+      </h2>
 
       {% if progetto.periodo_inizio or progetto.periodo_fine %}
         <div class="flex flex-col gap-2">
@@ -128,7 +135,9 @@
 
       {% if luogo %}
         <div class="flex flex-col gap-2">
-          <span class="text-tight text-xl font-semibold text-black">{{ function("pll__", "Luogo") }}</span>
+          <span class="text-tight text-xl font-semibold text-black">
+            {{ function("pll__", "Luogo") }}
+          </span>
           <span class="text-tight text-xl">
             {{ luogo|map(t => t.name)|join(" · ") }}
           </span>
@@ -202,16 +211,6 @@
     }}
   {% endif %}
 
-  {% set partners_displayer = function("get_field", "partners_displayer", post.ID) %}
-  {% if partners_displayer.items %}
-    {{
-      include(
-        "components/partners-displayer/partners-displayer.twig",
-        { component: partners_displayer }
-      )
-    }}
-  {% endif %}
-
   {% set page_components = function("get_field", "page_components", post.ID) %}
   {% for component in page_components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
@@ -222,6 +221,18 @@
       )
     }}
   {% endfor %}
+
+  {% set partners_displayer =
+    function("get_field", "partners_displayer", post.ID)
+  %}
+  {% if partners_displayer.items %}
+    {{
+      include(
+        "components/partners-displayer/partners-displayer.twig",
+        { component: partners_displayer }
+      )
+    }}
+  {% endif %}
 
   {% include "parts/cta-bottom.twig" with {
     cta_title: function("get_field", "progetti_cta_titolo", "option"),

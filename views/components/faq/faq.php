@@ -3,6 +3,7 @@
 use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
+use Extended\ACF\Fields\TrueFalse;
 use Extended\ACF\Fields\WYSIWYGEditor;
 
 return [
@@ -23,6 +24,11 @@ return [
                 ->disableMediaUpload()
                 ->withSettings(["acfe_wysiwyg_height" => 200]),
         ]),
+    Tab::make("Stile", "stile_tab"),
+    TrueFalse::make("Prima FAQ aperta", "first_open")
+        ->stylized()
+        ->default(true),
+
     Tab::make("Impostazioni", "impostazioni_tab"),
     Text::make("Ancora (ID)", "anchor")
         ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")

@@ -86,17 +86,16 @@
                   {# Accordion #}
                 {% elseif layout == "accordion" %}
                   {% if block.items %}
-                    <div class="border-stroke flex flex-col gap-6">
+                    <div class="border-stroke flex flex-col gap-6" x-data="{ active: null }">
                       {% for item in block.items %}
                         <div
                           class="border-stroke flex flex-col border-x border-t border-b"
-                          x-data="{ open: false }"
                         >
                           <button
                             class="flex w-full cursor-pointer items-start gap-4 p-6 text-left transition-colors xl:p-10"
-                            :class="!open && 'hover:bg-white-hover active:bg-white-active'"
-                            @click="open = !open"
-                            :aria-expanded="open"
+                            :class="active !== {{ loop.index0 }} && 'hover:bg-white-hover active:bg-white-active'"
+                            @click="active === {{ loop.index0 }} ? active = null : active = {{ loop.index0 }}"
+                            :aria-expanded="active === {{ loop.index0 }}"
                           >
                             <p
                               class="text-tight heading-h6 flex-1 font-semibold text-black"
@@ -108,7 +107,7 @@
                             >
                               <span
                                 class="absolute inset-0"
-                                x-show="!open"
+                                x-show="active !== {{ loop.index0 }}"
                                 x-transition:enter="transition duration-200 ease-out"
                                 x-transition:enter-start="opacity-0 scale-75"
                                 x-transition:enter-end="opacity-100 scale-100"
@@ -124,7 +123,7 @@
                               </span>
                               <span
                                 class="absolute inset-0"
-                                x-show="open"
+                                x-show="active === {{ loop.index0 }}"
                                 x-transition:enter="transition duration-200 ease-out"
                                 x-transition:enter-start="opacity-0 scale-75"
                                 x-transition:enter-end="opacity-100 scale-100"
@@ -141,7 +140,7 @@
                             </span>
                           </button>
                           {% if item.answer %}
-                            <div x-show="open" x-collapse>
+                            <div x-show="active === {{ loop.index0 }}" x-collapse>
                               <div
                                 class="prose text-tight px-6 pb-6 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-10"
                               >
