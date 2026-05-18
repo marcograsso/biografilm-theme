@@ -24,7 +24,6 @@
             </div>
           </div>
         </div>
-
         {% for giorno in giorni %}
           <section x-show="activeDay === {{ loop.index0 }}" x-cloak>
             <h2 class="display-h3 p-6 xl:p-10">
@@ -172,7 +171,6 @@
             </button>
           </div>
         </div>
-
         <div
           x-show="desktopFiltersOpen"
           x-collapse

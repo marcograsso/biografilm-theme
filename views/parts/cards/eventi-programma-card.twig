@@ -37,6 +37,7 @@
       <div
         class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-[1500ms] ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px] group-hover:duration-700"
       ></div>
+      <div class="overlay-blur absolute inset-0 z-40"></div>
       <img
         src="{{
         image_url
@@ -52,18 +53,18 @@
     <div class="flex flex-1 flex-col justify-between gap-8 px-6 py-10 lg:border-b lg:border-b-stroke lg:px-8 lg:py-6">
       <div class="flex flex-col gap-3">
         {% if title %}
-          <h5 class="text-tight text-2xl! font-semibold">{{ title }}</h5>
+          <h5 class="blur-in text-tight text-2xl! font-semibold">{{ title }}</h5>
         {% endif %}
         {% if tipo_di_evento %}
-          <p class="text-tight text-red text-sm font-semibold uppercase">
+          <p class="blur-in text-tight text-red text-sm font-semibold uppercase">
             {% for tipo in tipo_di_evento %}{{ tipo.name }}{% if not loop.last %}, {% endif %}{% endfor %}
           </p>
         {% endif %}
         {% if descrizione %}
-          <p class="text-tight text-base text-black">{{ descrizione }}</p>
+          <p class="blur-in text-tight text-base text-black">{{ descrizione }}</p>
         {% endif %}
       </div>
-      <div class="flex flex-wrap items-baseline gap-x-6 gap-y-1">
+      <div class="blur-in flex flex-wrap items-baseline gap-x-6 gap-y-1">
         {% if data or orario_inizio %}
           <p class="text-tight text-base font-semibold text-black">
             {% if data %}{{ data|date("d F Y") }}{% endif %}{% if orario_inizio %}{% if data %}&ensp;·&ensp;{% endif %}{{ orario_inizio }}{% if orario_fine %} – {{ orario_fine }}{% endif %}{% endif %}
