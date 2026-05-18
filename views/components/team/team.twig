@@ -1,7 +1,11 @@
-<section class="border-stroke w-full border-t">
+<section class="border-stroke w-full {{ component.show_border_top ? "border-t" : "" }} {{ component.show_border_bottom ? "border-b" : "" }}">
   {% if component.title %}
-    <div class="px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20">
-      <h2 class="heading-h4 font-semibold">{{ component.title }}</h2>
+    {% set title_class = component.title_style == "display"
+      ? "display-h3"
+      : "heading-h4 font-semibold"
+    %}
+    <div class="px-6 pt-20 pb-10 xl:px-10 xl:pt-10 xl:pb-10">
+      <h2 class="{{ title_class }}">{{ component.title }}</h2>
     </div>
   {% endif %}
   {% if component.members %}

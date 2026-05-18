@@ -2,13 +2,27 @@
 
 use Extended\ACF\Fields\Image;
 use Extended\ACF\Fields\Repeater;
+use Extended\ACF\Fields\Select;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
+use Extended\ACF\Fields\TrueFalse;
 use Extended\ACF\Fields\WYSIWYGEditor;
 
 return [
     Tab::make("Titolo", "titolo_tab"),
     Text::make("Titolo", "title"),
+    Select::make("Stile titolo", "title_style")
+        ->choices([
+            "heading" => "Heading (heading-h4)",
+            "display" => "Display (display-h3)",
+        ])
+        ->default("heading"),
+    TrueFalse::make("Mostra bordo superiore", "show_border_top")
+        ->stylized()
+        ->default(true),
+    TrueFalse::make("Mostra bordo inferiore", "show_border_bottom")
+        ->stylized()
+        ->default(false),
     Tab::make("Membri", "membri_tab"),
     Repeater::make("Membri", "members")
         ->layout("block")
