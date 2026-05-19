@@ -1,7 +1,14 @@
 {% extends "base.twig" %}
 
 {% block content %}
-  {{ include("components/locations/locations.twig", { component: post }) }}
+  {% set all_locations = post.locations %}
+  {% for group in post.extra_groups %}
+    {% set all_locations = all_locations|merge(group.locations ?? []) %}
+  {% endfor %}
+  {{ include("components/locations/locations.twig", { component: post, all_locations: all_locations }) }}
+  {% for group in post.extra_groups %}
+    {{ include("components/locations/locations.twig", { component: group, show_map: false }) }}
+  {% endfor %}
   {% for component in post.page_components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
     {{

@@ -1,7 +1,7 @@
 {% if component.locations %}
   {# Build map data from locations that have coordinates #}
   {% set map_locations = [] %}
-  {% for location in component.locations %}
+  {% for location in (all_locations ?? component.locations) %}
     {% if location.map_location and location.map_location.latitude %}
       {% set map_locations =
         map_locations|merge(
@@ -29,7 +29,7 @@
 
   <section class="w-full">
     {# Map — full-width hero at the top #}
-    {% if map_locations and mapbox_token %}
+    {% if (show_map ?? true) and map_locations and mapbox_token %}
       <script>
         window.mapboxKey = "{{ mapbox_token }}"
       </script>
