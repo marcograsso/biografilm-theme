@@ -11,6 +11,7 @@ use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\WYSIWYGEditor;
 
 return [
+    Tab::make("Contenuti", "contenuti_tab"),
     Repeater::make("Slide", "hero_carousel_slides")
         ->layout("block")
         ->collapsed("title")

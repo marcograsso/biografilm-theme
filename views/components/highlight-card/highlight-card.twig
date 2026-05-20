@@ -139,6 +139,11 @@
   {% endif %}
 {% endif %}
 
+{% if component.alt_image %}
+  {% set image_url = component.alt_image.url ?? component.alt_image %}
+  {% set fp_source_id = component.alt_image.ID ?? null %}
+{% endif %}
+
 {% if post_id %}
   {% set permalink = film_id
     ? function("get_permalink", film_id)
