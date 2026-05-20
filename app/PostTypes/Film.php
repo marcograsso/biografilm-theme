@@ -64,6 +64,8 @@ class Film extends \Timber\Post
             "sync_proiezioni_taxonomies",
         ]);
 
+        add_action("pre_get_posts", [self::class, "set_archive_per_page"]);
+
         add_action("admin_head-post.php", [
             self::class,
             "featured_image_helper",
@@ -72,6 +74,16 @@ class Film extends \Timber\Post
             self::class,
             "featured_image_helper",
         ]);
+    }
+
+    public static function set_archive_per_page(\WP_Query $query): void
+    {
+        if (is_admin() || !$query->is_main_query()) {
+            return;
+        }
+        if ($query->is_post_type_archive(self::$names["slug"])) {
+            $query->set("posts_per_page", 50);
+        }
     }
 
     public static function sync_proiezioni_taxonomies(int $post_id): void

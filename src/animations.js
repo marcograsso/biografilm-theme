@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener(
     "wheel",
     (e) => {
-      if (e.target.closest(".fs-options")) e.stopImmediatePropagation();
+      if (e.target.closest(".fs-options, .scroll-x")) e.stopImmediatePropagation();
     },
     { capture: true, passive: false },
   );

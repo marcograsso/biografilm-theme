@@ -1,11 +1,11 @@
-@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Manrope:wght@400..700&family=Oswald:wght@400..700&display=swap");
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-sans: "Instrument Sans", "sans-serif";
-  --font-display: "Bebas Neue", "sans-serif";
+  --font-sans: "Instrument Sans", "Manrope", "sans-serif";
+  --font-display: "Bebas Neue", "Oswald", "sans-serif";
   --default-font-color: var(--color-black);
 }
 
@@ -152,8 +152,13 @@
 }
 
 @keyframes skeletonPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 .skeleton-card {
@@ -165,7 +170,10 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-card { flex-direction: row; align-items: flex-end; }
+  .skeleton-card {
+    flex-direction: row;
+    align-items: flex-end;
+  }
 }
 
 .skeleton-image {
@@ -177,7 +185,11 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-image { width: 16.25rem; aspect-ratio: auto; align-self: stretch; }
+  .skeleton-image {
+    width: 16.25rem;
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
 }
 
 .skeleton-body {
@@ -189,7 +201,9 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-body { padding: 1.5rem 2rem; }
+  .skeleton-body {
+    padding: 1.5rem 2rem;
+  }
 }
 
 .skeleton-line {
@@ -198,8 +212,12 @@
   animation: skeletonPulse 1.6s ease-in-out infinite;
 }
 
-.skeleton-line + .skeleton-line { animation-delay: 0.1s; }
-.skeleton-line + .skeleton-line + .skeleton-line { animation-delay: 0.2s; }
+.skeleton-line + .skeleton-line {
+  animation-delay: 0.1s;
+}
+.skeleton-line + .skeleton-line + .skeleton-line {
+  animation-delay: 0.2s;
+}
 
 .skeleton-text {
   color: #d0d0d0;
@@ -249,7 +267,9 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-program-group .skeleton-hour { width: 7.5rem; }
+  .skeleton-program-group .skeleton-hour {
+    width: 7.5rem;
+  }
 }
 
 .skeleton-program-card {
@@ -261,7 +281,10 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-program-card { flex-direction: row; align-items: stretch; }
+  .skeleton-program-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
 }
 
 .skeleton-program-card .skeleton-image {
@@ -271,7 +294,11 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-program-card .skeleton-image { width: 16.25rem; aspect-ratio: auto; align-self: stretch; }
+  .skeleton-program-card .skeleton-image {
+    width: 16.25rem;
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
 }
 
 .skeleton-program-card .skeleton-body {
@@ -283,6 +310,7 @@
 }
 
 @media (min-width: 1024px) {
-  .skeleton-program-card .skeleton-body { padding: 1.5rem 2rem; }
+  .skeleton-program-card .skeleton-body {
+    padding: 1.5rem 2rem;
+  }
 }
-

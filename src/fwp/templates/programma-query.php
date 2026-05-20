@@ -2,7 +2,7 @@
 return [
     'post_type'      => ['proiezione', 'eventi-programma'],
     'post_status'    => ['publish'],
-    'posts_per_page' => 15,
+    'posts_per_page' => 20,
     'meta_query'     => [
         'data_clause' => [
             'key'     => 'data',

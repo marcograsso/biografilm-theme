@@ -2,7 +2,7 @@
   <section class="w-full" x-data="{ active: 0 }">
     {# Tab headers #}
     <div class="">
-      <div class="border-t-stroke flex overflow-x-auto border-t bg-black">
+      <div class="scroll-x border-t-stroke flex overflow-x-scroll border-t bg-black">
         {% for tab in component.tabs %}
           <button
             type="button"
@@ -86,15 +86,22 @@
                   {# Accordion #}
                 {% elseif layout == "accordion" %}
                   {% if block.items %}
-                    <div class="border-stroke flex flex-col gap-6" x-data="{ active: null }">
+                    <div
+                      class="border-stroke flex flex-col gap-6"
+                      x-data="{ active: null }"
+                    >
                       {% for item in block.items %}
                         <div
                           class="border-stroke flex flex-col border-x border-t border-b"
                         >
                           <button
                             class="flex w-full cursor-pointer items-start gap-4 p-6 text-left transition-colors xl:p-10"
-                            :class="active !== {{ loop.index0 }} && 'hover:bg-white-hover active:bg-white-active'"
-                            @click="active === {{ loop.index0 }} ? active = null : active = {{ loop.index0 }}"
+                            :class="active !== {{
+                            loop.index0
+                            }} && 'hover:bg-white-hover active:bg-white-active'"
+                            @click="active === {{
+                            loop.index0
+                            }} ? active = null : active = {{ loop.index0 }}"
                             :aria-expanded="active === {{ loop.index0 }}"
                           >
                             <p
@@ -140,7 +147,10 @@
                             </span>
                           </button>
                           {% if item.answer %}
-                            <div x-show="active === {{ loop.index0 }}" x-collapse>
+                            <div
+                              x-show="active === {{ loop.index0 }}"
+                              x-collapse
+                            >
                               <div
                                 class="prose text-tight px-6 pb-6 text-xl leading-[150%] text-black/80 xl:px-10 xl:pb-10"
                               >

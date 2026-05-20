@@ -54,6 +54,14 @@
                     )
                   }}
                 </div>
+              {% else %}
+                <div
+                  class="lg:w-1/2 xl:w-2/5 {{
+                  loop.first
+                    ? ""
+                    : "border-stroke border-t"
+                  }}"
+                ></div>
               {% endif %}
             </div>
           {% endfor %}
