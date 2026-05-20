@@ -11,6 +11,7 @@ use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\WYSIWYGEditor;
 
 return [
+    Tab::make("Contenuti", "contenuti_tab"),
     Repeater::make("Slide", "carousel_slides")
         ->layout("block")
         ->collapsed("title")
@@ -20,8 +21,7 @@ return [
             Image::make("Immagine di sfondo", "background_image")->format(
                 "array",
             ),
-            File::make("Video di sfondo", "background_video")
-                ->format("array"),
+            File::make("Video di sfondo", "background_video")->format("array"),
             Tab::make("Testi")->placement("left"),
             Text::make("Titolo", "title"),
             Text::make("Sottotitolo", "subtitle"),

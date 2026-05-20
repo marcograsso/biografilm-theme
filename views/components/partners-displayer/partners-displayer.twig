@@ -95,6 +95,7 @@
 
       {% for item in component.items %}
         {% set partner = item.partner %}
+        {% if partner %}
         {% set wide = item.wide %}
         {% set page_visible =
           function("get_field", "page_visible", partner.ID)
@@ -205,6 +206,7 @@
           {% set p4 = p4 == 4 ? 1 : p4 + 1 %}
           {% set p6 = p6 == 6 ? 1 : p6 + 1 %}
           {% set p8 = p8 == 8 ? 1 : p8 + 1 %}
+        {% endif %}
         {% endif %}
       {% endfor %}
 
