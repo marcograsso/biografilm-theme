@@ -6,6 +6,7 @@ use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\TrueFalse;
 
 return [
+    Tab::make("Dimensioni", "dimensioni_tab"),
     Number::make("Desktop (rem)", "gap")
         ->min(0)
         ->step(0.5)
@@ -22,12 +23,8 @@ return [
         ->step(0.5)
         ->helperText("< md, default: tablet")
         ->column(33),
-    TrueFalse::make("Bordo superiore", "border_top")
-        ->stylized()
-        ->column(50),
-    TrueFalse::make("Bordo inferiore", "border_bottom")
-        ->stylized()
-        ->column(50),
+    TrueFalse::make("Bordo superiore", "border_top")->stylized()->column(50),
+    TrueFalse::make("Bordo inferiore", "border_bottom")->stylized()->column(50),
     Tab::make("Impostazioni", "impostazioni_tab"),
     Text::make("Ancora (ID)", "anchor")
         ->helperText("ID per i link ancora. Inserisci senza il simbolo #.")

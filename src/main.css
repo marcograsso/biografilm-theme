@@ -314,3 +314,27 @@
     padding: 1.5rem 2rem;
   }
 }
+
+/* iubenda cookie banner */
+#iubenda-cs-banner {
+  font-family: var(--font-sans) !important;
+}
+
+#iubenda-cs-banner .iubenda-cs-opt-group button {
+  border-radius: 0 !important;
+  font-family: var(--font-sans) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+#iubenda-cs-banner .iubenda-cs-opt-group-consent button {
+  background-color: hsl(356, 77%, 42%) !important;
+  color: #fff !important;
+}
+
+#iubenda-cs-banner .iubenda-cs-opt-group-custom button,
+#iubenda-cs-banner .iubenda-cs-opt-group-reject button {
+  background-color: hsl(0, 0%, 22%) !important;
+  color: #fff !important;
+}

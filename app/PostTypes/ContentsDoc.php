@@ -51,6 +51,9 @@ class ContentsDoc extends \Timber\Post
         $spacer_fields = require get_stylesheet_directory() .
             "/views/components/spacer/spacer.php";
 
+        $logos_displayer_fields = require get_stylesheet_directory() .
+            "/views/components/logos-displayer/logos-displayer.php";
+
         register_extended_field_group([
             "title" => "Scheda Doc",
             "location" => [Location::where("post_type", self::$names["slug"])],
@@ -186,6 +189,9 @@ class ContentsDoc extends \Timber\Post
                                 Layout::make("Spacer", "spacer")
                                     ->key("layout_contents_doc_extra_spacer")
                                     ->fields($spacer_fields),
+                                Layout::make("Logos Displayer", "logos_displayer")
+                                    ->key("layout_contents_doc_extra_logos_displayer")
+                                    ->fields($logos_displayer_fields),
                                 Layout::make("Premi", "premi")
                                     ->key("layout_contents_doc_extra_premi")
                                     ->fields([
