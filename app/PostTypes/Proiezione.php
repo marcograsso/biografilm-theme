@@ -205,8 +205,8 @@ class Proiezione extends \Timber\Post
                 Taxonomy::make("Alt Badges", "alt_badges")
                     ->taxonomy("badge")
                     ->appearance("checkbox")
-                    ->create(true)
-                    ->save(true),
+                    ->format("object")
+                    ->create(true),
             ],
         ]);
     }

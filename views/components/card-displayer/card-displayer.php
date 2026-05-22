@@ -2,6 +2,7 @@
 
 use Extended\ACF\Fields\Group;
 use Extended\ACF\Fields\Link;
+use Extended\ACF\Fields\Select;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Text;
@@ -18,6 +19,13 @@ return [
         ->format("object")
         ->withSettings(["allow_duplicates" => 1]),
     Tab::make("Stile"),
+    Select::make("Stile titolo", "title_style")
+        ->choices([
+            "display-h2" => "Grande",
+            "heading-h4 font-semibold" => "Medio",
+            "heading-h5 font-semibold" => "Piccolo",
+        ])
+        ->default("display-h2"),
     TrueFalse::make("Sempre pari", "always_even")
         ->stylized()
         ->helperText(

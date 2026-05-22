@@ -10,7 +10,7 @@
 {% set alt_image =
   function("get_field", "immagine_alternativa", proiezione.ID)
 %}
-{% set alt_badges = function("wp_get_post_terms", proiezione.ID, "badge") %}
+{% set alt_badges = function("get_field", "alt_badges", proiezione.ID) %}
 
 {# Image & focal point #}
 {% if alt_image %}
@@ -39,10 +39,11 @@
 {% set title = alt_title ? : film.post_title ?? null %}
 
 {# Badges #}
-{% set badges = alt_badges
-  ?
-  : film_id ? function("wp_get_post_terms", film_id, "badge") : []
-%}
+{% if alt_badges is not empty %}
+  {% set badges = alt_badges %}
+{% else %}
+  {% set badges = film_id ? function("wp_get_post_terms", film_id, "badge") : [] %}
+{% endif %}
 
 {# Sezione (always from film) #}
 {% set sezione = film_id ? function("get_field", "sezione", film_id)[0] : null
@@ -104,7 +105,7 @@
   {% endif %}
   <div class="relative aspect-video w-full overflow-hidden bg-gray-200">
     <div
-      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-500 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px] group-hover:duration-700"
+      class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] backdrop-brightness-[1] backdrop-saturate-[1] transition-all duration-500 ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[36px] group-hover:backdrop-brightness-[1.08] group-hover:backdrop-saturate-[1.5] group-hover:duration-700"
     ></div>
     <img
       src="{{
