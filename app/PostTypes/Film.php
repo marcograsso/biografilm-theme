@@ -9,6 +9,7 @@ use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
 use Extended\ACF\Fields\Text;
+use Extended\ACF\Fields\TrueFalse;
 use Extended\ACF\Fields\WYSIWYGEditor;
 use Extended\ACF\Location;
 
@@ -83,6 +84,18 @@ class Film extends \Timber\Post
         }
         if ($query->is_post_type_archive(self::$names["slug"])) {
             $query->set("posts_per_page", 50);
+            $query->set("meta_query", [
+                "relation" => "OR",
+                [
+                    "key"     => "escludi_dall_archivio",
+                    "compare" => "NOT EXISTS",
+                ],
+                [
+                    "key"     => "escludi_dall_archivio",
+                    "value"   => "1",
+                    "compare" => "!=",
+                ],
+            ]);
         }
     }
 
@@ -124,6 +137,10 @@ class Film extends \Timber\Post
             "style" => "",
             "fields" => [
                 Tab::make("Generali"),
+                TrueFalse::make("Escludi dall'archivio", "escludi_dall_archivio")
+                    ->default(false)
+                    ->stylized()
+                    ->helperText("Se attivo, questo film non viene mostrato nell'archivio film."),
                 Text::make("Regista", "regista"),
                 Repeater::make("Altri registi", "altri_registi")
                     ->layout("row")

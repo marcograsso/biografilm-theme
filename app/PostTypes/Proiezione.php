@@ -10,6 +10,7 @@ use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Taxonomy;
 use Extended\ACF\Fields\Text;
 use Extended\ACF\Fields\TimePicker;
+use Extended\ACF\Fields\TrueFalse;
 use Extended\ACF\Fields\URL;
 use Extended\ACF\Fields\WYSIWYGEditor;
 use Extended\ACF\Location;
@@ -136,6 +137,10 @@ class Proiezione extends \Timber\Post
             "style" => "",
             "fields" => [
                 Tab::make("Proiezione"),
+                TrueFalse::make("Escludi dal programma", "escludi_dal_programma")
+                    ->default(false)
+                    ->stylized()
+                    ->helperText("Se attivo, questa proiezione non viene mostrata nel programma finale."),
                 Relationship::make("Film", "film")
                     ->key("field_proiezione_film")
                     ->postTypes(["film"])

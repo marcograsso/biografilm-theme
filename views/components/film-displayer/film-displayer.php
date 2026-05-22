@@ -5,6 +5,7 @@ use Extended\ACF\Fields\Tab;
 use Extended\ACF\Fields\Text;
 
 return [
+    Tab::make("Contenuti", "contenuti_tab"),
     Text::make("Titolo", "title"),
     Text::make("Sottotitolo", "subtitle"),
     Relationship::make("Film", "items")
