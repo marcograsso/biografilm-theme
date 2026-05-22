@@ -45,9 +45,7 @@
   ?
   : film_id ? function("wp_get_post_terms", film_id, "badge") : []
 %}
-{% set sezione = film_id
-  ? function("get_field", "sezione", film_id)[0]
-  : null
+{% set sezione = film_id ? function("get_field", "sezione", film_id)[0] : null
 %}
 
 {# Preview #}
@@ -123,16 +121,17 @@
         src="{{
         image_url
           ?
-          : site.theme.link ~ "/assets/images/fallback-img.jpg"
+          : site.theme.link ~ "/assets/images/fallback-img-black.png"
         }}"
         alt="{{ title }}"
-        class="h-full w-full object-cover"
+        class="absolute inset-0 h-full w-full object-cover transition-all duration-500 group-hover:scale-[1.1]"
         style="{{ fp_style }}"
       />
     </div>
-
     {# Info #}
-    <div class="flex flex-1 flex-col gap-8 px-6 py-10 lg:border-b lg:border-b-stroke lg:px-8 lg:py-6">
+    <div
+      class="lg:border-b-stroke flex flex-1 flex-col gap-8 px-6 py-10 lg:border-b lg:px-8 lg:py-6"
+    >
       <div class="flex flex-col gap-3">
         {% if sezione %}
           <p
@@ -142,7 +141,9 @@
           </p>
         {% endif %}
         {% if title %}
-          <h5 class="blur-in text-tight text-2xl! font-semibold">{{ title }}</h5>
+          <h5 class="blur-in text-tight text-2xl! font-semibold">
+            {{ title }}
+          </h5>
         {% endif %}
         <span class="blur-in flex flex-wrap items-center gap-x-6 gap-y-3">
           {% if sezione %}
@@ -160,13 +161,19 @@
         </span>
       </div>
       <div class="flex flex-col gap-3">
-        <div class="blur-in text-tight line-clamp-2 min-h-[2lh] text-sm text-black [&_p]:mb-0">
+        <div
+          class="blur-in text-tight line-clamp-2 min-h-[2lh] text-sm text-black [&_p]:mb-0"
+        >
           {{ descrizione_proiezione }}
         </div>
-        <div class="blur-in mt-auto flex flex-wrap items-baseline gap-x-6 gap-y-1">
+        <div
+          class="blur-in mt-auto flex flex-wrap items-baseline gap-x-6 gap-y-1"
+        >
           {% if proiezione.data or proiezione.orario %}
             <p class="text-tight text-base font-semibold text-black">
-              {{ proiezione.data|date("d F Y") }}{% if proiezione.orario %}&ensp;·&ensp;{{ proiezione.orario|date("H:i") }}{% endif %}
+              {{ proiezione.data|date("d F Y") }}{% if proiezione.orario %}
+                &ensp;·&ensp;{{ proiezione.orario|date("H:i") }}
+              {% endif %}
             </p>
           {% endif %}
           {% if location %}
@@ -181,7 +188,9 @@
 
   {# Ticket button — above the stretched film link #}
   {% if link_biglietto %}
-    <div class="pointer-events-auto relative z-10 lg:border-b lg:border-b-stroke">
+    <div
+      class="lg:border-b-stroke pointer-events-auto relative z-10 lg:border-b"
+    >
       {% include "components/button.twig" with {
         as_link: true,
         label: link_biglietto.title ? : function("pll__", "Compra biglietto"),

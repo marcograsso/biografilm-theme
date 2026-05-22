@@ -1,5 +1,6 @@
 <?php if (have_posts()): ?>
     <?php
+    $site   = new \Timber\Site();
     $groups = [];
     while (have_posts()):
         the_post();
@@ -51,7 +52,7 @@
                         } else {
                             Timber\Timber::render(
                                 "parts/cards/program-card.twig",
-                                ["proiezione" => $item['post']],
+                                ["proiezione" => $item['post'], "site" => $site],
                             );
                         }
                     endforeach; ?>

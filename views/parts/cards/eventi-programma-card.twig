@@ -11,10 +11,18 @@
 {% set sala_location = function("get_field", "sala_location", id) %}
 
 {% set thumb_id = function("get_post_thumbnail_id", id) %}
-{% set image_url = thumb_id ? function("get_the_post_thumbnail_url", id, "large") : "" %}
-{% set fp = thumb_id ? function("get_post_meta", thumb_id, "focalpoint", true) : null %}
+{% set image_url = thumb_id
+  ? function("get_the_post_thumbnail_url", id, "large")
+  : ""
+%}
+{% set fp = thumb_id
+  ? function("get_post_meta", thumb_id, "focalpoint", true)
+  : null
+%}
 {% set fp_style = fp
-  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% " ~ ((fp.top * 100)|round) ~ "%;"
+  ? "object-position: " ~ ((fp.left * 100)|round) ~ "% "
+    ~ ((fp.top * 100)|round)
+    ~ "%;"
   : null
 %}
 
@@ -24,15 +32,19 @@
   {% if link_card %}
     <a
       href="{{ link_card.url }}"
-      target="{{ link_card.target ?: "_self" }}"
+      target="{{ link_card.target ? : "_self" }}"
       class="absolute inset-0 transition-colors duration-300"
       aria-label="{{ title }}"
-    ></a>
+    >
+
+    </a>
   {% endif %}
 
-  <div class="pointer-events-none relative flex min-w-0 flex-1 flex-col lg:flex-row">
+  <div
+    class="pointer-events-none relative flex min-w-0 flex-1 flex-col lg:flex-row"
+  >
     <div
-      class="relative aspect-video w-full shrink-0 overflow-hidden bg-red lg:aspect-auto lg:w-65"
+      class="bg-red relative aspect-video w-full shrink-0 overflow-hidden lg:aspect-auto lg:w-65"
     >
       <div
         class="overlay absolute z-30 h-full w-full bg-transparent [mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] backdrop-blur-[0px] transition-[backdrop-filter,_-webkit-backdrop-filter] duration-[1500ms] ease-in-out [-webkit-mask-image:radial-gradient(ellipse_at_center,transparent_45%,black_90%)] group-hover:backdrop-blur-[90px] group-hover:duration-700"
@@ -42,32 +54,54 @@
         src="{{
         image_url
           ?
-          : function("get_stylesheet_directory_uri") ~ "/assets/images/fallback-img-red.jpg"
+          : function("get_stylesheet_directory_uri")
+            ~ "/assets/images/fallback-img-red.jpg"
         }}"
         alt="{{ title }}"
-        class="absolute inset-0 h-full w-full {{ image_url ? 'object-cover' : 'object-contain object-center lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 lg:h-auto lg:w-full' }}"
+        class="absolute inset-0 h-full w-full transition-all duration-500 group-hover:scale-[1.1] {{
+        image_url
+          ? "object-cover"
+          : "object-contain object-center lg:inset-auto lg:top-1/2 lg:left-1/2 lg:h-auto lg:w-full lg:-translate-x-1/2 lg:-translate-y-1/2"
+        }}"
         {{ image_url ? 'style="' ~ fp_style ~ '"' }}
       />
     </div>
 
-    <div class="flex flex-1 flex-col justify-between gap-8 px-6 py-10 lg:border-b lg:border-b-stroke lg:px-8 lg:py-6">
+    <div
+      class="lg:border-b-stroke flex flex-1 flex-col justify-between gap-8 px-6 py-10 lg:border-b lg:px-8 lg:py-6"
+    >
       <div class="flex flex-col gap-3">
         {% if title %}
-          <h5 class="blur-in text-tight text-2xl! font-semibold">{{ title }}</h5>
+          <h5 class="blur-in text-tight text-2xl! font-semibold">
+            {{ title }}
+          </h5>
         {% endif %}
         {% if tipo_di_evento %}
-          <p class="blur-in text-tight text-red text-sm font-semibold uppercase">
-            {% for tipo in tipo_di_evento %}{{ tipo.name }}{% if not loop.last %}, {% endif %}{% endfor %}
+          <p
+            class="blur-in text-tight text-red text-sm font-semibold uppercase"
+          >
+            {% for tipo in tipo_di_evento %}
+              {{ tipo.name }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
           </p>
         {% endif %}
         {% if descrizione %}
-          <p class="blur-in text-tight text-base text-black">{{ descrizione }}</p>
+          <p class="blur-in text-tight text-base text-black">
+            {{ descrizione }}
+          </p>
         {% endif %}
       </div>
       <div class="blur-in flex flex-wrap items-baseline gap-x-6 gap-y-1">
         {% if data or orario_inizio %}
           <p class="text-tight text-base font-semibold text-black">
-            {% if data %}{{ data|date("d F Y") }}{% endif %}{% if orario_inizio %}{% if data %}&ensp;·&ensp;{% endif %}{{ orario_inizio }}{% if orario_fine %} – {{ orario_fine }}{% endif %}{% endif %}
+            {% if data %}{{ data|date("d F Y") }}{% endif %}
+            {% if orario_inizio %}
+              {% if data %}
+                &ensp;·&ensp;
+              {% endif %}{{ orario_inizio }}{% if orario_fine %}
+                – {{ orario_fine }}
+              {% endif %}
+            {% endif %}
           </p>
         {% endif %}
         {% if location %}
@@ -80,7 +114,9 @@
   </div>
 
   {% if link %}
-    <div class="pointer-events-auto relative z-10 lg:border-b lg:border-b-stroke">
+    <div
+      class="lg:border-b-stroke pointer-events-auto relative z-10 lg:border-b"
+    >
       {{
         include(
           "components/button.twig",
@@ -91,7 +127,7 @@
             size: "lg",
             attributes: {
               href: link.url,
-              target: link.target ?: "_self",
+              target: link.target ? : "_self",
               class: "text-lg! py-6 px-8 lg:w-auto w-full"
             }
           }
