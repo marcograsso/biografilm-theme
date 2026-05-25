@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html {{ site.language_attributes }}>
+  {% block head %}
+    {{ include("parts/head.twig") }}
+  {% endblock head %}
+  <body class="antialiased">
+    {{ function("wp_body_open") }}
+
+    <div class="flex flex-col">
+      <!-- Logo + main content -->
+      <div
+        class="flex flex-1 flex-col items-center justify-between px-6 py-12 lg:px-16 lg:py-16"
+      >
+        <!-- Logo -->
+        <div>
+          <a href="{{ home_url }}">
+            {{
+              include("views/svgs/logo/logo-biografilm-red.svg")|attr({
+                class: "w-[180px] h-auto lg:w-[220px]"
+              })
+            }}
+          </a>
+        </div>
+
+        <!-- Heading -->
+        <div class="flex flex-col items-center gap-6 text-center">
+          {% if header_date or header_location %}
+            <p
+              class="text-tight my-10 text-sm font-semibold tracking-widest text-black/40 uppercase"
+            >
+              {% if header_date %}{{ header_date }}{% endif %}
+              {% if header_date and header_location %} — {% endif %}
+              {% if header_location %}{{ header_location }}{% endif %}
+            </p>
+          {% endif %}
+
+          <h1
+            class="text-tight my-20 text-5xl leading-tight font-semibold text-black lg:text-7xl"
+          >
+            Coming soon
+          </h1>
+        </div>
+
+        <div></div>
+      </div>
+
+      <!-- Newsletter block -->
+      {{ include("parts/newsletter-block.twig") }}
+    </div>
+
+    {{ function("wp_footer") }}
+  </body>
+</html>
