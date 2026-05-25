@@ -1,6 +1,6 @@
 <div
   x-data="{ menuOpen: false, mobileMenuOpen: false, searchOpen: false }"
-  class="fixed top-0 z-[40000] flex w-full flex-col transition-transform duration-200 [transition-timing-function:cubic-bezier(0.22,1,0.36,1)]"
+  class="fixed top-0 z-[40000] flex w-full flex-col"
 >
   <div class="relative">
     <div class="relative flex w-full items-stretch justify-between bg-white">
@@ -217,6 +217,7 @@
           </div>
           <!-- Sliding search input -->
           <div
+            x-cloak
             class="grid transition-[grid-template-columns] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
             :class="searchOpen ? 'grid-cols-[1fr] border-l-stroke border-l' : 'grid-cols-[0fr]'"
           >
