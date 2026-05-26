@@ -17,10 +17,10 @@
       not component.title and not component.link
         ? "hidden xl:flex"
         : ""
-      }} flex flex-col gap-2 px-6{{
+      }} {{
       is_rows
-        ? "py-20 xl:px-10 xl:py-30"
-        : "pt-20 3xl:col-span-1 col-span-3 pb-10 xl:col-span-1 xl:p-10 xl:pb-5"
+        ? "py-20 flex flex-col gap-2 px-6 xl:px-10 xl:py-30"
+        : "pt-20 3xl:col-span-1 col-span-3 flex flex-col gap-2 px-6 pb-10 xl:col-span-1 xl:p-10 xl:pb-5"
       }} {{
       component.title_style starts with "heading-"
         ? "font-semibold"
@@ -96,117 +96,117 @@
       {% for item in component.items %}
         {% set partner = item.partner %}
         {% if partner %}
-        {% set wide = item.wide %}
-        {% set page_visible =
-          function("get_field", "page_visible", partner.ID)
-        %}
-        {% set alt_url = function("get_field", "url", partner.ID) %}
-        {% set image_url =
-          function("get_the_post_thumbnail_url", partner.ID, "large")
-        %}
+          {% set wide = item.wide %}
+          {% set page_visible =
+            function("get_field", "page_visible", partner.ID)
+          %}
+          {% set alt_url = function("get_field", "url", partner.ID) %}
+          {% set image_url =
+            function("get_the_post_thumbnail_url", partner.ID, "large")
+          %}
 
-        {% if page_visible %}
-          {% set href = function("get_permalink", partner.ID) %}
-          {% set target = "_self" %}
-        {% elseif alt_url %}
-          {% set href = alt_url %}
-          {% set target = "_blank" %}
-        {% else %}
-          {% set href = null %}
-          {% set target = "_self" %}
-        {% endif %}
-
-        {% set cell_class = "border-stroke flex w-full items-center justify-center border-b border-l p-6 "
-          ~ (wide ? "col-span-2 aspect-8/3" : "col-span-1 aspect-4/3")
-        %}
-
-        {# Insert pre-fillers before a wide item that can't fit in the current row #}
-        {% if wide %}
-          {% if p2 == 2 %}
-            <div class="{{ filler_base }} border-l md:hidden"></div>
-            {% set p2 = 1 %}
+          {% if page_visible %}
+            {% set href = function("get_permalink", partner.ID) %}
+            {% set target = "_self" %}
+          {% elseif alt_url %}
+            {% set href = alt_url %}
+            {% set target = "_blank" %}
+          {% else %}
+            {% set href = null %}
+            {% set target = "_self" %}
           {% endif %}
-          {% if p3 == 3 %}
-            <div
-              class="{{ filler_base }} hidden border-l md:block lg:hidden"
-            ></div>
-            {% set p3 = 1 %}
-          {% endif %}
-          {% if p4 == 4 %}
-            {% if is_rows %}
-              <div
-                class="{{ filler_base }} hidden border-l lg:block xl:hidden"
-              ></div>
-            {% else %}
-              <div
-                class="{{ filler_base }} 3xl:hidden hidden border-l lg:block"
-              ></div>
+
+          {% set cell_class = "border-stroke flex w-full items-center justify-center border-b border-l p-6 "
+            ~ (wide ? "col-span-2 aspect-8/3" : "col-span-1 aspect-4/3")
+          %}
+
+          {# Insert pre-fillers before a wide item that can't fit in the current row #}
+          {% if wide %}
+            {% if p2 == 2 %}
+              <div class="{{ filler_base }} border-l md:hidden"></div>
+              {% set p2 = 1 %}
             {% endif %}
-            {% set p4 = 1 %}
-          {% endif %}
-          {% if p6 == 6 %}
-            {% if is_rows %}
+            {% if p3 == 3 %}
               <div
-                class="{{ filler_base }} 3xl:hidden hidden border-l xl:block"
+                class="{{ filler_base }} hidden border-l md:block lg:hidden"
               ></div>
-            {% else %}
+              {% set p3 = 1 %}
+            {% endif %}
+            {% if p4 == 4 %}
+              {% if is_rows %}
+                <div
+                  class="{{ filler_base }} hidden border-l lg:block xl:hidden"
+                ></div>
+              {% else %}
+                <div
+                  class="{{ filler_base }} 3xl:hidden hidden border-l lg:block"
+                ></div>
+              {% endif %}
+              {% set p4 = 1 %}
+            {% endif %}
+            {% if p6 == 6 %}
+              {% if is_rows %}
+                <div
+                  class="{{ filler_base }} 3xl:hidden hidden border-l xl:block"
+                ></div>
+              {% else %}
+                <div class="{{ filler_base }} 3xl:block hidden border-l"></div>
+              {% endif %}
+              {% set p6 = 1 %}
+            {% endif %}
+            {% if is_rows and p8 == 8 %}
               <div class="{{ filler_base }} 3xl:block hidden border-l"></div>
+              {% set p8 = 1 %}
             {% endif %}
-            {% set p6 = 1 %}
           {% endif %}
-          {% if is_rows and p8 == 8 %}
-            <div class="{{ filler_base }} 3xl:block hidden border-l"></div>
-            {% set p8 = 1 %}
+
+          {% if href %}
+            <a
+              href="{{ href }}"
+              target="{{ target }}"
+              rel="noopener noreferrer"
+              class="group relative {{ cell_class }}"
+            >
+              <div
+                class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
+              ></div>
+              {% if image_url %}
+                <img
+                  src="{{ image_url }}"
+                  alt="{{ partner.post_title }}"
+                  class="h-full w-full scale-90 object-contain transition-all duration-300 group-hover:scale-100"
+                />
+              {% endif %}
+            </a>
+          {% else %}
+            <div class="relative {{ cell_class }}">
+              <div
+                class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
+              ></div>
+              {% if image_url %}
+                <img
+                  src="{{ image_url }}"
+                  alt="{{ partner.post_title }}"
+                  class="h-full w-full object-contain"
+                />
+              {% endif %}
+            </div>
           {% endif %}
-        {% endif %}
 
-        {% if href %}
-          <a
-            href="{{ href }}"
-            target="{{ target }}"
-            rel="noopener noreferrer"
-            class="group relative {{ cell_class }}"
-          >
-            <div
-              class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
-            ></div>
-            {% if image_url %}
-              <img
-                src="{{ image_url }}"
-                alt="{{ partner.post_title }}"
-                class="h-full w-full scale-90 object-contain transition-all duration-300 group-hover:scale-100"
-              />
-            {% endif %}
-          </a>
-        {% else %}
-          <div class="relative {{ cell_class }}">
-            <div
-              class="overlay-blur overlay absolute inset-0 z-10 bg-transparent backdrop-blur-[50px]"
-            ></div>
-            {% if image_url %}
-              <img
-                src="{{ image_url }}"
-                alt="{{ partner.post_title }}"
-                class="h-full w-full object-contain"
-              />
-            {% endif %}
-          </div>
-        {% endif %}
-
-        {# Update column positions after each item #}
-        {% if wide %}
-          {% set p2 = p2 + 2 <= 2 ? p2 + 2 : 1 %}
-          {% set p3 = p3 + 2 <= 3 ? p3 + 2 : 1 %}
-          {% set p4 = p4 + 2 <= 4 ? p4 + 2 : 1 %}
-          {% set p6 = p6 + 2 <= 6 ? p6 + 2 : 1 %}
-          {% set p8 = p8 + 2 <= 8 ? p8 + 2 : 1 %}
-        {% else %}
-          {% set p2 = p2 == 2 ? 1 : p2 + 1 %}
-          {% set p3 = p3 == 3 ? 1 : p3 + 1 %}
-          {% set p4 = p4 == 4 ? 1 : p4 + 1 %}
-          {% set p6 = p6 == 6 ? 1 : p6 + 1 %}
-          {% set p8 = p8 == 8 ? 1 : p8 + 1 %}
-        {% endif %}
+          {# Update column positions after each item #}
+          {% if wide %}
+            {% set p2 = p2 + 2 <= 2 ? p2 + 2 : 1 %}
+            {% set p3 = p3 + 2 <= 3 ? p3 + 2 : 1 %}
+            {% set p4 = p4 + 2 <= 4 ? p4 + 2 : 1 %}
+            {% set p6 = p6 + 2 <= 6 ? p6 + 2 : 1 %}
+            {% set p8 = p8 + 2 <= 8 ? p8 + 2 : 1 %}
+          {% else %}
+            {% set p2 = p2 == 2 ? 1 : p2 + 1 %}
+            {% set p3 = p3 == 3 ? 1 : p3 + 1 %}
+            {% set p4 = p4 == 4 ? 1 : p4 + 1 %}
+            {% set p6 = p6 == 6 ? 1 : p6 + 1 %}
+            {% set p8 = p8 == 8 ? 1 : p8 + 1 %}
+          {% endif %}
         {% endif %}
       {% endfor %}
 

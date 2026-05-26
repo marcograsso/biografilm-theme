@@ -7,7 +7,7 @@
 {% endblock hero %}
 
 {% block content %}
-  <article>
+  <article class="mb-10">
     <div class="xl:w-2/3">
       {% if post.content or post.thumbnail %}
         <div
@@ -23,15 +23,18 @@
           {{ post.content }}
         </div>
       {% endif %}
-
     </div>
   </article>
 
   {% set proposte = get_proposte_by_publisher(post.ID) %}
   {% if proposte %}
-    <section class="w-full border-t border-stroke">
-      <div class="border-stroke flex flex-col border-b px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20">
-        <h2 class="heading-h4 blur-in font-semibold">{{ function("pll__", "Proposte editoriali") }}</h2>
+    <section class="border-stroke w-full border-t">
+      <div
+        class="border-stroke flex flex-col border-b px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20"
+      >
+        <h2 class="heading-h4 blur-in font-semibold">
+          {{ function("pll__", "Proposte editoriali") }}
+        </h2>
       </div>
       {% set count = proposte|length %}
       {% set is_odd = count % 2 == 1 %}
@@ -39,21 +42,42 @@
       {% set filler_3col = remainder_3col > 0 ? 3 - remainder_3col : 0 %}
       {% set remainder_4col = count % 4 %}
       {% set filler_4col = remainder_4col > 0 ? 4 - remainder_4col : 0 %}
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
+      <div
+        class="3xl:grid-cols-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3"
+      >
         {% for project in proposte %}
-          {{ include("parts/cards/proposta-editoriale-card.twig", { project: project, no_border: false }) }}
+          {{
+            include(
+              "parts/cards/proposta-editoriale-card.twig",
+              { project: project, no_border: false }
+            )
+          }}
         {% endfor %}
         {% if is_odd %}
-          <div class="border-stroke col-span-1 border-b border-l xl:hidden"></div>
+          <div
+            class="border-stroke col-span-1 border-b border-l xl:hidden"
+          ></div>
         {% endif %}
         {% if filler_3col > 0 %}
           {% for i in 1..filler_3col %}
-            <div class="border-stroke col-span-1 hidden border-b 3xl:hidden xl:block {{ loop.first ? 'border-l' : '' }}"></div>
+            <div
+              class="border-stroke 3xl:hidden col-span-1 hidden border-b xl:block {{
+              loop.first
+                ? "border-l"
+                : ""
+              }}"
+            ></div>
           {% endfor %}
         {% endif %}
         {% if filler_4col > 0 %}
           {% for i in 1..filler_4col %}
-            <div class="border-stroke col-span-1 hidden border-b 3xl:block {{ loop.first ? 'border-l' : '' }}"></div>
+            <div
+              class="border-stroke 3xl:block col-span-1 hidden border-b {{
+              loop.first
+                ? "border-l"
+                : ""
+              }}"
+            ></div>
           {% endfor %}
         {% endif %}
       </div>
@@ -62,16 +86,24 @@
 
   {% set whos_coming = function("get_field", "whos_coming", post.ID) %}
   {% set whos_coming_titolo = function("get_field", "titolo", post.ID) %}
-  {% set whos_coming_sottotitolo = function("get_field", "sottotitolo", post.ID) %}
+  {% set whos_coming_sottotitolo =
+    function("get_field", "sottotitolo", post.ID)
+  %}
   {% if whos_coming %}
     {% if whos_coming_titolo or whos_coming_sottotitolo %}
-      <div class="border-stroke flex flex-col border-b px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20">
+      <div
+        class="border-stroke flex flex-col border-b px-6 pt-20 pb-10 xl:px-10 xl:pt-30 xl:pb-20"
+      >
         <div class="flex flex-col gap-6 xl:w-2/3">
           {% if whos_coming_titolo %}
-            <h2 class="heading-h4 blur-in font-semibold">{{ whos_coming_titolo }}</h2>
+            <h2 class="heading-h4 blur-in font-semibold">
+              {{ whos_coming_titolo }}
+            </h2>
           {% endif %}
           {% if whos_coming_sottotitolo %}
-            <p class="blur-in max-w-pros text-xl text-black/80">{{ whos_coming_sottotitolo }}</p>
+            <p class="blur-in max-w-pros text-xl text-black/80">
+              {{ whos_coming_sottotitolo }}
+            </p>
           {% endif %}
         </div>
       </div>
@@ -82,21 +114,38 @@
     {% set filler_3col = remainder_3col > 0 ? 3 - remainder_3col : 0 %}
     {% set remainder_4col = count % 4 %}
     {% set filler_4col = remainder_4col > 0 ? 4 - remainder_4col : 0 %}
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4">
+    <div class="3xl:grid-cols-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
       {% for person in whos_coming %}
-        {{ include("parts/cards/whos-coming-card.twig", { person: person, extra_class: "" }) }}
+        {{
+          include(
+            "parts/cards/whos-coming-card.twig",
+            { person: person, extra_class: "" }
+          )
+        }}
       {% endfor %}
       {% if is_odd %}
         <div class="border-stroke col-span-1 border-b border-l xl:hidden"></div>
       {% endif %}
       {% if filler_3col > 0 %}
         {% for i in 1..filler_3col %}
-          <div class="border-stroke col-span-1 hidden border-b 3xl:hidden xl:block {{ loop.first ? 'border-l' : '' }}"></div>
+          <div
+            class="border-stroke 3xl:hidden col-span-1 hidden border-b xl:block {{
+            loop.first
+              ? "border-l"
+              : ""
+            }}"
+          ></div>
         {% endfor %}
       {% endif %}
       {% if filler_4col > 0 %}
         {% for i in 1..filler_4col %}
-          <div class="border-stroke col-span-1 hidden border-b 3xl:block {{ loop.first ? 'border-l' : '' }}"></div>
+          <div
+            class="border-stroke 3xl:block col-span-1 hidden border-b {{
+            loop.first
+              ? "border-l"
+              : ""
+            }}"
+          ></div>
         {% endfor %}
       {% endif %}
     </div>

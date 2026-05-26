@@ -19,7 +19,7 @@
 {% endblock hero %}
 
 {% block content %}
-  <article>
+  <article class="mb-10">
     <div class="flex flex-col gap-10 xl:w-2/3 xl:gap-12">
       {% if post.thumbnail %}
         {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}
@@ -65,7 +65,7 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Area Professionale") }}
-</span>
+            </span>
             <span
               class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
@@ -78,7 +78,7 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Area Professionale") }}
-</span>
+            </span>
             <span
               class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
@@ -92,7 +92,7 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Azienda") }}
-</span>
+            </span>
             <span class="blur-in border-stroke text-tight border-b py-6">
               <span
                 class="mb-2 block text-base font-semibold text-black lg:text-xl"
@@ -115,7 +115,7 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Paese") }}
-</span>
+            </span>
             <span
               class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
@@ -129,21 +129,22 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Accredito") }}
-</span>
+            </span>
             <span
               class="blur-in border-stroke text-tight border-b py-6 text-base font-semibold lg:text-xl"
             >
               {% set names = accredito|map(t => t.name) %}
-              {% if names|length > 1 and "|" in names|first %}
+              {% if (names|length) > 1 and "|" in (names|first) %}
                 {% set first_prefix = names|first|split(" | ")|first %}
                 {% set all_same_prefix = true %}
                 {% for name in names %}
-                  {% if name|split(" | ")|first != first_prefix %}
+                  {% if (name|split(" | ")|first) != first_prefix %}
                     {% set all_same_prefix = false %}
                   {% endif %}
                 {% endfor %}
                 {% if all_same_prefix %}
-                  {{- first_prefix ~ " | " ~ names|map(n => n|split(" | ")|last)|join(" & ") -}}
+                  {{- first_prefix ~ " | "
+                    ~ (names|map(n => n|split(" | ")|last)|join(" & ")) -}}
                 {% else %}
                   {{- names|join(", ") -}}
                 {% endif %}
@@ -159,7 +160,7 @@
               class="blur-in border-stroke text-tight border-b py-6 pr-8 text-base lg:pr-16 lg:text-xl"
             >
               {{ function("pll__", "Link utili") }}
-</span>
+            </span>
             <div
               class="blur-in border-stroke flex flex-wrap items-center border-b py-6 text-base font-semibold lg:text-xl"
             >

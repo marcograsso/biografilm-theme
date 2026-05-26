@@ -16,7 +16,7 @@
 {% endblock hero %}
 
 {% block content %}
-  <article class="">
+  <article class="mb-10">
     <div class="flex flex-col gap-10 xl:w-2/3 xl:gap-12">
       {% if post.thumbnail %}
         {% set thumb_id = function("get_post_thumbnail_id", post.ID) %}

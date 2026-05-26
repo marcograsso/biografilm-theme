@@ -105,8 +105,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Replace CSS sticky with ScrollTrigger.pin — required inside ScrollSmoother
-  // because transforms on #smooth-content break position:sticky
+  // because transforms on #smooth-content break position:sticky.
+  // On touch devices normalizeScroll is off (native scroll), so CSS sticky works
+  // and is preferable — JS pin lags behind native momentum causing jitter.
   gsap.utils.toArray("[data-sticky-top]").forEach((el) => {
+    if (isTouch) {
+      el.style.position = "sticky";
+      el.style.top = "0";
+      return;
+    }
     ScrollTrigger.create({
       trigger: el,
       start: "top top",

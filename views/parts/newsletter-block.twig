@@ -19,11 +19,11 @@
         ~ "%;"
       : null
     %}
-    <div class="min-h-140 overflow-hidden xl:min-h-100 xl:w-1/2">
+    <div class="relative min-h-140 overflow-hidden xl:min-h-100 xl:w-1/2">
       <img
         src="{{ footer_image.url }}"
         alt="{{ footer_image.alt }}"
-        class="h-full w-full object-cover {{
+        class="absolute inset-0 h-full w-full object-cover {{
         footer_image_mobile
           ? "hidden md:block"
           : ""
@@ -34,7 +34,7 @@
         <img
           src="{{ footer_image_mobile.url }}"
           alt="{{ footer_image_mobile.alt }}"
-          class="h-full w-full object-cover md:hidden"
+          class="absolute inset-0 h-full w-full object-cover md:hidden"
           style="{{ fp_mobile_style }}"
         />
       {% endif %}
