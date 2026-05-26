@@ -126,6 +126,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Hour labels in the programma grid — pin each to top:48px (below the filter bar)
   // within its own row container, mirroring sticky top-12
   function pinHourLabels() {
+    if (isTouch) {
+      gsap.utils.toArray("[data-sticky-hour]").forEach((el) => {
+        el.style.position = "sticky";
+        el.style.top = "48px";
+      });
+      return;
+    }
+
     ScrollTrigger.getAll()
       .filter((st) => st.vars.id === "hour-label")
       .forEach((st) => st.kill());

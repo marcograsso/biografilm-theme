@@ -9,6 +9,7 @@ use Extended\ACF\Fields\TrueFalse;
 use Extended\ACF\Fields\WYSIWYGEditor;
 
 return [
+    Tab::make("Contenuti", "contenuti_tab"),
     Repeater::make("Sezioni", "items")
         ->layout("block")
         ->collapsed("title")
@@ -23,7 +24,11 @@ return [
             Link::make("Link", "link")->format("array"),
 
             Tab::make("Logo e sfondo", "logo_sfondo_tab")->placement("left"),
-            Image::make("Logo", "logo")->format("array")->helperText("Per un risultato ottimale, usa un'immagine quadrata."),
+            Image::make("Logo", "logo")
+                ->format("array")
+                ->helperText(
+                    "Per un risultato ottimale, usa un'immagine quadrata.",
+                ),
             Image::make("Sfondo", "background")->format("array"),
 
             Tab::make("Stile", "stile_tab")->placement("left"),
@@ -33,7 +38,10 @@ return [
             TrueFalse::make("Bordo inferiore", "border_bottom")
                 ->stylized()
                 ->default(false),
-            TrueFalse::make("Nascondi sfondo su desktop", "hide_background_desktop")
+            TrueFalse::make(
+                "Nascondi sfondo su desktop",
+                "hide_background_desktop",
+            )
                 ->stylized()
                 ->default(false),
         ]),
