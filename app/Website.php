@@ -1463,6 +1463,21 @@ class Website extends Site
             !is_page($allowed_pages) &&
             $pagenow != "wp-login.php"
         ) {
+            $coming_soon_page = get_page_by_path("coming-soon");
+            if (
+                $coming_soon_page &&
+                function_exists("pll_get_post") &&
+                function_exists("pll_current_language")
+            ) {
+                $translated_id = pll_get_post(
+                    $coming_soon_page->ID,
+                    pll_current_language(),
+                );
+                if ($translated_id) {
+                    wp_redirect(get_permalink($translated_id));
+                    exit();
+                }
+            }
             wp_redirect(home_url("coming-soon"));
             exit();
         }
