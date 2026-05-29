@@ -7,67 +7,78 @@
       {
         hero_title: function("pll__", "Risultati"),
         hero_title_style: "primary",
-        hero_subtitle: found_posts ~ " " ~ function("pll__", "risultati trovati per la ricerca") ~ " \"" ~ search_query ~ "\""
+        hero_subtitle: found_posts ~ " "
+          ~ function("pll__", "risultati trovati per la ricerca")
+          ~ ' "'
+          ~ search_query
+          ~ '"'
       }
     )
   }}
 {% endblock hero %}
 
 {% block content %}
-  <div
-    x-data="{ drawerOpen: false }"
-    x-effect="document.body.style.overflow = drawerOpen ? 'hidden' : ''"
-    @keydown.escape.window="drawerOpen = false"
-  >
-    <div id="filters-sentinel" class="h-0"></div>
-    <div data-sticky-top class="top-0 z-50 mb-20">
-      <div class="filters-black flex w-full justify-between bg-black">
-        {# Mobile: filter icon #}
-        <button
-          type="button"
-          class="border-stroke hover:bg-white-hover active:bg-white-active relative flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
-          @click="drawerOpen = true"
-          aria-label="{{ function('pll__', 'Apri filtri') }}"
-        >
-          {{ include("icons/generic/filters.svg")|attr({ class: "size-5" }) }}
-          <span class="filters-active-dot bg-red absolute top-2 right-2 hidden size-2 rounded-full"></span>
-        </button>
-        {# Desktop: result_type filter #}
-        <div class="hidden lg:block lg:min-w-1/3">
-          {{ function("do_shortcode", '[facetwp facet="result_type"]') }}
-        </div>
-        <button
-          type="button"
-          class="text-tight border-stroke hover:bg-white-hover active:bg-white-active -ml-px cursor-pointer border bg-white px-4 py-3 text-base text-black uppercase transition-colors"
-          onclick="FWP.reset()"
-        >
-          Reset
-        </button>
-      </div>
-    </div>
+  {% if found_posts > 0 %}
+    <div
+      x-data="{ drawerOpen: false }"
+      x-effect="document.body.style.overflow = drawerOpen ? 'hidden' : ''"
+      @keydown.escape.window="drawerOpen = false"
+    >
+      <div id="filters-sentinel" class="h-0"></div>
+      <div data-sticky-top class="top-0 z-50 mb-20">
+        <div class="filters-black flex w-full justify-between bg-black">
+          {# Mobile: filter icon #}
+          <button
+            type="button"
+            class="border-stroke hover:bg-white-hover active:bg-white-active relative flex shrink-0 cursor-pointer items-center justify-center border-r bg-white px-6 text-black transition-colors focus-visible:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-black lg:hidden"
+            @click="drawerOpen = true"
+            aria-label="{{ function("pll__", "Apri filtri") }}"
+          >
+            {{ include("icons/generic/filters.svg")|attr({ class: "size-5" }) }}
+            <span
+              class="filters-active-dot bg-red absolute top-2 right-2 hidden size-2 rounded-full"
+            >
 
-    {% include "parts/filters-drawer.twig" with {
-      state_var: "drawerOpen",
-      facets: ["result_type"]
-    } %}
-  </div>
+            </span>
+          </button>
+          {# Desktop: result_type filter #}
+          <div class="hidden lg:block lg:min-w-1/3">
+            {{ function("do_shortcode", '[facetwp facet="result_type"]') }}
+          </div>
+          <button
+            type="button"
+            class="text-tight border-stroke hover:bg-white-hover active:bg-white-active -ml-px cursor-pointer border bg-white px-4 py-3 text-base text-black uppercase transition-colors"
+            onclick="FWP.reset()"
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      {% include "parts/filters-drawer.twig" with {
+        state_var: "drawerOpen",
+        facets: ["result_type"]
+      } %}
+    </div>
+  {% endif %}
 
   <section class="w-full pb-20">
     <div class="facetwp-template">
-    {% if posts %}
-      <div class="border-stroke flex w-full flex-col border-t">
-        {% for post in posts %}
-          {% include "parts/cards/search-card.twig" %}
-        {% endfor %}
-      </div>
-    {% else %}
-      <p
-        class="text-tight border-stroke border-t py-20 text-center text-xl font-semibold text-black"
-      >
-        {{ function("pll__", "Nessun risultato trovato.") }}
-      </p>
-    {% endif %}
-    </div>{# /.facetwp-template #}
+      {% if found_posts > 0 %}
+        <div class="border-stroke flex w-full flex-col border-t">
+          {% for post in posts %}
+            {% include "parts/cards/search-card.twig" %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p
+          class="text-tight border-stroke border-t py-20 pt-30 text-center text-xl font-semibold text-black"
+        >
+          {{ function("pll__", "Nessun risultato trovato.") }}
+        </p>
+      {% endif %}
+    </div>
+    {# /.facetwp-template #}
     {{ function("do_shortcode", '[facetwp facet="load_more"]') }}
   </section>
 {% endblock content %}

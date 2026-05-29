@@ -338,3 +338,12 @@
   background-color: hsl(0, 0%, 22%) !important;
   color: #fff !important;
 }
+
+.searchwp-revised-search-notice {
+  @apply hidden!;
+}
+
+.fwp-no-results,
+.facetwp-template:not(:has(*)) {
+  @apply col-span-full w-full pt-20 pb-70 text-center font-sans text-[18px] text-black/40;
+}
