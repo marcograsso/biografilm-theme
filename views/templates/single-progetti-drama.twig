@@ -10,6 +10,7 @@
   {% set genere = function("wp_get_post_terms", post_id, "pdr-genere")[0] %}
   {% set badges = function("wp_get_post_terms", post_id, "pdr-badge") %}
   {% set regista = function("get_field", "regista", post_id) %}
+  {% set label_regista = function("get_field", "label_regista", post_id) %}
   {% set titolo_alternativo =
     function("get_field", "titolo_alternativo", post_id)
   %}
@@ -97,7 +98,7 @@
             <span
               class="blur-in border-stroke text-tight border-b pr-8 pb-6 text-base lg:pr-16 lg:text-xl"
             >
-              {{ altri_registi ? function("pll__", "Registi") : function("pll__", "Regista") }}
+              {{ label_regista ?: (altri_registi ? function("pll__", "Registi") : function("pll__", "Regista")) }}
             </span>
             <span
               class="blur-in border-stroke text-tight border-b pb-6 text-base font-semibold lg:text-xl"

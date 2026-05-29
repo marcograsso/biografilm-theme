@@ -71,6 +71,9 @@ class ProgettiDrama extends \Timber\Post
             "fields" => [
                 Tab::make("Generali"),
                 Text::make("Regista", "regista"),
+                Text::make("Label regista", "label_regista")->helperText(
+                    "Sostituisce l'etichetta 'Regista' nella tabella informativa. Es: Autore, Direttore, ecc.",
+                ),
                 Repeater::make("Altri registi", "altri_registi")
                     ->layout("row")
                     ->key("field_progetti_drama_altri_registi")

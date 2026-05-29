@@ -3,7 +3,6 @@ import Alpine from "alpinejs";
 
 // Auto-click .facetwp-load-more when it enters the viewport, with stagger animation on new cards
 let loadMoreBusy = false;
-let cardCountBeforeLoad = 0;
 
 function cloneSkeleton(id) {
   const tpl = document.getElementById(id);
@@ -43,13 +42,13 @@ function showFilmSkeletons() {
 
 function checkLoadMore() {
   if (loadMoreBusy) return;
+  if (document.querySelector(".fs-wrap.fs-open")) return;
   const btn = document.querySelector(".facetwp-load-more");
   if (!btn || btn.classList.contains("facetwp-hidden")) return;
 
   const rect = btn.getBoundingClientRect();
   if (rect.top < window.innerHeight) {
     loadMoreBusy = true;
-    cardCountBeforeLoad = document.querySelectorAll("[data-search-card], [data-film-card]").length;
     if (document.querySelector("[data-search-card]")) {
       loadingIndicator.classList.remove("hidden");
     } else if (document.querySelector("[data-programma-grid]")) {
@@ -57,7 +56,13 @@ function checkLoadMore() {
     } else if (document.querySelector("[data-film-card]")) {
       showFilmSkeletons();
     }
-    setTimeout(() => { btn.click(); }, 1800);
+    setTimeout(() => {
+      if (document.querySelector(".fs-wrap.fs-open")) {
+        loadMoreBusy = false;
+        return;
+      }
+      btn.click();
+    }, 1800);
   }
 }
 
@@ -182,6 +187,12 @@ function mergeFilmGrid() {
 }
 
 document.addEventListener("scroll", checkLoadMore, { passive: true });
+// Block checkLoadMore for the entire FacetWP AJAX cycle (initial load, filters,
+// sort). ScrollTrigger.refresh() in animations.js fires scroll events inside the
+// facetwp-loaded handlers; without this guard those events would spuriously
+// trigger load-more. loadMoreBusy is reset via setTimeout(0) in facetwp-loaded
+// so the reset happens after all synchronous handlers (including refresh) finish.
+document.addEventListener("facetwp-refresh", () => { loadMoreBusy = true; });
 document.addEventListener("facetwp-loaded", () => {
   const filmResult = mergeFilmGrid();
   const programmaResult = mergeProgrammaGrid();
@@ -205,7 +216,10 @@ document.addEventListener("facetwp-loaded", () => {
     }
   }
 
-  loadMoreBusy = false;
+  // Delay so ScrollTrigger.refresh() in animations.js (also on facetwp-loaded)
+  // fires its internal scroll events while loadMoreBusy is still true, preventing
+  // checkLoadMore from auto-triggering after every FacetWP AJAX refresh.
+  setTimeout(() => { loadMoreBusy = false; }, 0);
 });
 
 // Re-initialize Alpine on elements injected by FacetWP AJAX refreshes

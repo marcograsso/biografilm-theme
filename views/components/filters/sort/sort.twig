@@ -1,0 +1,62 @@
+{% set selected = params.selected_values[0] ?? '' %}
+{% set is_default = params.is_default_sort ?? false %}
+{% set default_label = function("pll__", params.facet.label) %}
+{% set sort_options = params.facet.sort_options ?? [] %}
+
+{# Hidden select — FacetWP JS reads this via find('select').val() #}
+<select class="sr-only" aria-hidden="true" tabindex="-1">
+  <option value="">{{ default_label }}</option>
+  {% for option in sort_options %}
+    <option value="{{ option.name }}" {{ option.name == selected ? "selected" : "" }}>
+      {{ function("pll__", option.label) }}
+    </option>
+  {% endfor %}
+</select>
+
+<div
+  x-data="{
+    open: false,
+    isDefault: {{ is_default ? 'true' : 'false' }},
+    init() { this.open = window._sortFilterOpen ?? false; },
+    setOpen(val) { this.open = val; window._sortFilterOpen = val; },
+    selected: '{{ selected }}',
+    getLabel() {
+      if (this.isDefault) return '{{ default_label|e('js') }}';
+      {% for option in sort_options %}
+      if (this.selected === '{{ option.name }}') return '{{ function("pll__", option.label)|e('js') }}';
+      {% endfor %}
+      return '{{ default_label|e('js') }}';
+    }
+  }"
+  @click.outside="setOpen(false)"
+  class="fs-wrap"
+>
+  <div class="fs-label-wrap" @click="setOpen(!open)" :aria-expanded="open.toString()">
+    <span
+      class="fs-label"
+      x-text="getLabel()"
+    >{{ default_label }}</span>
+    <span class="fs-arrow"></span>
+  </div>
+
+  <div class="fs-dropdown" :class="open ? '' : 'fs-hidden'">
+    <div class="fs-options">
+      {% for option in sort_options %}
+        <div
+          class="fs-option"
+          :class="!isDefault && selected === '{{ option.name }}' ? 'selected' : ''"
+          @click="
+            selected = '{{ option.name }}';
+            isDefault = false;
+            $el.closest('.facetwp-facet').querySelector('select').value = '{{ option.name }}';
+            $el.closest('.facetwp-facet').querySelector('select').dispatchEvent(new Event('change', { bubbles: true }));
+            setOpen(false);
+          "
+        >
+          <span class="fs-checkbox"></span>
+          <span class="fs-option-label">{{ function("pll__", option.label) }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

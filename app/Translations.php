@@ -49,6 +49,9 @@ class Translations
         "Scopri anche" => ["en" => "Discover more"],
 
         // Filter UI
+        "Ordina per" => ["en" => "Sort by"],
+        "Titolo (A-Z)" => ["en" => "Title (A-Z)"],
+        "Titolo (Z-A)" => ["en" => "Title (Z-A)"],
         "Filtri" => ["en" => "Filters"],
         "FILTRI" => ["en" => "FILTERS"],
         "Apri filtri" => ["en" => "Open filters"],

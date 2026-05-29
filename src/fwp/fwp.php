@@ -41,6 +41,17 @@ class FWP_Config
             case "search":
                 $template = "components/filters/search/search.twig";
                 break;
+
+            case "sort":
+                $template = "components/filters/sort/sort.twig";
+                if (
+                    is_post_type_archive("film") &&
+                    empty($params["selected_values"])
+                ) {
+                    $context["params"]["selected_values"] = ["sezione_asc"];
+                    $context["params"]["is_default_sort"] = true;
+                }
+                break;
         }
 
         if ($template) {
@@ -54,6 +65,50 @@ class FWP_Config
 new FWP_Config();
 
 add_filter("facetwp_facet_dropdown_show_counts", "__return_false");
+
+add_action("pre_get_posts", function ($query) {
+    if (
+        !$query->is_main_query() ||
+        !is_post_type_archive("film") ||
+        is_admin()
+    ) {
+        return;
+    }
+    $query->set("meta_key", "sezione");
+    $query->set("orderby", ["meta_value" => "ASC", "title" => "ASC"]);
+});
+
+add_filter(
+    "facetwp_query_args",
+    function ($query_args, $params) {
+        if (($params->template["name"] ?? "") === "films") {
+            $query_args = array_merge(
+                $query_args,
+                include __DIR__ . "/templates/film-query.php",
+            );
+        }
+        return $query_args;
+    },
+    10,
+    2,
+);
+
+// Override the admin-configured sezione_asc sort option so FacetWP does not
+// add its own INNER JOIN on the sezione meta key — that would conflict with
+// the LEFT JOIN in posts_clauses below and exclude films with no sezione.
+add_filter(
+    "facetwp_sort_options",
+    function ($options, $params) {
+        $options["sezione_asc"] = [
+            "label" => "Sezione (A-Z)",
+            "query_args" => [],
+        ];
+        return $options;
+    },
+    10,
+    2,
+);
+
 
 // Resolve sezione ACF relationship data during FacetWP indexing.
 //
@@ -167,6 +222,37 @@ add_filter(
     20,
     2,
 );
+
+// Order whos-coming archive alphabetically by company name (azienda → titolo).
+add_filter(
+    "posts_clauses",
+    function ($clauses, $query) {
+        global $wpdb;
+        $types = (array) ($query->query_vars["post_type"] ?? []);
+        if (!in_array("whos-coming", $types)) {
+            return $clauses;
+        }
+
+        $clauses["join"] .=
+            " LEFT JOIN {$wpdb->postmeta} AS _pm_azienda" .
+            " ON ({$wpdb->posts}.ID = _pm_azienda.post_id AND _pm_azienda.meta_key = 'whos_coming_azienda_titolo')";
+
+        $clauses[
+            "orderby"
+        ] = "COALESCE(NULLIF(_pm_azienda.meta_value, ''), 'zzz') ASC, {$wpdb->posts}.post_title ASC";
+
+        return $clauses;
+    },
+    20,
+    2,
+);
+
+add_filter("facetwp_preload_url_vars", function ($url_vars) {
+    if (is_post_type_archive("film") && empty($url_vars["order_by"])) {
+        $url_vars["order_by"] = ["sezione_asc"];
+    }
+    return $url_vars;
+});
 
 add_filter("facetwp_preload_url_vars", function ($url_vars) {
     if (false === strpos(FWP()->helper->get_uri(), "program")) {

@@ -2,15 +2,21 @@
 
 {% block hero %}
   {% set _archive_page = function("get_archive_page", "film") %}
-  {% if _archive_page and not function("get_field", "hide_hero", _archive_page.ID) %}
-    {% set _hero_title = function("get_field", "hero_alt_title", _archive_page.ID) %}
-    {% set _hero_style = function("get_field", "hero_title_style", _archive_page.ID) %}
+  {% if
+    _archive_page
+      and not function("get_field", "hide_hero", _archive_page.ID) %}
+    {% set _hero_title =
+      function("get_field", "hero_alt_title", _archive_page.ID)
+    %}
+    {% set _hero_style =
+      function("get_field", "hero_title_style", _archive_page.ID)
+    %}
     {{
       include(
         "components/hero/hero.twig",
         {
-          hero_title: _hero_title ?: _archive_page.post_title,
-          hero_title_style: _hero_style ?: "primary"
+          hero_title: _hero_title ? : _archive_page.post_title,
+          hero_title_style: _hero_style ? : "primary"
         }
       )
     }}
@@ -55,8 +61,12 @@
       class="filters-black top-0 z-50 mb-20 hidden w-full lg:flex"
     >
       <div class="flex-1">
+        {{ function("do_shortcode", '[facetwp facet="order_by"]') }}
+      </div>
+      <div class="-ml-px flex-1">
         {{ function("do_shortcode", '[facetwp facet="sezione"]') }}
       </div>
+
       <div class="-ml-px flex-1">
         {{ function("do_shortcode", '[facetwp facet="area_tematica"]') }}
       </div>
@@ -69,6 +79,7 @@
       <div class="-ml-px flex-1">
         {{ function("do_shortcode", '[facetwp facet="film_search"]') }}
       </div>
+
       <button
         type="button"
         class="text-tight border-stroke hover:bg-white-hover active:bg-white-active -ml-px cursor-pointer border bg-white px-4 py-3 text-base text-black uppercase transition-colors focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-black"
@@ -80,7 +91,7 @@
 
     {% include "parts/filters-drawer.twig" with {
       state_var: "filtersOpen",
-      facets: ["film_search", "sezione", "area_tematica", "paese", "genere"]
+      facets: ["order_by", "film_search", "sezione", "area_tematica", "paese", "genere"]
     } %}
 
     <div class="facetwp-template">
@@ -98,34 +109,62 @@
           <p
             class="text-tight col-span-full py-30 text-center text-xl font-semibold text-black"
           >
-            {{ function("pll__", "Nessun risultato per i filtri selezionati.") }}<br />{{ function("pll__", "Prova a modificare la ricerca o resetta i filtri.") }}
+            {{
+              function("pll__", "Nessun risultato per i filtri selezionati.")
+            }}<br />{{
+              function(
+                "pll__",
+                "Prova a modificare la ricerca o resetta i filtri."
+              )
+            }}
           </p>
         {% endfor %}
 
         {# 2-col fillers #}
         {% set count = posts|length %}
         {% if count % 2 == 1 %}
-          <div data-film-filler class="border-stroke col-span-1 border-l xl:hidden"></div>
+          <div
+            data-film-filler
+            class="border-stroke col-span-1 border-l xl:hidden"
+          ></div>
         {% endif %}
 
         {# 3-col fillers #}
         {% if count % 3 == 1 %}
-          <div data-film-filler class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"></div>
-          <div data-film-filler class="3xl:hidden col-span-1 hidden xl:block"></div>
+          <div
+            data-film-filler
+            class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
+          ></div>
+          <div
+            data-film-filler
+            class="3xl:hidden col-span-1 hidden xl:block"
+          ></div>
         {% elseif count % 3 == 2 %}
-          <div data-film-filler class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"></div>
+          <div
+            data-film-filler
+            class="border-stroke 3xl:hidden col-span-1 hidden border-l xl:block"
+          ></div>
         {% endif %}
 
         {# 4-col fillers #}
         {% if count % 4 == 1 %}
-          <div data-film-filler class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+          <div
+            data-film-filler
+            class="border-stroke 3xl:block col-span-1 hidden border-l"
+          ></div>
           <div data-film-filler class="3xl:block col-span-1 hidden"></div>
           <div data-film-filler class="3xl:block col-span-1 hidden"></div>
         {% elseif count % 4 == 2 %}
-          <div data-film-filler class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+          <div
+            data-film-filler
+            class="border-stroke 3xl:block col-span-1 hidden border-l"
+          ></div>
           <div data-film-filler class="3xl:block col-span-1 hidden"></div>
         {% elseif count % 4 == 3 %}
-          <div data-film-filler class="border-stroke 3xl:block col-span-1 hidden border-l"></div>
+          <div
+            data-film-filler
+            class="border-stroke 3xl:block col-span-1 hidden border-l"
+          ></div>
         {% endif %}
       </div>
     </div>
@@ -134,7 +173,10 @@
   </section>
 
   {% set _archive_page = function("get_archive_page", "film") %}
-  {% set components = _archive_page ? function("get_field", "archive_components", _archive_page.ID) : null %}
+  {% set components = _archive_page
+    ? function("get_field", "archive_components", _archive_page.ID)
+    : null
+  %}
   {% for component in components %}
     {% set layout = component.acf_fc_layout|replace({ "_": "-" }) %}
     {{
