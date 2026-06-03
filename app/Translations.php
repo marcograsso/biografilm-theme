@@ -69,6 +69,8 @@ class Translations
 
         // General UI
         "Gestione consenso",
+        "Mostra di più",
+        "Mostra meno",
         "Informazioni utili",
         "Informazioni",
         "Scopri di più",

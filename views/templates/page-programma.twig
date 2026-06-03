@@ -30,16 +30,15 @@
               {{ giorno.giorno|it_day_full }}
             </h2>
             {% if giorno.eventi %}
-              {# Collect unique hours #}
-              {% set hours = [] %}
+              {# Collect unique exact times #}
+              {% set times = [] %}
               {% for evento in giorno.eventi %}
-                {% set h = evento.orario|split(":")[0] %}
-                {% if h not in hours %}{% set hours =
-                  hours|merge([h])
+                {% if evento.orario not in times %}{% set times =
+                  times|merge([evento.orario])
                 %}{% endif %}
               {% endfor %}
               <div class="w-full">
-                {% for hour in hours %}
+                {% for time in times %}
                   <div
                     class="flex {{
                     loop.first
@@ -54,14 +53,14 @@
                         data-sticky-hour
                         class="w-full pt-10 pb-10 text-center"
                       >
-                        <h3 class="display-h6">{{ hour }}:00</h3>
+                        <h3 class="display-h6">{{ time|slice(0, 5) }}</h3>
                       </div>
                     </div>
                     <div
                       class="border-b-stroke divide-stroke min-w-0 flex-1 divide-y border-b"
                     >
                       {% for evento in giorno.eventi %}
-                        {% if evento.orario|split(":")[0] == hour %}
+                        {% if evento.orario == time %}
                           <div
                             class="flex min-h-60 flex-col justify-between gap-10 px-6 py-6 xl:px-10"
                           >

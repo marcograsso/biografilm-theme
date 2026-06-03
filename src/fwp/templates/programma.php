@@ -13,8 +13,7 @@
             $orario = get_post_meta($id, "orario", true);
         }
 
-        $hour = $orario ? (int) substr($orario, 0, 2) : "";
-        $key  = $hour !== "" ? sprintf("%02d:00", $hour) : "__no_time__";
+        $key = $orario ?: "__no_time__";
 
         $groups[$key][] = [
             'post'      => Timber\Timber::get_post($id),
@@ -35,7 +34,7 @@
                     <div class="border-r-stroke border-b-stroke w-20 lg:w-30 shrink-0 border-r border-b">
                         <div data-sticky-hour class="flex justify-center pt-10 pb-10">
                             <h3 class="display-h6">
-                                <?= esc_html($hour_label) ?>
+                                <?= esc_html(substr($hour_label, 0, 5)) ?>
                             </h3>
                         </div>
                     </div>
