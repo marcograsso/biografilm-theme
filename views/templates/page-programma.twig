@@ -5,7 +5,7 @@
     {% if giorni %}
       <div
         x-data="{ activeDay: 0 }"
-        x-effect="$nextTick(() => window.dispatchEvent(new CustomEvent('doc-day-changed')))"
+        x-effect="activeDay; $nextTick(() => window.dispatchEvent(new CustomEvent('doc-day-changed')))"
       >
         <div id="filters-sentinel" class="h-0"></div>
         <div data-sticky-top class="top-0 z-50">
