@@ -75,6 +75,9 @@ class ProgettiDoc extends \Timber\Post
                     ->postTypes(["contents-doc"])
                     ->nullable(),
                 Text::make("Regista", "regista"),
+                Text::make("Label regista", "label_regista")->helperText(
+                    "Sostituisce l'etichetta 'Regista' nella tabella informativa. Es: Autore, Direttore, ecc.",
+                ),
                 Repeater::make("Altri registi", "altri_registi")
                     ->layout("row")
                     ->key("field_progetti_doc_altri_registi")
