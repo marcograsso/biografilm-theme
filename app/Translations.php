@@ -77,6 +77,7 @@ class Translations
         "Nessuna ospitalità trovata." => ["en" => "No accommodation found."],
 
         // General UI
+        "Gestione consenso" => ["en" => "Manage consent"],
         "Informazioni utili" => ["en" => "Useful information"],
         "Informazioni" => ["en" => "Information"],
         "Scopri di più" => ["en" => "Find out more"],

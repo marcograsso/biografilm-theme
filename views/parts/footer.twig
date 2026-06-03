@@ -165,10 +165,16 @@
           </a>
         {% endif %}
       {% endfor %}
+      <a
+        href='#'
+        class='iubenda-cs-preferences-link text-tight link-underline w-fit text-sm font-normal text-black/80 [--link-underline-height:1px] [&::after]:-bottom-0.5'
+      >
+        {{ function("pll__", "Gestione consenso") }}
+      </a>
     </div>
     {% if footer_credits %}
       <div
-        class="prose prose-sm w-full text-sm text-black/80 xl:w-fit [&_a]:text-black/80 [&_a]:underline-offset-2 [&_p]:m-0"
+        class="prose prose-sm w-full text-sm text-black/80! xl:w-fit [&_a]:text-black/80 [&_a]:underline-offset-2 [&_p]:m-0"
       >
         {{ footer_credits }}
       </div>
