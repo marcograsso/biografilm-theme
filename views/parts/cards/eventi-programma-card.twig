@@ -68,7 +68,7 @@
     </div>
 
     <div
-      class="lg:border-b-stroke flex flex-1 flex-col justify-between gap-8 px-6 py-10 lg:border-b lg:px-8 lg:py-6"
+      class="lg:border-b-stroke flex flex-1 flex-col gap-8 px-6 py-10 lg:border-b lg:px-8 lg:py-6"
     >
       <div class="flex flex-col gap-3">
         {% if title %}
@@ -85,30 +85,36 @@
             {% endfor %}
           </p>
         {% endif %}
-        {% if descrizione %}
-          <p class="blur-in text-tight text-sm text-black">
-            {{ descrizione|nl2br }}
-          </p>
-        {% endif %}
       </div>
-      <div class="blur-in flex flex-wrap items-baseline gap-x-6 gap-y-1">
-        {% if data or orario_inizio %}
-          <p class="text-tight text-base font-semibold text-black">
-            {% if data %}{{ data|date("d F Y") }}{% endif %}
-            {% if orario_inizio %}
-              {% if data %}
-                &ensp;·&ensp;
-              {% endif %}{{ orario_inizio }}{% if orario_fine %}
-                – {{ orario_fine }}
+      <div class="flex flex-col gap-3">
+        {% if descrizione %}
+          <div class="flex min-h-[1.5lh] flex-col justify-end">
+            <div class="blur-in text-tight text-sm text-black">
+              {{ descrizione|nl2br }}
+            </div>
+          </div>
+        {% endif %}
+        <div
+          class="blur-in mt-auto flex flex-wrap items-baseline gap-x-6 gap-y-1"
+        >
+          {% if data or orario_inizio %}
+            <p class="text-tight text-base font-semibold text-black">
+              {% if data %}{{ data|date("d F Y") }}{% endif %}
+              {% if orario_inizio %}
+                {% if data %}
+                  &ensp;·&ensp;
+                {% endif %}{{ orario_inizio }}{% if orario_fine %}
+                  – {{ orario_fine }}
+                {% endif %}
               {% endif %}
-            {% endif %}
-          </p>
-        {% endif %}
-        {% if location %}
-          <p class="text-tight text-base font-semibold text-black">
-            {{ location.name }}{{ sala_location ? " – " ~ sala_location : "" }}
-          </p>
-        {% endif %}
+            </p>
+          {% endif %}
+          {% if location %}
+            <p class="text-tight text-base font-semibold text-black">
+              {{ location.name }}{{ sala_location ? " – " ~ sala_location : "" }}
+            </p>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
