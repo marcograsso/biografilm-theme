@@ -3,6 +3,7 @@
 namespace App\PostTypes;
 
 use Extended\ACF\Fields\Number;
+use Extended\ACF\Fields\PostObject;
 use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
@@ -70,6 +71,9 @@ class ProgettiDrama extends \Timber\Post
             "style" => "",
             "fields" => [
                 Tab::make("Generali"),
+                PostObject::make("Sezione (Contents Drama)", "contents_drama_parent")
+                    ->postTypes(["contents-drama"])
+                    ->nullable(),
                 Text::make("Regista", "regista"),
                 Text::make("Label regista", "label_regista")->helperText(
                     "Sostituisce l'etichetta 'Regista' nella tabella informativa. Es: Autore, Direttore, ecc.",

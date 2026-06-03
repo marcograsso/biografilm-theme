@@ -3,6 +3,7 @@
 namespace App\PostTypes;
 
 use Extended\ACF\Fields\Number;
+use Extended\ACF\Fields\PostObject;
 use Extended\ACF\Fields\Relationship;
 use Extended\ACF\Fields\Repeater;
 use Extended\ACF\Fields\Tab;
@@ -70,6 +71,9 @@ class ProgettiDoc extends \Timber\Post
             "style" => "",
             "fields" => [
                 Tab::make("Generali"),
+                PostObject::make("Sezione (Contents Doc)", "contents_doc_parent")
+                    ->postTypes(["contents-doc"])
+                    ->nullable(),
                 Text::make("Regista", "regista"),
                 Repeater::make("Altri registi", "altri_registi")
                     ->layout("row")

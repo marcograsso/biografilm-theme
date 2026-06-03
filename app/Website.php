@@ -214,8 +214,16 @@ class Website extends Site
         $context["social_x"] = get_field("social_x", "option");
         $context["social_linkedin"] = get_field("social_linkedin", "option");
         $context["social_telegram"] = get_field("social_telegram", "option");
+        $context["social_industry_instagram"] = get_field("social_industry_instagram", "option");
+        $context["social_industry_facebook"] = get_field("social_industry_facebook", "option");
+        $context["social_industry_youtube"] = get_field("social_industry_youtube", "option");
+        $context["social_industry_tiktok"] = get_field("social_industry_tiktok", "option");
+        $context["social_industry_x"] = get_field("social_industry_x", "option");
+        $context["social_industry_linkedin"] = get_field("social_industry_linkedin", "option");
+        $context["social_industry_telegram"] = get_field("social_industry_telegram", "option");
         $context["newsletter_title"] = get_field("newsletter_title", "option");
         $context["newsletter_social_text"] = get_field("newsletter_social_text", "option");
+        $context["newsletter_social_text_industry"] = get_field("newsletter_social_text_industry", "option");
         $context["newsletter_form_shortcode"] = get_field("newsletter_form_shortcode", "option");
         $context["mapbox_token"] = get_field("mapbox_api_key", "option");
         $context["environment"] = $this->vite->environment;
@@ -763,6 +771,13 @@ class Website extends Site
                     "url" => get_post_type_archive_link("contents-doc"),
                     "title" => "Contents",
                 ];
+                $contents_doc_parent = get_field("contents_doc_parent", $post->ID);
+                if ($contents_doc_parent) {
+                    $breadcrumbs[] = [
+                        "url" => get_permalink($contents_doc_parent->ID),
+                        "title" => get_the_title($contents_doc_parent->ID),
+                    ];
+                }
                 $breadcrumbs[] = [
                     "url" => "",
                     "title" => get_the_title($post->ID),
@@ -792,6 +807,13 @@ class Website extends Site
                     "url" => get_post_type_archive_link("contents-drama"),
                     "title" => "Contents",
                 ];
+                $contents_drama_parent = get_field("contents_drama_parent", $post->ID);
+                if ($contents_drama_parent) {
+                    $breadcrumbs[] = [
+                        "url" => get_permalink($contents_drama_parent->ID),
+                        "title" => get_the_title($contents_drama_parent->ID),
+                    ];
+                }
                 $breadcrumbs[] = [
                     "url" => "",
                     "title" => get_the_title($post->ID),
