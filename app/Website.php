@@ -80,12 +80,6 @@ class Website extends Site
         Translations::register();
     }
 
-    #[Action("init", priority: 20)]
-    public function inject_polylang_translations()
-    {
-        Translations::inject();
-    }
-
     #[Action("wp_enqueue_scripts")]
     public function enqueue_frontend_assets()
     {

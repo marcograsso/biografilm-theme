@@ -3,188 +3,142 @@
 namespace App;
 
 /**
- * Static Polylang string translations.
+ * Registers hardcoded theme strings with Polylang so they appear in
+ * Polylang → String Translations in the admin. Translate them there.
  *
- * Add entries to $strings below — translations are written to the DB only
- * when the array changes (detected by hash), so there is no overhead on
- * normal page loads.
- *
- * Format:
- *   'Original Italian string' => [
- *       'en' => 'English translation',
- *   ],
+ * Add new strings to $strings below, then visit the Polylang Strings
+ * Translations screen to enter the English (or other language) values.
  */
 class Translations
 {
     private static array $strings = [
         // Archive pages
-        "Sezioni" => ["en" => "Sections"],
-        "Sezione" => ["en" => "Section"],
-        "Tutti i film" => ["en" => "All Films"],
+        "Sezioni",
+        "Sezione",
+        "Tutti i film",
 
         // Single film — info table labels
-        "Regista" => ["en" => "Director"],
-        "Registi" => ["en" => "Directors"],
-        "Titolo alternativo" => ["en" => "Alternative title"],
-        "Titoli alternativi" => ["en" => "Alternative titles"],
-        "Titolo aggiuntivo" => ["en" => "Additional title"],
-        "Titoli aggiuntivi" => ["en" => "Additional titles"],
-        "Titolo/Regista..." => ["en" => "Title/Director..."],
-        "Durata" => ["en" => "Duration"],
-        "Paese" => ["en" => "Country"],
-        "Anno" => ["en" => "Year"],
-        "Genere" => ["en" => "Genre"],
-        "Formato" => ["en" => "Format"],
-        "Tipologia" => ["en" => "Typology"],
-        "Area tematica" => ["en" => "Thematic area"],
-        "Aree tematiche" => ["en" => "Thematic areas"],
+        "Regista",
+        "Registi",
+        "Titolo alternativo",
+        "Titoli alternativi",
+        "Titolo aggiuntivo",
+        "Titoli aggiuntivi",
+        "Titolo/Regista...",
+        "Durata",
+        "Paese",
+        "Anno",
+        "Genere",
+        "Formato",
+        "Tipologia",
+        "Area tematica",
+        "Aree tematiche",
 
         // Single film — screenings
-        "Programmazione" => ["en" => "Screenings"],
-        "oppure" => ["en" => "or"],
-        "Compra biglietto" => ["en" => "Buy ticket"],
-        "Guarda online su MyMovies" => ["en" => "Watch online on MyMovies"],
+        "Programmazione",
+        "oppure",
+        "Compra biglietto",
+        "Guarda online su MyMovies",
 
         // Related content
-        "Scopri anche" => ["en" => "Discover more"],
+        "Scopri anche",
 
         // Filter UI
-        "Ordina per" => ["en" => "Sort by"],
-        "Titolo (A-Z)" => ["en" => "Title (A-Z)"],
-        "Titolo (Z-A)" => ["en" => "Title (Z-A)"],
-        "Filtri" => ["en" => "Filters"],
-        "FILTRI" => ["en" => "FILTERS"],
-        "Apri filtri" => ["en" => "Open filters"],
-        "Chiudi filtri" => ["en" => "Close filters"],
-        "Rimuovi filtri" => ["en" => "Remove filters"],
-        "Vedi risultati" => ["en" => "View results"],
+        "Ordina per",
+        "Titolo (A-Z)",
+        "Titolo (Z-A)",
+        "Filtri",
+        "FILTRI",
+        "Apri filtri",
+        "Chiudi filtri",
+        "Rimuovi filtri",
+        "Vedi risultati",
 
         // Carousel / slider navigation
-        "Precedente" => ["en" => "Previous"],
-        "Successivo" => ["en" => "Next"],
-        "Chiudi" => ["en" => "Close"],
+        "Precedente",
+        "Successivo",
+        "Chiudi",
 
         // Empty-state messages
-        "Nessun risultato per i filtri selezionati." => [
-            "en" => "No results for the selected filters.",
-        ],
-        "Prova a modificare la ricerca o resetta i filtri." => [
-            "en" => "Try modifying your search or reset the filters.",
-        ],
-        "Nessun documento trovato." => ["en" => "No documents found."],
-        "Nessuna sezione trovata." => ["en" => "No sections found."],
-        "Nessuna news trovata." => ["en" => "No news found."],
-        "Nessuna ospitalità trovata." => ["en" => "No accommodation found."],
+        "Nessun risultato per i filtri selezionati.",
+        "Prova a modificare la ricerca o resetta i filtri.",
+        "Nessun documento trovato.",
+        "Nessuna sezione trovata.",
+        "Nessuna news trovata.",
+        "Nessuna ospitalità trovata.",
 
         // General UI
-        "Gestione consenso" => ["en" => "Manage consent"],
-        "Informazioni utili" => ["en" => "Useful information"],
-        "Informazioni" => ["en" => "Information"],
-        "Scopri di più" => ["en" => "Find out more"],
+        "Gestione consenso",
+        "Informazioni utili",
+        "Informazioni",
+        "Scopri di più",
 
         // Archive / breadcrumb labels — eventi & progetti
-        "eventi" => ["en" => "Events"],
-        "Eventi" => ["en" => "Events"],
-        "Eventi Campus" => ["en" => "Campus Events"],
-        "Progetti e formazione" => ["en" => "Projects and education"],
+        "eventi",
+        "Eventi",
+        "Eventi Campus",
+        "Progetti e formazione",
 
         // Single evento / progetto — info labels
-        "Data" => ["en" => "Date"],
-        "Luogo" => ["en" => "Venue"],
-        "Relatori / Ospiti" => ["en" => "Speakers / Guests"],
-        "Descrizione" => ["en" => "Description"],
-        "Periodo" => ["en" => "Period"],
-        "Status" => ["en" => "Status"],
-        "Stato" => ["en" => "status"],
-        "Target" => ["en" => "Target"],
-        "Tipo di progetto" => ["en" => "Project type"],
-        "Tipo di evento" => ["en" => "event type"],
-        "Relatori / Tutor" => ["en" => "Speakers / Tutors"],
-        "Beneficiari" => ["en" => "Beneficiaries"],
-        "Restituzione finale" => ["en" => "Final presentation"],
+        "Data",
+        "Luogo",
+        "Relatori / Ospiti",
+        "Descrizione",
+        "Periodo",
+        "Status",
+        "Stato",
+        "Target",
+        "Tipo di progetto",
+        "Tipo di evento",
+        "Relatori / Tutor",
+        "Beneficiari",
+        "Restituzione finale",
 
         // Search results
-        "Risultati" => ["en" => "Results"],
-        "Tipologia risultato" => ["en" => "Result type"],
-        "risultati trovati per la ricerca" => ["en" => "results found for the search"],
-        "Nessun risultato trovato." => ["en" => "No results found."],
-        "Pagina" => ["en" => "Page"],
+        "Risultati",
+        "Tipologia risultato",
+        "risultati trovati per la ricerca",
+        "Nessun risultato trovato.",
+        "Pagina",
 
         // 404
-        "Pagina non trovata" => ["en" => "Page not found"],
-        "La pagina che cerchi non esiste o è stata spostata." => ["en" => "The page you're looking for doesn't exist or has been moved."],
-        "Torna alla home" => ["en" => "Back to home"],
+        "Pagina non trovata",
+        "La pagina che cerchi non esiste o è stata spostata.",
+        "Torna alla home",
 
         // Single sezione / news / related
-        "Film in sezione" => ["en" => "Films in section"],
-        "Leggi anche" => ["en" => "Read also"],
-        "Proposte editoriali" => ["en" => "Editorial proposals"],
+        "Film in sezione",
+        "Leggi anche",
+        "Proposte editoriali",
 
         // Single whos-coming — info labels
-        "Nome" => ["en" => "Name"],
-        "Area Professionale" => ["en" => "Professional Area"],
-        "Area professionale" => ["en" => "Professional Area"],
-        "Accrediti" => ["en" => "Accreditations"],
-        "Azienda" => ["en" => "Company"],
-        "Accredito" => ["en" => "Accreditation"],
-        "Cerca..." => ["en" => "Search..."],
-        "Link utili" => ["en" => "Useful links"],
+        "Nome",
+        "Area Professionale",
+        "Area professionale",
+        "Accrediti",
+        "Azienda",
+        "Accredito",
+        "Cerca...",
+        "Link utili",
 
         // Single proposta editoriale — info labels
-        "Autore" => ["en" => "Author"],
-        "Autori" => ["en" => "Authors"],
-        "Traduttore" => ["en" => "Translator"],
-        "Editore" => ["en" => "Publisher"],
-        "Collana" => ["en" => "Series"],
-        "Pagine" => ["en" => "Pages"],
-        "Lingua originale" => ["en" => "Original language"],
+        "Autore",
+        "Autori",
+        "Traduttore",
+        "Editore",
+        "Collana",
+        "Pagine",
+        "Lingua originale",
     ];
 
-    /**
-     * Register all strings with Polylang so they appear in the admin UI.
-     * Call this on `init`.
-     */
     public static function register(): void
     {
         if (!function_exists("pll_register_string")) {
             return;
         }
 
-        foreach (array_keys(self::$strings) as $original) {
-            pll_register_string($original, $original, "Theme");
+        foreach (self::$strings as $string) {
+            pll_register_string($string, $string, "Theme");
         }
-    }
-
-    /**
-     * Write translations to the DB via PLL_MO.
-     * Skipped entirely when the strings array has not changed since the last run.
-     * Call this on `init` at a priority > 1 (after Polylang itself initialises).
-     */
-    public static function inject(): void
-    {
-        if (!function_exists("PLL") || !PLL() || !isset(PLL()->model)) {
-            return;
-        }
-
-        $hash = md5(serialize(self::$strings));
-        if (get_option("_biografilm_translations_hash") === $hash) {
-            return;
-        }
-
-        foreach (self::$strings as $original => $languages) {
-            foreach ($languages as $slug => $translation) {
-                $language = PLL()->model->get_language($slug);
-                if (!$language) {
-                    continue;
-                }
-
-                $mo = new \PLL_MO();
-                $mo->import_from_db($language);
-                $mo->add_entry($mo->make_entry($original, $translation));
-                $mo->export_to_db($language);
-            }
-        }
-
-        update_option("_biografilm_translations_hash", $hash, false);
     }
 }
