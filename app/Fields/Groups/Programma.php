@@ -17,6 +17,11 @@ register_extended_field_group([
     "title" => "Programma",
     "location" => [Location::where("page_template", "=", "page-programma.php")],
     "fields" => [
+        Link::make("Documento", "archive_documento")
+            ->key("field_programma_archive_documento")
+            ->helperText("Link al documento scaricabile dalla pagina programma. Opzionale.")
+            ->format("array"),
+
         Select::make("Tipo programma", "tipo_programma")
             ->key("field_programma_tipo_programma")
             ->choices([

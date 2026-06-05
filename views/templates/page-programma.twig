@@ -120,9 +120,10 @@
       @keydown.escape.window="drawerOpen = false"
     >
       <div id="filters-sentinel" class="h-0"></div>
+      {% set documento = function("get_field", "archive_documento", post.ID) %}
 
       {# ── Filter bar (single, always visible) ── #}
-      <div data-sticky-top class="top-0 z-50 mb-20">
+      <div data-sticky-top class="top-0 z-50 {{ documento ? "mb-6" : "mb-20" }}">
         <div class="filters-black flex w-full bg-black">
           {# Mobile only: filter icon button #}
           <button
@@ -202,6 +203,22 @@
           </button>
         </div>
       </div>
+      {% if documento %}
+        <div class="flex w-full justify-end px-10 pb-6">
+          <a
+            href="{{ documento.url }}"
+            target="{{ documento.target ? : "_self" }}"
+            class="text-tight text-red group flex items-center gap-2 text-base font-semibold"
+          >
+            <span class="link-underline">{{ documento.title }}</span>
+            {{
+              include("icons/generic/arrow-right.svg")|attr({
+                class: "size-5 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1 "
+              })
+            }}
+          </a>
+        </div>
+      {% endif %}
 
       {% include "parts/filters-drawer.twig" with {
         state_var: "drawerOpen",

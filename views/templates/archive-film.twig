@@ -31,11 +31,13 @@
     @keydown.escape.window="filtersOpen = false"
   >
     <div id="filters-sentinel" class="h-0"></div>
+    {% set _archive_page = function("get_archive_page", "film") %}
+    {% set documento = _archive_page ? function("get_field", "archive_documento", _archive_page.ID) : null %}
 
     {# ── Mobile filter bar (< lg) ── #}
     <div
       data-sticky-top
-      class="filters-black top-0 z-50 mb-20 flex w-full lg:hidden"
+      class="filters-black top-0 z-50 {{ documento ? "mb-6" : "mb-20" }} flex w-full lg:hidden"
     >
       <button
         type="button"
@@ -58,7 +60,7 @@
     {# ── Desktop filter bar (lg+) ── #}
     <div
       data-sticky-top
-      class="filters-black top-0 z-50 mb-20 hidden w-full lg:flex"
+      class="filters-black top-0 z-50 {{ documento ? "mb-6" : "mb-20" }} hidden w-full lg:flex"
     >
       <div class="flex-1">
         {{ function("do_shortcode", '[facetwp facet="order_by"]') }}
@@ -88,6 +90,22 @@
         Reset
       </button>
     </div>
+    {% if documento %}
+      <div class="flex w-full justify-end px-10 pb-6">
+        <a
+          href="{{ documento.url }}"
+          target="{{ documento.target ? : "_self" }}"
+          class="text-tight text-red group flex items-center gap-2 text-base font-semibold"
+        >
+          <span class="link-underline">{{ documento.title }}</span>
+          {{
+            include("icons/generic/arrow-right.svg")|attr({
+              class: "size-5 shrink-0 transition-transform duration-300 ease-out group-hover:translate-x-1 "
+            })
+          }}
+        </a>
+      </div>
+    {% endif %}
 
     {% include "parts/filters-drawer.twig" with {
       state_var: "filtersOpen",
