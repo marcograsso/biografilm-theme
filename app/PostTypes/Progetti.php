@@ -43,12 +43,8 @@ class Progetti extends \Timber\Post
             return;
         }
 
-        $query->set("meta_query", [
-            "relation"     => "OR",
-            "date_clause"  => ["key" => "periodo_inizio", "compare" => "EXISTS"],
-            "no_date"      => ["key" => "periodo_inizio", "compare" => "NOT EXISTS"],
-        ]);
-        $query->set("orderby", ["date_clause" => "ASC"]);
+        $query->set("orderby", "title");
+        $query->set("order", "ASC");
     }
 
     private static function register_custom_fields()
